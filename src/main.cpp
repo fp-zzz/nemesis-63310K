@@ -176,10 +176,38 @@ constexpr Auto AutoSelect = Auto::Left;
 
 void AutoLeft()
 {
-    chassis.setPose(
+    chassis.setPose();
+    chassis.turnToPoint();
+    chassis.moveToPoint();
+    chassis.turnToPoint();
+    intake.move(MAX_INPUT);
+    chassis.moveToPoint();
+    intake.move(0);
+    pros::delay(1000);
 
-        fhdsjkhflkjdsahfkdshflhif
-    );
+    chassis.turnToPoint();
+    chassis.moveToPoint();
+    chassis.turnToHeading(-45,750);
+    chassis.moveToPoint();
+    top.move(127) && intake.move(127);
+    pros::delay(2000);
+    top.move(0) && intake.move(0);
+    chassis.turnToPoint();
+    chassis.moveToPoint();
+    pros::delay(1000);
+
+    clamp.set_value(false);
+    chassis.turnToPoint();
+    chassis.moveToPoint();
+    intake.move(127);
+    pros::delay(2000);
+    intake.move(0);
+    chassis.moveToPoint();
+    clamp.set_value(true);
+    top.move(127)&&intake.move(127);
+    pros::delay(2000);
+    top.move(0)&&intake.move(0);
+    pros::delay(1000);
 }
 
 void AutoRight()
