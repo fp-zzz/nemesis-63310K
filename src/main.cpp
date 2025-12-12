@@ -176,7 +176,10 @@ constexpr Auto AutoSelect = Auto::Left;
 
 void AutoLeft()
 {
-    chassis.setPose();
+    chassis.setPose(
+
+        fhdsjkhflkjdsahfkdshflhif
+    );
 }
 
 void AutoRight()
