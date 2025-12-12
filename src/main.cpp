@@ -179,6 +179,7 @@ void autonomouse() {
     pros::delay(1000);
     intake.move(127);
     top.move(127);
+    top.move(-127);
 }
 
 
