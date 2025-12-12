@@ -166,20 +166,43 @@ void initialize() {
 void disabled() {}
 void competition_initialize() {}
 
-void autonomous(){}
+enum class Auto{
+    Left,
+    Right,
+    Full
+};
 
-void autonomouse() {
-    // Example autonomous routine
-    
-    chassis.setPose(-54.5, 18.5, 0);
-    pros::delay(1000);
-    chassis.moveToPoint(-50, 47, 2000);
-    chassis.turnToHeading(270, 2000);
-    chassis.moveToPoint(-33, 47, 1000, {.forwards = false});
-    pros::delay(1000);
-    intake.move(127);
-    top.move(127);
-    top.move(-127);
+constexpr Auto AutoSelect = Auto::Left;
+
+void AutoLeft()
+{
+    chassis.setPose();
+}
+
+void AutoRight()
+{
+
+}
+
+void AutoFull()
+{
+
+}
+
+void autonomous()
+{
+    switch(AutoSelect)
+    {
+        case Auto::Left:
+            AutoLeft();
+            break;
+        case Auto::Right:
+            AutoRight();
+            break;
+        case Auto::Full:
+            AutoFull();
+            break;
+    }
 }
 
 
