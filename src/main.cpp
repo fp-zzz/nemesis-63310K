@@ -104,8 +104,8 @@ lemlib::Drivetrain drivetrain(
     &left_motors,                // Left motor group
     &right_motors,               // Right motor group
     14.5,                          // Track width (inches)
-    lemlib::Omniwheel::NEW_4,    // Wheel type (4" omni)
-    450,                         // Max RPM
+    lemlib::Omniwheel::NEW_275,    // Wheel type (4" omni)
+    442,                         // Max RPM
     2                            // Drift (measured experimentally)
 );
 
@@ -176,15 +176,17 @@ constexpr Auto AutoSelect = Auto::Left;
 
 void AutoLeft()
 {
-    chassis.setPose();
-    chassis.turnToPoint();
-    chassis.moveToPoint();
-    chassis.turnToPoint();
-    intake.move(MAX_INPUT);
+    chassis.setPose();//set position
+    //collect first 3 blocks
+    chassis.turnToPoint();//turn to the point
+    chassis.moveToPoint();//move to point
+    chassis.turnToPoint();//face the balls
+    intake.move(MAX_INPUT);//Intake on
     chassis.moveToPoint();
     intake.move(0);
     pros::delay(1000);
 
+    //Score the first set of blocks
     chassis.turnToPoint();
     chassis.moveToPoint();
     chassis.turnToHeading(-45,750);
@@ -196,6 +198,7 @@ void AutoLeft()
     chassis.moveToPoint();
     pros::delay(1000);
 
+    //collect from match loader and score
     clamp.set_value(false);
     chassis.turnToPoint();
     chassis.moveToPoint();
@@ -212,11 +215,46 @@ void AutoLeft()
 
 void AutoRight()
 {
+    chassis.setPose();
+    //collect the three blocks
+    chassis.turnToPoint();
+    chassis.moveToPoint();
+    chassis.turnToPoint();
+    intake.move(MAX_INPUT);
+    chassis.moveToPoint();//slowly
+    intake.move(0);
+    pros::delay(1000);
+
+    //score in lower
+    chassis.turnToPoint();
+    chassis.moveToPoint();//move slow
+    intake.move(-MAX_INPUT);
+    pros::delay(1000);
+    intake.move(0);
+    chassis.moveToPoint();//backwards
+    pros::delay(1000);
+
+    //match load and score
+    chassis.turnToPoint();
+    chassis.moveToPoint();
+    chassis.turnToPoint();
+    clamp.set_value(false);
+    chassis.moveToPoint();
+    intake.move(127);
+    pros.delay(1000);
+    intake.move(0);
+    chassis.moveToPoint();//go backwards
+    clamp.set_value(true);
+    top.move(127) && intake.move(127);
+    pros::delay(1000);
+    top.move(0) && intake.move(0);
+    pros::delay(1000);
 
 }
 
 void AutoFull()
 {
+    
 
 }
 
