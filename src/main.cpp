@@ -47,11 +47,11 @@ Sections include:
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 //controls
-constexpr auto in = pros::E_CONTROLLER_DIGITAL_L2
-constexpr auto out = pros::E_CONTROLLER_DIGITAL_R2
-constexpr auto intop = pros::E_CONTROLLER_DIGITAL_L1
-constexpr auto outtop = pros::E_CONTROLLER_DIGITAL_R1
-constexpr auto tounge = pros::E_CONTROLLER_DIGITAL_Y
+constexpr auto in = pros::E_CONTROLLER_DIGITAL_L2;
+constexpr auto out = pros::E_CONTROLLER_DIGITAL_R2;
+constexpr auto intop = pros::E_CONTROLLER_DIGITAL_L1;
+constexpr auto outtop = pros::E_CONTROLLER_DIGITAL_R1;
+constexpr auto tounge = pros::E_CONTROLLER_DIGITAL_Y;
 
 // Left motor group on ports 1, 2, 3 (1 & 3 reversed)
 pros::MotorGroup left_motors({-2,-6,-7},pros::MotorGears::blue);
@@ -323,7 +323,7 @@ void opcontrol() {
 
         // --- Pneumatics Toggle ---
         // A button toggles the pneumatic clamp
-        if (master.get_digital_new_press(pros::tounge)) {
+        if (master.get_digital_new_press(tounge)) {
             clampValue = !clampValue;
             clamp.set_value(clampValue);
         }
