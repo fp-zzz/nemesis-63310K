@@ -47,12 +47,12 @@ Sections include:
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 //controls
-#define in pros::E_CONTROLLER_DIGITAL_L2
-#define out pros::E_CONTROLLER_DIGITAL_R2
-#define intop pros::E_CONTROLLER_DIGITAL_L1
-#define outtop pros::E_CONTROLLER_DIGITAL_R1
-
-
+constexpr auto in = pros::E_CONTROLLER_DIGITAL_L2
+constexpr auto out = pros::E_CONTROLLER_DIGITAL_R2
+constexpr auto intop = pros::E_CONTROLLER_DIGITAL_L1
+constexpr auto outtop = pros::E_CONTROLLER_DIGITAL_R1
+constexpr auto up = pros::E_CONTROLLER_DIGITAL_RIGHT
+constexpr auto down = pros::E_CONTROLLER_DIGITAL_Y
 
 // Left motor group on ports 1, 2, 3 (1 & 3 reversed)
 pros::MotorGroup left_motors({-2,-6,-7},pros::MotorGears::blue);
@@ -62,7 +62,7 @@ pros::MotorGroup right_motors({8,13,21}, pros::MotorGears::blue);
 
 // Standalone intake motor (port 10)
 pros::Motor intake(-5, pros::MotorGears::blue);
-pros::Motor top(16);
+pros::Motor top(16, pros::MotorGears::blue);
 
 
 /*
@@ -74,10 +74,7 @@ pros::Motor top(16);
 - IMU provides inertial heading tracking.
 */
 
-pros::Imu imu(16); // IMU on port 10
-
-
-
+pros::Imu imu(20); // IMU on port 10
 
 /*
 -----------------------------------------------------------
