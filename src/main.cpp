@@ -62,7 +62,7 @@ pros::MotorGroup right_motors({8,13,21}, pros::MotorGears::blue);
 
 // Standalone intake motor (port 10)
 pros::Motor intake(-5, pros::MotorGears::blue);
-pros::Motor top(16);
+pros::Motor top(16, pros::MotorGears::blue);
 
 
 /*
@@ -74,7 +74,7 @@ pros::Motor top(16);
 - IMU provides inertial heading tracking.
 */
 
-pros::Imu imu(16); // IMU on port 10
+pros::Imu imu(20); // IMU on port 10
 
 
 
