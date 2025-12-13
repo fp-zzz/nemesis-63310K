@@ -4,6 +4,7 @@
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "pros/adi.hpp"
 #include "pros/misc.h"
+#include "pros/motors.h"
 #include "pros/rtos.hpp"
 #include <sys/syslimits.h>
 #include "pros/apix.h"
@@ -84,7 +85,7 @@ pros::Imu imu(20); // IMU on port 10
 - Example button control included in opcontrol().
 */
 
-pros::adi::DigitalOut clamp('A');  // Pneumatic clamp on ADI port A
+pros::adi::DigitalOut clamp('A',false);  // Pneumatic clamp on ADI port A
 bool clampValue = false;           // Initial state of pneumatic clamp
 
 
@@ -99,7 +100,7 @@ bool clampValue = false;           // Initial state of pneumatic clamp
 lemlib::Drivetrain drivetrain(
     &left_motors,                // Left motor group
     &right_motors,               // Right motor group
-    14.5,                          // Track width (inches)
+    12,                          // Track width (inches)
     lemlib::Omniwheel::NEW_275,    // Wheel type (4" omni)
     442,                         // Max RPM
     2                            // Drift (measured experimentally)
@@ -144,11 +145,13 @@ lemlib::Chassis chassis(drivetrain, lateral_controller, angular_controller, sens
 
 void initialize() {
     chassis.calibrate();  // Calibrate IMU & encoders
+    clamp.set_value(false); // Ensure clamp is in initial state
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
     // Task to continuously print pose data to the brain screen
-    lv_obj_t * img = lv_image_create(lv_screen_active());
-    lv_image_set_src(img, &WIN_20250904_16_05_21_Pro);
-    lv_obj_align(img, LV_ALIGN_CENTER, 0, 0);
+   // lv_obj_t * img = lv_image_create(lv_screen_active());
+    //lv_image_set_src(img, &WIN_20250904_16_05_21_Pro);
+    //lv_obj_align(img, LV_ALIGN_CENTER, 0, 0);
 }
 
 
@@ -172,85 +175,90 @@ constexpr Auto AutoSelect = Auto::Left;
 
 void AutoLeft()
 {
-    chassis.setPose();//set position
+    chassis.setPose(-45.773,6.768,90);//set position
     //collect first 3 blocks
-    chassis.turnToPoint();//turn to the point
-    chassis.moveToPoint();//move to point
-    chassis.turnToPoint();//face the balls
     intake.move(MAX_INPUT);//Intake on
-    chassis.moveToPoint();
-    intake.move(0);
-    pros::delay(1000);
+    chassis.turnToPoint(-23,24,250);//turn to the point
+    chassis.moveToPoint(-23,24,750,{.maxSpeed = 55});//move to point
+    chassis.turnToPoint(-13.776,23.042,500);//face the balls
+    //clamp.set_value(false);
+    chassis.moveToPoint(-13.776,23.042,750,{.maxSpeed = 64});
+    //pros::delay(1000);
+    //intake.move(0);
+    chassis.moveToPoint(-30.274,23.817,750,{.forwards = false });
 
     //Score the first set of blocks
-    chassis.turnToPoint();
-    chassis.moveToPoint();
-    chassis.turnToHeading(-45,750);
-    chassis.moveToPoint();
-    top.move(127) && intake.move(127);
+    intake.move(0);
+    chassis.turnToPoint(-47.615,46.5,750);
+    chassis.moveToPoint(-47.615,46.5,1500);
+    chassis.turnToHeading(270, 750);
+    chassis.moveToPoint(-26.141,48,1000,{.forwards = false});
+    pros::delay(1000);
+    top.move(-127) && intake.move(-127);
+    top.move(127)&&intake.move(127);
     pros::delay(2000);
     top.move(0) && intake.move(0);
-    chassis.turnToPoint();
-    chassis.moveToPoint();
-    pros::delay(1000);
+    //pros::delay(1000);
 
     //collect from match loader and score
-    clamp.set_value(false);
-    chassis.turnToPoint();
-    chassis.moveToPoint();
+    clamp.set_value(true);
+    chassis.turnToPoint(-70.372,48,750);
+    chassis.moveToPoint(-53.5, 47, 500, {.maxSpeed = 64});
+    chassis.moveToPoint(-65.5,47,1000,{.maxSpeed = 70});
     intake.move(127);
     pros::delay(2000);
     intake.move(0);
-    chassis.moveToPoint();
-    clamp.set_value(true);
+    chassis.moveToPoint(-26.141,48,1000,{.forwards = false});
+    pros::delay(1000);
+    clamp.set_value(false);
+    top.move(-127) && intake.move(-127);
     top.move(127)&&intake.move(127);
     pros::delay(2000);
     top.move(0)&&intake.move(0);
     pros::delay(1000);
 }
 
-void AutoRight()
-{
-    chassis.setPose();
-    //collect the three blocks
-    chassis.turnToPoint();
-    chassis.moveToPoint();
-    chassis.turnToPoint();
-    intake.move(MAX_INPUT);
-    chassis.moveToPoint();//slowly
-    intake.move(0);
-    pros::delay(1000);
+// void AutoRight()
+// {
+//     chassis.setPose();
+//     //collect the three blocks
+//     chassis.turnToPoint();
+//     chassis.moveToPoint();
+//     chassis.turnToPoint();
+//     intake.move(MAX_INPUT);
+//     chassis.moveToPoint();//slowly
+//     intake.move(0);
+//     pros::delay(1000);
 
-    //score in lower
-    chassis.turnToPoint();
-    chassis.moveToPoint();//move slow
-    intake.move(-MAX_INPUT);
-    pros::delay(1000);
-    intake.move(0);
-    chassis.moveToPoint();//backwards
-    pros::delay(1000);
+//     //score in lower
+//     chassis.turnToPoint();
+//     chassis.moveToPoint();//move slow
+//     intake.move(-MAX_INPUT);
+//     pros::delay(1000);
+//     intake.move(0);
+//     chassis.moveToPoint();//backwards
+//     pros::delay(1000);
 
-    //match load and score
-    chassis.turnToPoint();
-    chassis.moveToPoint();
-    chassis.turnToPoint();
-    clamp.set_value(false);
-    chassis.moveToPoint();
-    intake.move(127);
-    pros.delay(1000);
-    intake.move(0);
-    chassis.moveToPoint();//go backwards
-    clamp.set_value(true);
-    top.move(127) && intake.move(127);
-    pros::delay(1000);
-    top.move(0) && intake.move(0);
-    pros::delay(1000);
+//     //match load and score
+//     chassis.turnToPoint();
+//     chassis.moveToPoint();
+//     chassis.turnToPoint();
+//     clamp.set_value(false);
+//     chassis.moveToPoint();
+//     intake.move(127);
+//     pros.delay(1000);
+//     intake.move(0);
+//     chassis.moveToPoint();//go backwards
+//     clamp.set_value(true);
+//     top.move(127) && intake.move(127);
+//     pros::delay(1000);
+//     top.move(0) && intake.move(0);
+//     pros::delay(1000);
+// }
 
-}
 
 void AutoFull()
 {
-    
 
 }
 
@@ -262,7 +270,7 @@ void autonomous()
             AutoLeft();
             break;
         case Auto::Right:
-            AutoRight();
+           // AutoRight();
             break;
         case Auto::Full:
             AutoFull();
