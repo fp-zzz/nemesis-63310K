@@ -9,6 +9,7 @@
 #include <sys/syslimits.h>
 #include "pros/apix.h"
 
+
 LV_IMAGE_DECLARE(WIN_20250904_16_05_21_Pro);
 
 /*
@@ -152,6 +153,8 @@ void initialize() {
    // lv_obj_t * img = lv_image_create(lv_screen_active());
     //lv_image_set_src(img, &WIN_20250904_16_05_21_Pro);
     //lv_obj_align(img, LV_ALIGN_CENTER, 0, 0);
+
+    //initUI();
 }
 
 
@@ -166,20 +169,22 @@ void disabled() {}
 void competition_initialize() {}
 
 enum class Auto{
-    Left,
-    Right,
-    Full
+    RedLeft,
+    RedRight,
+    BlueRight,
+    BlueLeft
 };
 
-constexpr Auto AutoSelect = Auto::Left;
+constexpr Auto AutoSelect = Auto::RedRight;
 
-void AutoLeft()
+void AutoRedLeft()
 {
-    chassis.setPose(-45.773,6.768,90);//set position
+   // chassis.setPose(-45.773,6.768,90);//set position
+    chassis.setPose(-45.773,10.901,90);
     //collect first 3 blocks
     intake.move(MAX_INPUT);//Intake on
-    chassis.turnToPoint(-23,24,250);//turn to the point
-    chassis.moveToPoint(-23,24,750,{.maxSpeed = 55});//move to point
+    chassis.turnToPoint(-23.5,24,250);//turn to the point
+    chassis.moveToPoint(-23.5,24,750,{.maxSpeed = 55});//move to point
     chassis.turnToPoint(-13.776,23.042,500);//face the balls
     //clamp.set_value(false);
     chassis.moveToPoint(-13.776,23.042,750,{.maxSpeed = 64});
@@ -189,11 +194,11 @@ void AutoLeft()
 
     //Score the first set of blocks
     intake.move(0);
-    chassis.turnToPoint(-47.615,46.5,750);
-    chassis.moveToPoint(-47.615,46.5,1500);
+    chassis.turnToPoint(-47.615,50,750);
+    chassis.moveToPoint(-47.615,50,1500);
     chassis.turnToHeading(270, 750);
-    chassis.moveToPoint(-26.141,48,1000,{.forwards = false});
-    pros::delay(1000);
+    chassis.moveToPoint(-28,50.5,1500,{.forwards = false});
+    pros::delay(750);
     top.move(-127) && intake.move(-127);
     top.move(127)&&intake.move(127);
     pros::delay(2000);
@@ -202,78 +207,177 @@ void AutoLeft()
 
     //collect from match loader and score
     clamp.set_value(true);
-    chassis.turnToPoint(-70.372,48,750);
-    chassis.moveToPoint(-53.5, 47, 500, {.maxSpeed = 64});
-    chassis.moveToPoint(-65.5,47,1000,{.maxSpeed = 70});
+    chassis.turnToPoint(-56,50.5,750);
+    chassis.moveToPoint(-52, 50.5, 500, {.maxSpeed = 62});
+    chassis.moveToPoint(-56,50.5,1000,{.maxSpeed = 68});
+    chassis.moveToPoint(-55.5,50.5,1000,{.forwards = false});
     intake.move(127);
     pros::delay(2000);
     intake.move(0);
-    chassis.moveToPoint(-26.141,48,1000,{.forwards = false});
-    pros::delay(1000);
+    chassis.moveToPoint(-27,50.5,1500,{.forwards = false});
+    pros::delay(750);
     clamp.set_value(false);
     top.move(-127) && intake.move(-127);
     top.move(127)&&intake.move(127);
-    pros::delay(2000);
+    pros::delay(2500);
     top.move(0)&&intake.move(0);
-    pros::delay(1000);
 }
 
-// void AutoRight()
-// {
-//     chassis.setPose();
-//     //collect the three blocks
-//     chassis.turnToPoint();
-//     chassis.moveToPoint();
-//     chassis.turnToPoint();
-//     intake.move(MAX_INPUT);
-//     chassis.moveToPoint();//slowly
-//     intake.move(0);
-//     pros::delay(1000);
-
-//     //score in lower
-//     chassis.turnToPoint();
-//     chassis.moveToPoint();//move slow
-//     intake.move(-MAX_INPUT);
-//     pros::delay(1000);
-//     intake.move(0);
-//     chassis.moveToPoint();//backwards
-//     pros::delay(1000);
-
-//     //match load and score
-//     chassis.turnToPoint();
-//     chassis.moveToPoint();
-//     chassis.turnToPoint();
-//     clamp.set_value(false);
-//     chassis.moveToPoint();
-//     intake.move(127);
-//     pros.delay(1000);
-//     intake.move(0);
-//     chassis.moveToPoint();//go backwards
-//     clamp.set_value(true);
-//     top.move(127) && intake.move(127);
-//     pros::delay(1000);
-//     top.move(0) && intake.move(0);
-//     pros::delay(1000);
-// }
-
-
-void AutoFull()
+void AutoRedRight()
 {
+    // chassis.setPose(-45.773,6.768,90);//set position
+    chassis.setPose(-45.773,-10.901,180);
+    //collect first 3 blocks
+    intake.move(MAX_INPUT);//Intake on
+    chassis.turnToPoint(-19,-17,250);//turn to the point
+    chassis.moveToPoint(-19,-17,750,{.maxSpeed = 55});//move to point
+    chassis.turnToPoint(-23,-17,500);//face the balls
+    //clamp.set_value(false);
+    chassis.moveToPoint(-19,-20,750,{.maxSpeed = 64});
+    //pros::delay(1000);
+    //intake.move(0);
+    chassis.moveToPoint(-19,-217,750,{.forwards = false });
+
+    //Score the first set of blocks
+    intake.move(0);
+    chassis.turnToPoint(-35,-40,750);
+    chassis.moveToPoint(-35,-40,1500);
+    chassis.turnToHeading(270, 750);
+    chassis.moveToPoint(-15,-40,1500,{.forwards = false});
+    pros::delay(750);
+    top.move(-127) && intake.move(-127);
+    top.move(127)&&intake.move(127);
+    pros::delay(2000);
+    top.move(0) && intake.move(0);
+    //pros::delay(1000);
+
+    //collect from match loader and score
+    clamp.set_value(true);
+    chassis.turnToPoint(-50,-40,750);
+    chassis.moveToPoint(-45, -40, 500, {.maxSpeed = 62});
+    chassis.moveToPoint(-45,-40,1000,{.maxSpeed = 68});
+    chassis.moveToPoint(-50,-40,1000,{.forwards = false});
+    intake.move(127);
+    pros::delay(2000);
+    intake.move(0);
+    chassis.moveToPoint(-15,-40,1500,{.forwards = false});
+    pros::delay(750);
+    clamp.set_value(false);
+    top.move(-127) && intake.move(-127);
+    top.move(127)&&intake.move(127);
+    pros::delay(2500);
+    top.move(0)&&intake.move(0);
 
 }
 
+
+void AutoBlueLeft()
+{
+     // chassis.setPose(-45.773,6.768,90);//set position
+    chassis.setPose(45.773,-10.901,90);
+    //collect first 3 blocks
+    intake.move(MAX_INPUT);//Intake on
+    chassis.turnToPoint(23.5,-24,250);//turn to the point
+    chassis.moveToPoint(23.5,-24,750,{.maxSpeed = 55});//move to point
+    chassis.turnToPoint(13.776,-23.042,500);//face the balls
+    //clamp.set_value(false);
+    chassis.moveToPoint(13.776,-23.042,750,{.maxSpeed = 64});
+    //pros::delay(1000);
+    //intake.move(0);
+    chassis.moveToPoint(30.274,-23.817,750,{.forwards = false });
+
+    //Score the first set of blocks
+    intake.move(0);
+    chassis.turnToPoint(47.615,-50,750);
+    chassis.moveToPoint(47.615,-50,1500);
+    chassis.turnToHeading(270, 750);
+    chassis.moveToPoint(28,-50.5,1500,{.forwards = false});
+    pros::delay(750);
+    top.move(-127) && intake.move(-127);
+    top.move(127)&&intake.move(127);
+    pros::delay(2000);
+    top.move(0) && intake.move(0);
+    //pros::delay(1000);
+
+    //collect from match loader and score
+    clamp.set_value(true);
+    chassis.turnToPoint(56,-50.5,750);
+    chassis.moveToPoint(52, -50.5, 500, {.maxSpeed = 62});
+    chassis.moveToPoint(56,-50.5,750,{.maxSpeed = 68});
+    chassis.moveToPoint(55.5,-50.5,500,{.forwards = false});
+    intake.move(127);
+    pros::delay(2000);
+    intake.move(0);
+    chassis.moveToPoint(28,-50.5,1500,{.forwards = false});
+    pros::delay(750);
+    clamp.set_value(false);
+    top.move(-127) && intake.move(-127);
+    top.move(127)&&intake.move(127);
+    pros::delay(2500);
+    top.move(0)&&intake.move(0);
+    //pros::delay(1000);
+}
+void AutoBlueRight()
+{
+    // chassis.setPose(-45.773,6.768,90);//set position
+    chassis.setPose(45.773,-10.901,90);
+    //collect first 3 blocks
+    intake.move(MAX_INPUT);//Intake on
+    chassis.turnToPoint(23.5,-24,250);//turn to the point
+    chassis.moveToPoint(23.5,-24,750,{.maxSpeed = 55});//move to point
+    chassis.turnToPoint(13.776,-23.042,500);//face the balls
+    //clamp.set_value(false);
+    chassis.moveToPoint(13.776,-23.042,750,{.maxSpeed = 64});
+    //pros::delay(1000);
+    //intake.move(0);
+    chassis.moveToPoint(30.274,-23.817,750,{.forwards = false });
+
+    //Score the first set of blocks
+    intake.move(0);
+    chassis.turnToPoint(47.615,-50,750);
+    chassis.moveToPoint(47.615,-50,1500);
+    chassis.turnToHeading(270, 750);
+    chassis.moveToPoint(28,-50.5,1500,{.forwards = false});
+    pros::delay(750);
+    top.move(-127) && intake.move(-127);
+    top.move(127)&&intake.move(127);
+    pros::delay(2000);
+    top.move(0) && intake.move(0);
+    //pros::delay(1000);
+
+    //collect from match loader and score
+    clamp.set_value(true);
+    chassis.turnToPoint(56,-50.5,750);
+    chassis.moveToPoint(52, -50.5, 500, {.maxSpeed = 62});
+    chassis.moveToPoint(56,-50.5,1000,{.maxSpeed = 68});
+    chassis.moveToPoint(55.5,-50.5,1000,{.forwards = false});
+    intake.move(127);
+    pros::delay(2000);
+    intake.move(0);
+    chassis.moveToPoint(27,-50.5,1500,{.forwards = false});
+    pros::delay(750);
+    clamp.set_value(false);
+    top.move(-127) && intake.move(-127);
+    top.move(127)&&intake.move(127);
+    pros::delay(2500);
+    top.move(0)&&intake.move(0);
+
+}
 void autonomous()
 {
     switch(AutoSelect)
     {
-        case Auto::Left:
-            AutoLeft();
+        case Auto::RedLeft:
+            AutoRedLeft();
             break;
-        case Auto::Right:
-           // AutoRight();
+        case Auto::RedRight:
+            AutoRedRight();
             break;
-        case Auto::Full:
-            AutoFull();
+        case Auto::BlueRight:
+            AutoBlueRight();
+            break;
+        case Auto::BlueLeft:
+            AutoBlueLeft();
             break;
     }
 }

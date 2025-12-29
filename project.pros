@@ -636,7 +636,8 @@
     },
     "upload_options": {
       "description": "K-TeamDrive",
-      "icon": "pizza"
+      "icon": "pizza",
+      "slot": 3
     },
     "use_early_access": false
   }
