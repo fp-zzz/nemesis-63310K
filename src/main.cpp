@@ -179,7 +179,7 @@ void AutoLeft()
 {
     //** All coordinates are in INCHES and are CLOSE APPROXIMARIONS 
     //Set starting position
-    chassis.setPose(-45.773,10.901,90);
+    chassis.setPose(-45.773,10.901,270);
     //collect first 3 blocks
     intake.move(MAX_INPUT);//Intake on
     chassis.turnToPoint(-23.5,24,250);//turn to the point
@@ -269,7 +269,7 @@ void AutoSkills()
     chassis.moveToPoint(-65,0,2000);
     chassis.moveToPoint(-42,0,750,{.forwards = false,.minSpeed = 45});
 
-    /*scoring in the low goal
+    //scoring in the low goal
     chassis.turnToPoint(-22.5,-23,750);
     chassis.moveToPoint(-22.5,-23,1750,{.maxSpeed = 60});
     chassis.turnToPoint(-12,-13,750);
@@ -285,7 +285,6 @@ void AutoSkills()
     intake.move(127);
     chassis.moveToPoint(-55,-47,750,{.maxSpeed = 68});
     pros::delay(2000);
-    intake.move(0);
 
     //Get to the other side of the long goal
     chassis.moveToPoint(-43,-59,750,{.forwards = false,.minSpeed = 45});
@@ -295,8 +294,8 @@ void AutoSkills()
     //chassis.moveToPoint(33.5,-47,750,{.forwards = false,.minSpeed = 45});
 
     //Score in the long goal
-    chassis.turnToHeading(90,750);
-    top.move(127) && intake.move(127);
+    //chassis.turnToHeading(90,750);
+    top.move(127);
     pros::delay(1000);
     top.move(0);
 
@@ -305,9 +304,10 @@ void AutoSkills()
     pros::delay(1000);
 
     //Score again in the long goal
-    chassis.moveToPoint(33.5,-47,750,{.forwards = false,.minSpeed = 45});
+    chassis.moveToPoint(25,-47,750,{.forwards = false,.minSpeed = 45});\
+    top.move(127);
     pros::delay(1000);
-    intake.move(0);
+    intake.move(0) && top.move(0);
     clamp.set_value(false); 
 
     //Clear parking zone
@@ -320,26 +320,24 @@ void AutoSkills()
     chassis.moveToPoint(43,47,750);
     chassis.turnToHeading(90,750);
     clamp.set_value(true);
-    chassis.moveToPoint(55,47,750,{.maxSpeed = 68});
     intake.move(127);
+    chassis.moveToPoint(55,47,750,{.maxSpeed = 68});
     pros::delay(2000);
     
     //Move to the other side of the long goal
     chassis.moveToPoint(43,59,750,{.forwards = false,.minSpeed = 45});
     chassis.turnToHeading(90,750);
-    chassis.moveToPoint(33.5,59,1000,{.forwards = false,.minSpeed = 45});
-    chassis.turnToPoint(33.5,46.5,750);
-    chassis.moveToPoint(33.5,47,750,{.forwards = false,.minSpeed = 45});
+    chassis.moveToPoint(-43,59,1000,{.forwards = false,.minSpeed = 45});
+    chassis.swingToPoint(-25,47,DriveSide::RIGHT,750);
+
 
     //Score in the long goal again
-    chassis.turnToHeading(90,750);
-    chassis.moveToPoint(25,47,750,{.forwards = false});
-    top.move(127) && intake.move(127);
+    top.move(127);
     pros::delay(2000);
     top.move(0);
 
     //Intake from last match loader
-    chassis.moveToPoint(55,47,750,{.maxSpeed = 68});
+    chassis.moveToPoint(-55,47,750,{.maxSpeed = 68});
     pros::delay(1000);
     
     //Final scoring set
@@ -353,7 +351,7 @@ void AutoSkills()
     chassis.moveToPoint(-42,0,1000);
     chassis.turnToHeading(270,750);
     chassis.moveToPoint(-65,0,750,{.minSpeed = 45});
-*/
+
 
 }
 
