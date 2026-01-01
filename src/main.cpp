@@ -179,19 +179,21 @@ void AutoLeft()
 {
     //** All coordinates are in INCHES and are CLOSE APPROXIMARIONS 
     //Set starting position
-    chassis.setPose(-45.773,10.901,270);
+    chassis.setPose(-45,10,90);
     //collect first 3 blocks
     intake.move(MAX_INPUT);//Intake on
-    chassis.turnToPoint(-23.5,24,250);//turn to the point
-    chassis.moveToPoint(-23.5,24,750,{.maxSpeed = 55});//move to point
-    chassis.turnToPoint(-13.776,23.042,500);//face the balls
+    chassis.turnToPoint(-23.5,24,750);//turn to the point
+    chassis.moveToPoint(-23.5,24,2000,{.maxSpeed = 55});//move to point
+    chassis.turnToPoint(-13,24,500);//face the balls
+    chassis.moveToPoint(-13,24,750);
+    
     //clamp.set_value(false);
-    chassis.moveToPoint(-13.776,23.042,750,{.maxSpeed = 64});
+   // chassis.moveToPoint(-13.776,23.042,750,{.maxSpeed = 64});
     //pros::delay(1000);
     //intake.move(0);
-    chassis.moveToPoint(-30.274,23.817,750,{.forwards = false });
+    //chassis.moveToPoint(-30.274,23.817,750,{.forwards = false });
 
-    //Score the first set of blocks
+    /*Score the first set of blocks
     intake.move(0);
     chassis.turnToPoint(-47.615,50,750);
     chassis.moveToPoint(-47.615,50,1500);
@@ -219,7 +221,7 @@ void AutoLeft()
     top.move(-127) && intake.move(-127);
     top.move(127)&&intake.move(127);
     pros::delay(2500);
-    top.move(0)&&intake.move(0);
+    top.move(0)&&intake.move(0);*/
 }
 void AutoRight()
 {
