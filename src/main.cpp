@@ -180,12 +180,12 @@ void AutoLeft()
     chassis.setPose(-45,10,90);
 
     //collect first 3 blocks
-    intake.move(MAX_INPUT);//Intake on
     chassis.turnToPoint(-35,20,750);
     chassis.moveToPoint(-35,20,900);//move to point
     chassis.turnToHeading(90,750);
-    chassis.moveToPoint(-3,20,1500,{.maxSpeed = 45}); 
     intake.move(127);
+    chassis.moveToPoint(-3,20,1500,{.maxSpeed = 45}); 
+    
     
     //Get to long goal
     chassis.moveToPoint(-35,20,750,{.forwards = false,.minSpeed = 40});
