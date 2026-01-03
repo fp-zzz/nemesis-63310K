@@ -211,10 +211,10 @@ void AutoLeft()
 
     //intake from loader
     chassis.moveToPoint(-55,45,1000,{.maxSpeed = 68});
-    pros::delay(1000);//Intakes
+    pros::delay(1750);//Intakes
 
-    /*//Score again in long goal
-    chassis.moveToPoint(-20,50,750,{.forwards = false,.minSpeed = 40});
+    ///Score again in long goal
+    chassis.moveToPoint(-20,45,750,{.forwards = false,.minSpeed = 40});
     top.move(127);
     pros::delay(1000);//Scores*/
 }
