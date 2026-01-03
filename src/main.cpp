@@ -177,13 +177,13 @@ void AutoLeft()
 {
     //** All coordinates are in INCHES and are CLOSE APPROXIMARIONS 
     //Set starting position
-    chassis.setPose(-45,10,90);
+    chassis.setPose(-45,10,90;
     //collect first 3 blocks
     intake.move(MAX_INPUT);//Intake on
     chassis.turnToPoint(-23.5,14,1000);//turn to the point
     chassis.moveToPoint(-23.5,14,2000,{.maxSpeed = 55});//move to point
-    chassis.turnToPoint(-13,24,1000);//face the balls
-    chassis.moveToPoint(-13,24,1000);
+    chassis.turnToPoint(-13,14,1000);//face the balls
+    chassis.moveToPoint(-13,14,1000);
     
     //clamp.set_value(false);
    // chassis.moveToPoint(-13.776,23.042,750,{.maxSpeed = 64});
