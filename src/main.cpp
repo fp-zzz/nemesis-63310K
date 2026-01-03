@@ -184,7 +184,7 @@ void AutoLeft()
     chassis.moveToPoint(-35,20,900);//move to point
     chassis.turnToHeading(90,750);
     intake.move(127);
-    chassis.moveToPoint(-5,20,1750,{.maxSpeed = 50}); 
+    chassis.moveToPoint(-5,20,1750,{.maxSpeed = 55}); 
 
     //Score in middle goal
     //chassis.turnToPoint(-12,15,750);
@@ -209,11 +209,11 @@ void AutoLeft()
     pros::delay(1750);//Scores
     top.move(0);
 
-    /*//intake from loader
-    chassis.moveToPoint(-55,50,1000,{.maxSpeed = 68});
+    //intake from loader
+    chassis.moveToPoint(-55,45,1000,{.maxSpeed = 68});
     pros::delay(1000);//Intakes
 
-    //Score again in long goal
+    /*//Score again in long goal
     chassis.moveToPoint(-20,50,750,{.forwards = false,.minSpeed = 40});
     top.move(127);
     pros::delay(1000);//Scores*/
