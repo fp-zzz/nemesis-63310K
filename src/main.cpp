@@ -9,9 +9,6 @@
 #include <sys/syslimits.h>
 #include "pros/apix.h"
 
-
-//LV_IMAGE_DECLARE(WIN_20250904_16_05_21_Pro);
-
 /*
 ===========================================================
 VEX V5 Robot Program — PROS + LemLib Template
