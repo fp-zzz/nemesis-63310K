@@ -184,11 +184,12 @@ void AutoLeft()
     chassis.moveToPoint(-35,20,900);//move to point
     chassis.turnToHeading(90,750);
     intake.move(127);
-    chassis.moveToPoint(-3,20,1500,{.maxSpeed = 45}); 
+    chassis.moveToPoint(-5,20,1500,{.maxSpeed = 45}); 
     
     
     //Get to long goal
-    //chassis.moveToPoint(-35,20,750,{.forwards = false,.minSpeed = 40});
+    chassis.moveToPoint(-35,20,750,{.forwards = false,.minSpeed = 40});
+    intake.move(0);
     //chassis.turnToHeading(-180,750);
     //chassis.moveToPoint(-35,50,900,{.minSpeed = 40});
 
