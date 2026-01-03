@@ -401,7 +401,7 @@ void opcontrol() {
 
         // --- Intake Motor Control ---
         // L2 = forward, L1 = reverse
-        if (master.get_digital(in)) {
+        if (master.get_digital(intake)) {
             intake.move(127);  // Full forward
         } 
         else if (master.get_digital(out)) {
