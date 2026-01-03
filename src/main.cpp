@@ -10,7 +10,7 @@
 #include "pros/apix.h"
 
 
-LV_IMAGE_DECLARE(WIN_20250904_16_05_21_Pro);
+//LV_IMAGE_DECLARE(WIN_20250904_16_05_21_Pro);
 
 /*
 ===========================================================
@@ -48,6 +48,7 @@ Sections include:
 //controler delcatiaroin
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
+constexpr auto in = pros::E_CONTROLLER_DIGITAL_L2;
 constexpr auto out = pros::E_CONTROLLER_DIGITAL_R2;
 constexpr auto intop = pros::E_CONTROLLER_DIGITAL_L1;
 constexpr auto outtop = pros::E_CONTROLLER_DIGITAL_R1;
