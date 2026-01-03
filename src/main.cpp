@@ -143,7 +143,7 @@ lemlib::Chassis chassis(drivetrain, lateral_controller, angular_controller, sens
 void initialize() {
     chassis.calibrate();  // Calibrate IMU & encoders
     clamp.set_value(false); // Ensure clamp is in initial state
-    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+    //chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
     // Task to continuously print pose data to the brain screen
    // lv_obj_t * img = lv_image_create(lv_screen_active());
@@ -185,6 +185,7 @@ void AutoLeft()
     chassis.moveToPoint(-35,20,900);//move to point
     chassis.turnToHeading(90,750);
     chassis.moveToPoint(-3,20,1500,{.maxSpeed = 45}); 
+    intake.move(127);
     
     //Get to long goal
     chassis.moveToPoint(-35,20,750,{.forwards = false,.minSpeed = 40});
@@ -192,7 +193,7 @@ void AutoLeft()
     chassis.moveToPoint(-35,50,900,{.minSpeed = 40});
 
 
-    //Score in long goal
+    /*//Score in long goal
     chassis.turnToHeading(270,750);
     chassis.moveToPoint(-20,50,750,{.forwards = false,.minSpeed = 40});
     top.move(127) && intake.move(0) && clamp.set_value(true);
@@ -206,7 +207,7 @@ void AutoLeft()
     //Score again in long goal
     chassis.moveToPoint(-20,50,750,{.forwards = false,.minSpeed = 40});
     top.move(127);
-    pros::delay(1000);//Scores
+    pros::delay(1000);//Scores*/
 }
     
 void AutoRight()
