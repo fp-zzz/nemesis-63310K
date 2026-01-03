@@ -188,9 +188,9 @@ void AutoLeft()
     
     
     //Get to long goal
-    chassis.moveToPoint(-35,20,750,{.forwards = false,.minSpeed = 40});
-    chassis.turnToHeading(-180,750);
-    chassis.moveToPoint(-35,50,900,{.minSpeed = 40});
+    //chassis.moveToPoint(-35,20,750,{.forwards = false,.minSpeed = 40});
+    //chassis.turnToHeading(-180,750);
+    //chassis.moveToPoint(-35,50,900,{.minSpeed = 40});
 
 
     /*//Score in long goal
