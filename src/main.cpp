@@ -180,10 +180,10 @@ void AutoLeft()
     chassis.setPose(-45,10,90);
     //collect first 3 blocks
     intake.move(MAX_INPUT);//Intake on
-    chassis.turnToPoint(-35,14,1000);//turn to the point
-    chassis.moveToPoint(-35,14,2000);//move to point
+    chassis.turnToPoint(-35,20,1000);//turn to the point
+    chassis.moveToPoint(-35,20,2000);//move to point
     chassis.turnToHeading(90,1000);//face the balls
-    chassis.moveToPoint(-13,14,2000,{.maxSpeed = 35});
+    chassis.moveToPoint(-10,20,2000,{.maxSpeed = 35});
     
     //clamp.set_value(false);
    // chassis.moveToPoint(-13.776,23.042,750,{.maxSpeed = 64});
