@@ -178,49 +178,38 @@ void AutoLeft()
     //** All coordinates are in INCHES and are CLOSE APPROXIMARIONS 
     //Set starting position
     chassis.setPose(-45,10,90);
+    
     //collect first 3 blocks
     intake.move(MAX_INPUT);//Intake on
-    chassis.turnToPoint(-35,20,1000);//turn to the point
-    chassis.moveToPoint(-35,20,2000);//move to point
-    chassis.turnToHeading(90,1000);//face the balls
-    chassis.moveToPoint(-10,20,2000,{.maxSpeed = 35});
-    
-    //clamp.set_value(false);
-   // chassis.moveToPoint(-13.776,23.042,750,{.maxSpeed = 64});
-    //pros::delay(1000);
-    //intake.move(0);
-    //chassis.moveToPoint(-30.274,23.817,750,{.forwards = false });
+    chassis.turnToPoint(-35,20,750);
+    chassis.moveToPoint(-35,20,900);//move to point
+    chassis.turnToHeading(90,750);
+    chassis.moveToPoint(-10,20,1500,{.maxSpeed = 45});
+    intake.move(0);//Intake off
 
-    /*Score the first set of blocks
-    intake.move(0);
-    chassis.turnToPoint(-47.615,50,750);
-    chassis.moveToPoint(-47.615,50,1500);
-    chassis.turnToHeading(270, 750);
-    chassis.moveToPoint(-28,50.5,1500,{.forwards = false});
-    pros::delay(750);
-    top.move(-127) && intake.move(-127);
-    top.move(127)&&intake.move(127);
-    pros::delay(2000);
-    top.move(0) && intake.move(0);
-    //pros::delay(1000);
+    //Get to long goal
+    chassis.moveToPoint(-35,20,750,{.forwards = false,.minSpeed = 40});
+    chassis.turnToHeading(180,750);
+    chassis.moveToPoint(-35,47,900,{.minSpeed = 40});
 
-    //collect from match loader and score
-    clamp.set_value(true);
-    chassis.turnToPoint(-56,50.5,750);
-    chassis.moveToPoint(-52, 50.5, 500, {.maxSpeed = 62});
-    chassis.moveToPoint(-56,50.5,1000,{.maxSpeed = 68});
-    chassis.moveToPoint(-55.5,50.5,1000,{.forwards = false});
-    intake.move(127);
-    pros::delay(2000);
-    intake.move(0);
-    chassis.moveToPoint(-27,50.5,1500,{.forwards = false});
-    pros::delay(750);
-    clamp.set_value(false);
-    top.move(-127) && intake.move(-127);
-    top.move(127)&&intake.move(127);
-    pros::delay(2500);
-    top.move(0)&&intake.move(0);*/
+
+    //Score in long goal
+    chassis.turnToHeading(270,750);
+    chassis.moveToPoint(-20,47,750,{.forwards = false,.minSpeed = 40});
+    top.move(127) && intake.move(0) && clamp.set_value(true);
+    pros::delay(1000);//Scores
+    top.move(0);
+
+    //intake from loader
+    chassis.moveToPoint(-55,47,1000,{.maxSpeed = 68});
+    pros::delay(1000);//Intakes
+
+    //Score again in long goal
+    chassis.moveToPoint(-20,47,750,{.forwards = false,.minSpeed = 40});
+    top.move(127);
+    pros::delay(1000);//Scores
 }
+    
 void AutoRight()
 {
     //** All coordinates are in INCHES and are CLOSE APPROXIMARIONS 
