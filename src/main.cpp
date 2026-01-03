@@ -45,6 +45,7 @@ Sections include:
 //controler delcatiaroin
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
+constexpr auto in = pros::E_CONTROLLER_DIGITAL_L2;
 constexpr auto out = pros::E_CONTROLLER_DIGITAL_R2;
 constexpr auto intop = pros::E_CONTROLLER_DIGITAL_L1;
 constexpr auto outtop = pros::E_CONTROLLER_DIGITAL_R1;
@@ -401,7 +402,7 @@ void opcontrol() {
 
         // --- Intake Motor Control ---
         // L2 = forward, L1 = reverse
-        if (master.get_digital(intake)) {
+        if (master.get_digital(in)) {
             intake.move(127);  // Full forward
         } 
         else if (master.get_digital(out)) {
