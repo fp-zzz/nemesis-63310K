@@ -177,7 +177,7 @@ void AutoLeft()
 {
     //** All coordinates are in INCHES and are CLOSE APPROXIMARIONS 
     //Set starting position
-    chassis.setPose(-45,10,90;
+    chassis.setPose(-45,10,90);
     //collect first 3 blocks
     intake.move(MAX_INPUT);//Intake on
     chassis.turnToPoint(-23.5,14,1000);//turn to the point
