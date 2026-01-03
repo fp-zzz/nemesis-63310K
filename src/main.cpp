@@ -185,6 +185,14 @@ void AutoLeft()
     chassis.turnToHeading(90,750);
     intake.move(127);
     chassis.moveToPoint(-5,20,1500,{.maxSpeed = 45}); 
+
+    //Score in middle goal
+    chassis.turnToPoint(-12,15,750);
+    chassis.moveToPoint(-12,15,750);
+    chassis.turnToHeading(180,750);
+    chassis.moveToPoint(-12,13,1000,{.forwards = false,.maxSpeed = 30});
+    top.move(63) && intake.move(63);
+    pros::delay(2000);
     
     
     //Get to long goal
