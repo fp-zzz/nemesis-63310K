@@ -187,29 +187,29 @@ void AutoLeft()
     chassis.moveToPoint(-5,20,1500,{.maxSpeed = 45}); 
 
     //Score in middle goal
-    chassis.turnToPoint(-12,15,750);
-    chassis.moveToPoint(-12,15,750);
-    chassis.turnToHeading(180,750);
-    chassis.moveToPoint(-12,13,1000,{.forwards = false,.maxSpeed = 30});
-    top.move(63) && intake.move(63);
-    pros::delay(2000);
+    //chassis.turnToPoint(-12,15,750);
+    //chassis.moveToPoint(-12,15,750);
+    //chassis.turnToHeading(180,750);
+    //chassis.moveToPoint(-12,13,1000,{.forwards = false,.maxSpeed = 30});
+    //top.move(63) && intake.move(63);
+    //pros::delay(2000);
     
     
     //Get to long goal
+    
     chassis.moveToPoint(-35,20,750,{.forwards = false,.minSpeed = 40});
-    intake.move(0);
-    //chassis.turnToHeading(-180,750);
-    //chassis.moveToPoint(-35,50,900,{.minSpeed = 40});
+    chassis.turnToHeading(-180,750);
+    chassis.moveToPoint(-35,30,900,{.minSpeed = 40});
 
 
-    /*//Score in long goal
+    //Score in long goal
     chassis.turnToHeading(270,750);
-    chassis.moveToPoint(-20,50,750,{.forwards = false,.minSpeed = 40});
+    chassis.moveToPoint(-20,30,750,{.forwards = false,.minSpeed = 40});
     top.move(127) && intake.move(0) && clamp.set_value(true);
     pros::delay(1000);//Scores
     top.move(0);
 
-    //intake from loader
+    /*//intake from loader
     chassis.moveToPoint(-55,50,1000,{.maxSpeed = 68});
     pros::delay(1000);//Intakes
 
