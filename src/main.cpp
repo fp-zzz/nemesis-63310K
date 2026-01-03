@@ -182,7 +182,7 @@ void AutoLeft()
     intake.move(MAX_INPUT);//Intake on
     chassis.turnToPoint(-35,14,1000);//turn to the point
     chassis.moveToPoint(-35,14,2000);//move to point
-    chassis.turnToHeading(90,1000);//face the balls
+    chassis.turnToHeading(180,1000);//face the balls
     chassis.moveToPoint(-13,14,2000,{.maxSpeed = 45});
     
     //clamp.set_value(false);
