@@ -143,14 +143,7 @@ lemlib::Chassis chassis(drivetrain, lateral_controller, angular_controller, sens
 void initialize() {
     chassis.calibrate();  // Calibrate IMU & encoders
     clamp.set_value(false); // Ensure clamp is in initial state
-    //chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-
-    // Task to continuously print pose data to the brain screen
-   // lv_obj_t * img = lv_image_create(lv_screen_active());
-    //lv_image_set_src(img, &WIN_20250904_16_05_21_Pro);
-    //lv_obj_align(img, LV_ALIGN_CENTER, 0, 0);
-
-    //initUI();
+    
 }
 
 
@@ -171,7 +164,7 @@ enum class Auto{
     Skills
 };
 
-constexpr Auto AutoSelect = Auto::Left;
+constexpr Auto AutoSelect = Auto::Right;
 
 void AutoLeft()
 {
@@ -218,30 +211,34 @@ void AutoRight()
     //intaking the first 3 balls
     chassis.turnToPoint(-40,-20,750);//Turns to the balls
     chassis.moveToPoint(-40,-20,900);//Moves to the halfway point really fast
-    chassis.turnToHeading(90,750);//Moves to the balls slowly
+    chassis.turnToHeading(90,900);//Moves to the balls slowly
     intake.move(127);
-    chassis.moveToPoint(-5,-20,1750,{.maxSpeed = 60});//Moves to the lower goal
+    chassis.moveToPoint(-5,-20,1750,{.maxSpeed = 50});//Moves to the lower goal
 
     //Scoring in the low goal
-    chassis.moveToPoint(-20,-20,500,{.forwards = false});
-    chassis.turnToHeading(135,750);
-    chassis.moveToPoint(-10,-10,750,{.maxSpeed = 50});
-    intake.move(-63);
-    pros::delay(2000);
+    chassis.moveToPoint(-25,-25,900,{.forwards = false},false);
+    chassis.turnToPoint(-10,-10,800);
+    chassis.moveToPoint(-10,-10,1750,{.maxSpeed = 50});
+    intake.move(-127);
     intake.move(127);
+    intake.move(-127);
+    pros::delay(2000);
+    intake.move(0);
+    //chassis.moveToPoint(-5,-5,950,{.forwards = false,.maxSpeed = 20});
+   // intake.move(127);
 
     //Moving to the loader
-    chassis.moveToPoint(-45,-45,900,{.forwards = false,.minSpeed = 45});
+    chassis.moveToPoint(-45,-40,1000,{.forwards = false,},false);
 
     //Intake from the loader
-    chassis.turnToHeading(270,500);
+    chassis.turnToHeading(270,1000);
     clamp.set_value(true);
-    chassis.moveToPoint(-55,-45,750,{.maxSpeed = 68});
+    chassis.moveToPoint(-55,-40,900,{.maxSpeed = 68});
     pros::delay(1000);
 
-    //Scoring in the long goal
-    chassis.moveToPoint(-20,-45,750,{.forwards = false,.minSpeed = 40});
-    top.move(127);
+   //Scoring in the long goal
+    chassis.moveToPoint(-20,-41,1000,{.forwards = false},false);
+    top.move(127)&&intake.move(127);
     pros::delay(1000);
 
 
@@ -255,12 +252,12 @@ void AutoWinPoint()
 void AutoSkills()
 {
     //Sets position on the edge of the parking zone **Learn how the Theta works**(for Shriyans);
-    chassis.setPose(-58.5,0,270); 
-    
-    //Clearing the park and moving out of it
+    chassis.setPose(-45,-10,360); 
+
+    /*//Clearing the park and moving out of it
     intake.move(127); //Intake on
-    chassis.moveToPoint(-65,0,2000);
-    chassis.moveToPoint(-42,0,750,{.forwards = false,.minSpeed = 45});
+    chassis.moveToPoint(-65,0,3000,{.minSpeed = 45});
+    chassis.moveToPoint(-42,0,750,{.forwards = false,.minSpeed = 45});*/
 
     //scoring in the low goal
     chassis.turnToPoint(-22.5,-23,750);
