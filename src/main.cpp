@@ -164,7 +164,7 @@ enum class Auto{
     Skills
 };
 
-constexpr Auto AutoSelect = Auto::Right;
+constexpr Auto AutoSelect = Auto::Skills;
 
 void AutoLeft()
 {
@@ -188,7 +188,7 @@ void AutoLeft()
     top.move(0) && intake.move(127);
     
     //Get to loader
-    chassis.moveToPoint(-45,45,900,{.minSpeed = 45});
+    chassis.moveToPoint(-45,45,900);
 
     //intake from loader
     chassis.turnToHeading(270,500);
@@ -217,10 +217,9 @@ void AutoRight()
 
     //Scoring in the low goal
     chassis.moveToPoint(-25,-25,900,{.forwards = false},false);
-    chassis.turnToPoint(-10,-10,800);
-    chassis.moveToPoint(-10,-10,1750,{.maxSpeed = 50});
-    intake.move(-127);
-    intake.move(127);
+    intake.move(0);
+    chassis.turnToPoint(-11.5,-8.5,900);
+    chassis.moveToPoint(-11.5,-8.5,1750);
     intake.move(-127);
     pros::delay(2000);
     intake.move(0);
@@ -228,18 +227,19 @@ void AutoRight()
    // intake.move(127);
 
     //Moving to the loader
-    chassis.moveToPoint(-45,-40,1000,{.forwards = false,},false);
+    chassis.moveToPoint(-40,-40,1000,{.forwards = false});
 
     //Intake from the loader
-    chassis.turnToHeading(270,1000);
-    clamp.set_value(true);
-    chassis.moveToPoint(-55,-40,900,{.maxSpeed = 68});
-    pros::delay(1000);
+     clamp.set_value(true);
+    chassis.turnToPoint(-50,-45,900);
+    chassis.moveToPoint(-50,-45,750);
+    chassis.moveToPoint(-57,-45,1000,{.minSpeed = 68});
+    pros::delay(1500);
 
    //Scoring in the long goal
-    chassis.moveToPoint(-20,-41,1000,{.forwards = false},false);
+    chassis.moveToPoint(-18,-46,1750,{.forwards = false});
     top.move(127)&&intake.move(127);
-    pros::delay(1000);
+    pros::delay(2000);
 
 
 
@@ -252,14 +252,21 @@ void AutoWinPoint()
 void AutoSkills()
 {
     //Sets position on the edge of the parking zone **Learn how the Theta works**(for Shriyans);
-    chassis.setPose(-45,-10,360); 
+    chassis.setPose(-45,-10,180); 
 
-    /*//Clearing the park and moving out of it
-    intake.move(127); //Intake on
-    chassis.moveToPoint(-65,0,3000,{.minSpeed = 45});
-    chassis.moveToPoint(-42,0,750,{.forwards = false,.minSpeed = 45});*/
+    chassis.turnToPoint(-45,-43,750);
+    chassis.moveToPoint(-45,-43,1000);
+    chassis.turnToPoint(-62.5,-46,750);
+    clamp.set_value(true);
+    intake.move(127);
+    chassis.moveToPoint(-62.5,-46,750,{.maxSpeed = 73});
 
-    //scoring in the low goal
+    //Clearing the park and moving out of it
+    //intake.move(127); //Intake on
+    //chassis.moveToPoint(-65,0,3000,{.minSpeed = 45});
+    //chassis.moveToPoint(-42,0,750,{.forwards = false,.minSpeed = 45});
+
+    /*//scoring in the low goal
     chassis.turnToPoint(-22.5,-23,750);
     chassis.moveToPoint(-22.5,-23,1750,{.maxSpeed = 60});
     chassis.turnToPoint(-12,-13,750);
@@ -340,7 +347,7 @@ void AutoSkills()
     chassis.turnToPoint(-42,0,750);
     chassis.moveToPoint(-42,0,1000);
     chassis.turnToHeading(270,750);
-    chassis.moveToPoint(-65,0,750,{.minSpeed = 45});
+    chassis.moveToPoint(-65,0,750,{.minSpeed = 45});*/
 
 
 }
