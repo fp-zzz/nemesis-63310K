@@ -97,10 +97,10 @@ bool clampValue = false;           // Initial state of pneumatic clamp
 lemlib::Drivetrain drivetrain(
     &left_motors,                // Left motor group
     &right_motors,               // Right motor group
-    12,                          // Track width (inches)
+    14,                          // Track width (inches)
     lemlib::Omniwheel::NEW_275,    // Wheel type (4" omni)
     450,                         // Max RPM
-    2                            // Drift (measured experimentally)
+    2                           // Drift (measured experimentally)
 );
 
 // Odometry sensor setup
@@ -164,7 +164,7 @@ enum class Auto{
     Skills
 };
 
-constexpr Auto AutoSelect = Auto::Skills;
+constexpr Auto AutoSelect = Auto::Left;
 
 void AutoLeft()
 {
@@ -177,7 +177,7 @@ void AutoLeft()
     chassis.moveToPoint(-40,20,900);//move to point
     chassis.turnToHeading(90,750);
     intake.move(127);
-    chassis.moveToPoint(-6,20,1750,{.maxSpeed = 55}); 
+    chassis.moveToPoint(-6,19,1750,{.maxSpeed = 53}); 
 
     /*//Score in middle goal
     chassis.moveToPoint(-20,20,500,{.forwards = false});
@@ -189,17 +189,18 @@ void AutoLeft()
     
     //Get to loader
     chassis.moveToPoint(-43,20,1000,{.forwards = false});
-    chassis.turnToPoint(-43,41,900);
-    chassis.moveToPoint(-43,41,1000);
+    chassis.turnToPoint(-43,44,900);
+    chassis.moveToPoint(-43.5,44,1000,{.maxSpeed = 70});
     //intake from loader
-    chassis.turnToPoint(-67,41,750);
+    chassis.turnToPoint(-64,44,900);
     clamp.set_value(true);
-    chassis.moveToPoint(-67,42,1000,{.minSpeed = 35});
+    chassis.moveToPoint(-68.5,44,2000,{.maxSpeed = 91});
     intake.move(127);
     pros::delay(2000);//Intakes
 
     ///Score in long goal
-    chassis.moveToPoint(-20,42,1900,{.forwards = false,});
+    chassis.moveToPoint(-20,44,1900,{.forwards = false,.maxSpeed = 70});
+    pros::delay(1000);
     top.move(127);
     pros::delay(2000);//Scores
 }
@@ -240,7 +241,7 @@ void AutoRight()
     chassis.moveToPoint(-68,-46,2000,{.maxSpeed = 90});
     intake.move(127);
     pros::delay(2000);
-    chassis.moveToPoint(-21,-46,2750,{.forwards = false});
+    chassis.moveToPoint(-21,-46,2750,{.forwards = false,.maxSpeed = 70});
    top.move(127);
     pros::delay(2000);
 
@@ -266,9 +267,11 @@ void AutoSkills()
     clamp.set_value(true);
     intake.move(127);
      chassis.moveToPoint(-69,-47,1750,{.maxSpeed = 91});
+    // chassis.moveToPoint(-68,-47,750,{.forwards = false});
     pros::delay(4000);
    
     chassis.moveToPoint(-20,-47,4000,{.forwards = false,.maxSpeed = 70});
+    pros::delay(1000);
     top.move(127);
     pros::delay(3000);
 
