@@ -238,10 +238,10 @@ void AutoRight()
     //Intake from the loader
     chassis.turnToPoint(-64,-46,900);
      clamp.set_value(true);
-    chassis.moveToPoint(-68.5,-46,2000,{.maxSpeed = 91});
+    chassis.moveToPoint(-69.5,-46,2000,{.maxSpeed = 91});
     intake.move(127);
     pros::delay(2000);
-    chassis.moveToPoint(-17,-44,2000,{.forwards = false,.maxSpeed = 70});
+    chassis.moveToPoint(-16.5,-46,2000,{.forwards = false,.maxSpeed = 70});
     pros::delay(1000);
    top.move(127);
     pros::delay(2000);
