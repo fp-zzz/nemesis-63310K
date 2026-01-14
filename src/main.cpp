@@ -1,4 +1,4 @@
-//# 63310K-
+//# 63310K-Nemesis
 #include "main.h"
 #include "lemlib/api.hpp"
 #include "lemlib/chassis/trackingWheel.hpp"
@@ -45,11 +45,12 @@ Sections include:
 //controler delcatiaroin
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
-constexpr auto in = pros::E_CONTROLLER_DIGITAL_L2;
-constexpr auto out = pros::E_CONTROLLER_DIGITAL_R2;
-constexpr auto intop = pros::E_CONTROLLER_DIGITAL_L1;
-constexpr auto outtop = pros::E_CONTROLLER_DIGITAL_R1;
-constexpr auto tounge = pros::E_CONTROLLER_DIGITAL_Y;
+constexpr auto in = pros::E_CONTROLLER_DIGITAL_L2; // Intake & hold balls
+constexpr auto out = pros::E_CONTROLLER_DIGITAL_R2; // Outake balls that are being held
+constexpr auto intop = pros::E_CONTROLLER_DIGITAL_L1; // Outakes balls to score
+constexpr auto outtop = pros::E_CONTROLLER_DIGITAL_R1; // Outake balls that are held; Both motors out
+constexpr auto tounge = pros::E_CONTROLLER_DIGITAL_Y; // Piston to control tongue
+constexpr auto wing = pros::E_CONTROLLER_DIGITAL_RIGHT; // Piston to control wing/descore
 
 // Left motor group on ports 1, 2, 3 (1 & 3 reversed)
 pros::MotorGroup left_motors({-2,-6,-7},pros::MotorGears::blue);
@@ -60,7 +61,6 @@ pros::MotorGroup right_motors({8,13,21}, pros::MotorGears::blue);
 // Standalone intake motor (port 10)
 pros::Motor intake(-5, pros::MotorGears::blue);
 pros::Motor top(16, pros::MotorGears::blue);
-
 
 /*
 -----------------------------------------------------------
@@ -82,9 +82,13 @@ pros::Imu imu(20); // IMU on port 10
 - Example button control included in opcontrol().
 */
 
+// TONGUE PISTON
 pros::adi::DigitalOut clamp('A',false);  // Pneumatic clamp on ADI port A
 bool clampValue = false;           // Initial state of pneumatic clamp
 
+//  WING PISTON
+pros::adi::DigitalOut clamp2('B',false); // Pneumatic clamp on ADI port B
+bool clampValue2 = false;
 
 /*
 -----------------------------------------------------------
@@ -132,7 +136,6 @@ lemlib::ControllerSettings angular_controller(
 // Create LemLib chassis
 lemlib::Chassis chassis(drivetrain, lateral_controller, angular_controller, sensors);
 
-
 /*
 -----------------------------------------------------------
 5️⃣ INITIALIZATION & CALIBRATION
@@ -143,9 +146,8 @@ lemlib::Chassis chassis(drivetrain, lateral_controller, angular_controller, sens
 void initialize() {
     chassis.calibrate();  // Calibrate IMU & encoders
     clamp.set_value(false); // Ensure clamp is in initial state
-    
+    clamp2.set_value(false); // Ensure clamp is in initial state
 }
-
 
 /*
 -----------------------------------------------------------
@@ -413,9 +415,6 @@ void opcontrol() {
 
         // Arcade drive
          chassis.arcade(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y), master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
-        // Example template:
-      
-
 
         // --- Intake Motor Control ---
         // L2 = forward, L1 = reverse
@@ -443,10 +442,16 @@ void opcontrol() {
 
 
         // --- Pneumatics Toggle ---
-        // A button toggles the pneumatic clamp
+        //  TONGUE PISTON CONTROL
         if (master.get_digital_new_press(tounge)) {
             clampValue = !clampValue;
             clamp.set_value(clampValue);
+        }
+
+        //  WING PISTON CONTROL
+        if (master.get_digital_new_press(wing)) {
+            clampValue2 != clampValue2;
+            clamp2.set_value(clampValue2);
         }
 
         pros::delay(20); // Delay to reduce CPU usage
