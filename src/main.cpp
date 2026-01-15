@@ -236,12 +236,12 @@ void AutoRight()
 
 
     //Intake from the loader
-    chassis.turnToPoint(-64,-46,900);
+    chassis.turnToPoint(-64,-43,900);
      clamp.set_value(true);
-    chassis.moveToPoint(-69.5,-46,2000,{.maxSpeed = 91});
+    chassis.moveToPoint(-65,-43,2000,{.maxSpeed = 91});
     intake.move(127);
     pros::delay(2000);
-    chassis.moveToPoint(-16.5,-46,2000,{.forwards = false,.maxSpeed = 70});
+    chassis.moveToPoint(-18.25,-42.5,2000,{.forwards = false,.maxSpeed = 70});
     pros::delay(1000);
    top.move(127);
     pros::delay(2000);
@@ -262,6 +262,7 @@ void AutoSkills()
     //Sets position on the edge of the parking zone **Learn how the Theta works**(for Shriyans);
     chassis.setPose(-45,-10,180); 
 
+    //intake
     chassis.turnToPoint(-45,-41,750);
     chassis.moveToPoint(-45,-41,2000,{.maxSpeed = 70});
     chassis.turnToPoint(-64,-47,1000);
@@ -270,108 +271,21 @@ void AutoSkills()
      chassis.moveToPoint(-68.5,-47,1750,{.maxSpeed = 91});
     // chassis.moveToPoint(-68,-47,750,{.forwards = false});
     pros::delay(4000);
-   
-    chassis.moveToPoint(-20,-47,4000,{.forwards = false,.maxSpeed = 70});
-    pros::delay(1000);
-    top.move(127);
-    pros::delay(3000);
 
-    clamp.set_value(false);
-    chassis.moveToPoint(-35,-47,1000);
-    chassis.turnToPoint(-35,0,750);
-    chassis.moveToPoint(-35,0,2000,{.maxSpeed = 70});
+    //Move to 
+    chassis.moveToPoint(-35,-47,1000,{.forwards = false,.maxSpeed = 70});
+    chassis.turnToPoint(-35,-50,900);
+    chassis.moveToPoint(-35,-50,900,{.maxSpeed = 70});
     chassis.turnToHeading(270,750);
-    chassis.moveToPoint(-73,0,3000,{.minSpeed = 50});
-
-
-
-    //Clearing the park and moving out of it
-    //intake.move(127); //Intake on
-    //chassis.moveToPoint(-65,0,3000,{.minSpeed = 45});
-    //chassis.moveToPoint(-42,0,750,{.forwards = false,.minSpeed = 45});
-
-    /*//scoring in the low goal
-    chassis.turnToPoint(-22.5,-23,750);
-    chassis.moveToPoint(-22.5,-23,1750,{.maxSpeed = 60});
-    chassis.turnToPoint(-12,-13,750);
-    chassis.moveToPoint(-12,-13,750,{.maxSpeed = 50});
-    intake.move(-63);
-    pros::delay(2000);
-    intake.move(0);
-    
-    //Intaking from first match loader
-    chassis.moveToPoint(-43,47,1000,{.forwards = false,.minSpeed = 45});
-    chassis.turnToHeading(270,750);
-    clamp.set_value(true);
-    intake.move(127);
-    chassis.moveToPoint(-55,-47,750,{.maxSpeed = 68});
-    pros::delay(2000);
-
-    //Get to the other side of the long goal
-    chassis.moveToPoint(-43,-59,750,{.forwards = false,.minSpeed = 45});
-    chassis.turnToHeading(270,750);
-    chassis.moveToPoint(43,-59,1000,{.forwards = false,.minSpeed = 45});
-    chassis.swingToPoint(25,-47,DriveSide::RIGHT,750);
-    //chassis.moveToPoint(33.5,-47,750,{.forwards = false,.minSpeed = 45});
-
-    //Score in the long goal
-    //chassis.turnToHeading(90,750);
-    top.move(127);
-    pros::delay(1000);
-    top.move(0);
-
-    //Intake from second match loader
-    chassis.moveToPoint(55,-47,750,{.maxSpeed = 68});
-    pros::delay(1000);
-
-    //Score again in the long goal
-    chassis.moveToPoint(25,-47,750,{.forwards = false,.minSpeed = 45});\
-    top.move(127);
-    pros::delay(1000);
-    intake.move(0) && top.move(0);
-    clamp.set_value(false); 
-
-    //Clear parking zone
-    chassis.turnToPoint(61.5,-22,750);
-    chassis.moveToPoint(61.5,-22,1000,{.minSpeed = 45});
-    chassis.moveToPoint(61.5,22,1750,{.minSpeed = 55});
-
-    //Intake the third match loader
-    chassis.turnToPoint(43,47,750);
-    chassis.moveToPoint(43,47,750);
+    chassis.moveToPoint(35,-50,2000,{.forwards = false,.maxSpeed = 70});
+    chassis.turnToPoint(35,-47,900);
+    chassis.moveToPoint(35,-47,900,{.maxSpeed = 70});
     chassis.turnToHeading(90,750);
-    clamp.set_value(true);
-    intake.move(127);
-    chassis.moveToPoint(55,47,750,{.maxSpeed = 68});
-    pros::delay(2000);
+    chassis.moveToPoint(20,-47,900,{.forwards = false,.maxSpeed = 70});
+
     
-    //Move to the other side of the long goal
-    chassis.moveToPoint(43,59,750,{.forwards = false,.minSpeed = 45});
-    chassis.turnToHeading(90,750);
-    chassis.moveToPoint(-43,59,1000,{.forwards = false,.minSpeed = 45});
-    chassis.swingToPoint(-25,47,DriveSide::RIGHT,750);
 
 
-    //Score in the long goal again
-    top.move(127);
-    pros::delay(2000);
-    top.move(0);
-
-    //Intake from last match loader
-    chassis.moveToPoint(-55,47,750,{.maxSpeed = 68});
-    pros::delay(1000);
-    
-    //Final scoring set
-    chassis.moveToPoint(25,47,750,{.forwards = false,.minSpeed = 45});
-    top.move(127);
-    pros::delay(1000);
-    top.move(0) && intake.move(0);
-
-    //Park in the parking zone
-    chassis.turnToPoint(-42,0,750);
-    chassis.moveToPoint(-42,0,1000);
-    chassis.turnToHeading(270,750);
-    chassis.moveToPoint(-65,0,750,{.minSpeed = 45});*/
 
 
 }
