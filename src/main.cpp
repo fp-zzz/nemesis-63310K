@@ -50,7 +50,8 @@ constexpr auto out = pros::E_CONTROLLER_DIGITAL_R2; // Outake balls that are bei
 constexpr auto intop = pros::E_CONTROLLER_DIGITAL_L1; // Outakes balls to score
 constexpr auto outtop = pros::E_CONTROLLER_DIGITAL_R1; // Outake balls that are held; Both motors out
 constexpr auto tounge = pros::E_CONTROLLER_DIGITAL_Y; // Piston to control tongue
-constexpr auto wing = pros::E_CONTROLLER_DIGITAL_RIGHT; // Piston to control wing/descore
+constexpr auto wing = pros::E_CONTROLLER_DIGITAL_B; // Piston to control wing/descore
+
 
 // Left motor group on ports 1, 2, 3 (1 & 3 reversed)
 pros::MotorGroup left_motors({-2,-6,-7},pros::MotorGears::blue);
@@ -83,13 +84,14 @@ pros::Imu imu(20); // IMU on port 10
 */
 
 // TONGUE PISTON
-pros::adi::DigitalOut clamp('A',false);  // Pneumatic clamp on ADI port A
+pros::adi::DigitalOut clamp('A');  // Pneumatic clamp on ADI port A
 bool clampValue = false;           // Initial state of pneumatic clamp
+bool lockT = false;
 
 //  WING PISTON
-pros::adi::DigitalOut clamp2('B',false); // Pneumatic clamp on ADI port B
+pros::adi::DigitalOut clamp2('C'); // Pneumatic clamp on ADI port B
 bool clampValue2 = false;
-
+bool lockW = false;
 /*
 -----------------------------------------------------------
 4️⃣ LEMLIB DRIVETRAIN & CONTROLLERS
@@ -443,15 +445,25 @@ void opcontrol() {
 
         // --- Pneumatics Toggle ---
         //  TONGUE PISTON CONTROL
-        if (master.get_digital_new_press(tounge)) {
+        if (master.get_digital(tounge) && !lockT) {
             clampValue = !clampValue;
             clamp.set_value(clampValue);
+            lockT = true;
+        }
+        else if(!(master.get_digital(tounge) && !lockT))
+        {
+            lockT = false;
         }
 
         //  WING PISTON CONTROL
-        if (master.get_digital_new_press(wing)) {
+        if (master.get_digital(wing) && !lockW) {
             clampValue2 != clampValue2;
             clamp2.set_value(clampValue2);
+            lockW = true;
+        }
+        else if(!(master.get_digital(wing) && !lockW))
+        {
+            lockW = false;
         }
 
         pros::delay(20); // Delay to reduce CPU usage
