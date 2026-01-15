@@ -89,7 +89,7 @@ bool clampValue = false;           // Initial state of pneumatic clamp
 bool lockT = false;
 
 //  WING PISTON
-pros::adi::DigitalOut clamp2('C'); // Pneumatic clamp on ADI port B
+pros::adi::DigitalOut clamp2('B'); // Pneumatic clamp on ADI port B
 bool clampValue2 = false;
 bool lockW = false;
 /*
