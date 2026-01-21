@@ -48,7 +48,7 @@ pros::Controller master(pros::E_CONTROLLER_MASTER);
 constexpr auto in = pros::E_CONTROLLER_DIGITAL_L2; // Intake & hold balls
 constexpr auto out = pros::E_CONTROLLER_DIGITAL_R2; // Outake balls that are being held
 constexpr auto intop = pros::E_CONTROLLER_DIGITAL_L1; // Outakes balls to score
-constexpr auto outtop = pros::E_CONTROLLER_DIGITAL_R1; // Outake balls that are held; Both motors out
+constexpr auto middle = pros::E_CONTROLLER_DIGITAL_R1; // Outake balls that are held; Both motors out
 constexpr auto tounge = pros::E_CONTROLLER_DIGITAL_Y; // Piston to control tongue
 constexpr auto wing = pros::E_CONTROLLER_DIGITAL_RIGHT; // Piston to control wing/descore
 
@@ -92,6 +92,12 @@ bool lockT = false;
 pros::adi::DigitalOut clamp2('B'); // Pneumatic clamp on ADI port B
 bool clampValue2 = false;
 bool lockW = false;
+
+// MIDDLE PISTON
+pros::adi::DigitalOut clamp3('C');
+bool clampValue3 = true;
+bool lockM = true;
+
 /*
 -----------------------------------------------------------
 4️⃣ LEMLIB DRIVETRAIN & CONTROLLERS
@@ -149,6 +155,7 @@ void initialize() {
     chassis.calibrate();  // Calibrate IMU & encoders
     clamp.set_value(false); // Ensure clamp is in initial state
     clamp2.set_value(false); // Ensure clamp is in initial state
+    clamp3.set_value(true);
 }
 
 /*
@@ -346,22 +353,18 @@ void opcontrol() {
         else if (master.get_digital(out)) {
             intake.move(-127); // Full reverse
         } 
-        else if (master.get_digital(intop))
-        {
+        else if (master.get_digital(intop)) {
             intake.move(127);
             top.move(MAX_INPUT);
-
         }
-        else if(master.get_digital(outtop))
-        {
-            intake.move(-MAX_INPUT);
+        else if(master.get_digital(middle)) {   
+            intake.move(MAX_INPUT);
             top.move(-MAX_INPUT);
         }
         else {
             intake.brake();    // Stop (optional — can replace with .move(0))
             top.brake();
         }
-
 
         // --- Pneumatics Toggle ---
         //  TONGUE PISTON CONTROL
@@ -384,6 +387,18 @@ void opcontrol() {
         else if(!(master.get_digital(wing)))
         {
             lockW = false;
+        }
+
+        // MIDDLE PISTON CONTROL
+        
+        if (master.get_digital(middle) && !lockM) {
+            clampValue3 = !clampValue3;
+            clamp3.set_value(clampValue3);
+            lockM = true;
+        }
+        else if(!(master.get_digital(middle))) {
+            clampValue3 = !clampValue3;
+            lockM = false;
         }
 
         pros::delay(20); // Delay to reduce CPU usage
