@@ -51,7 +51,6 @@ constexpr auto intop = pros::E_CONTROLLER_DIGITAL_L1; // Outakes balls to score
 constexpr auto middle = pros::E_CONTROLLER_DIGITAL_R1; // Outake balls that are held; Both motors out
 constexpr auto tounge = pros::E_CONTROLLER_DIGITAL_Y; // Piston to control tongue
 constexpr auto wing = pros::E_CONTROLLER_DIGITAL_RIGHT; // Piston to control wing/descore
-constexpr auto mid = pros::E_CONTROLLER_DIGITAL_A; // Piston to control middle
 
 
 // Left motor group on ports 1, 2, 3 (1 & 3 reversed)
@@ -508,7 +507,7 @@ void opcontrol() {
 
         // MIDDLE PISTON CONTROL
         
-      /*  if (master.get_digital(middle) && !lockM) {
+        if (master.get_digital(middle) && !lockM) {
             clampValue3 = !clampValue3;
             clamp3.set_value(clampValue3);
             lockM = true;
@@ -517,18 +516,6 @@ void opcontrol() {
             clampValue3 = !clampValue3;
             lockM = false;
         }
-*/
         pros::delay(20); // Delay to reduce CPU usage
-
-        if(master.get_digital(mid) && !lockM)
-        {
-            clampValue3 = !clampValue3;
-            clamp3.set_value(clampValue3);
-            lockM = true;
-        }
-        if(!(master.get_digital(mid)))
-        {
-            lockM = false;
-        }
     }
 }
