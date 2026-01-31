@@ -135,17 +135,10 @@ lemlib::ControllerSettings lateral_controller(
 
 // PID Controller settings for turning
 lemlib::ControllerSettings angular_controller(
-<<<<<<< HEAD
-    2, 0, 17, 0,  // kP, kI, kD, anti-windup
-    0, 0,        // Small error (degrees), timeout (ms)
-    0, 0,        // Large error (degrees), timeout (ms)
-    4             // Max acceleration (slew)
-=======
     2, 0, 17, 3,  // kP, kI, kD, anti-windup
     1, 100,        // Small error (degrees), timeout (ms)
     3, 500,        // Large error (degrees), timeout (ms)
     80             // Max acceleration (slew)
->>>>>>> 4020b04c9773eabd4bde8795c4c7a558d6484581
 );
 
 // Create LemLib chassis
