@@ -246,11 +246,11 @@ void AutoRight()
     chassis.setPose(-45,-10, 90); 
 
     //intaking the first 3 balls
-    chassis.turnToPoint(-40,-18,750,{},false );//Turns to the balls
-    chassis.moveToPoint(-40,-18,900,{},false);//Moves to the halfway point really fast
+    chassis.turnToPoint(-40,-17.5,750,{},false );//Turns to the balls
+    chassis.moveToPoint(-40,-17.5,900,{},false);//Moves to the halfway point really fast
     chassis.turnToHeading(90,900,{},false);//Moves to the balls slowly
     intake.move(127);
-    chassis.moveToPoint(-6,-20,1750,{.maxSpeed = 65},false);//Moves to the lower goal
+    chassis.moveToPoint(-6,-20,1750,{.maxSpeed = 75},false);//Moves to the lower goal
 
     /*//two balls
     chassis.turnToPoint(-5,-45,900);
@@ -267,7 +267,7 @@ void AutoRight()
   
 
     //Moving to the loader
-    chassis.moveToPoint(-40,-18, 1000,{.forwards = false,.maxSpeed = 85});
+    chassis.moveToPoint(-40,-17.5, 1000,{.forwards = false,.maxSpeed = 85});
     chassis.turnToPoint(-40,-42,1000);
     chassis.moveToPoint(-40,-42,1750,{.maxSpeed = 70});
 
@@ -279,13 +279,13 @@ void AutoRight()
    clamp.set_value(true);
     intake.move(127);
      chassis.moveToPoint(-57,-47,1750,{.maxSpeed = 70},false);
-     chassis.moveToPoint(-58.8,-47,750,{.maxSpeed = 75},false);
+     chassis.moveToPoint(-58.9,-47,750,{.maxSpeed = 75},false);
      intake.move(127);
      pros::delay(750);
 
    //Scoring in the long goal
-   chassis.moveToPoint(-35,-42,1750,{.forwards = false,.maxSpeed = 70},false);
-   chassis.moveToPoint(-17.75,-43.9,1750,{.forwards = false,.maxSpeed = 70},false);
+   chassis.moveToPoint(-35,-47,1750,{.forwards = false,.maxSpeed = 70},false);
+   chassis.moveToPoint(-20,-43.25,1750,{.forwards = false,.maxSpeed = 70},false);
    //clamp.set_value(false);
     intake.move(-127);
     pros::delay(100);
@@ -312,7 +312,13 @@ void AutoSkills()
     clamp.set_value(true);
     intake.move(127);
      chassis.moveToPoint(-57,45,2750,{.maxSpeed = 70});
-     chassis.moveToPoint(-59,47,750,{.maxSpeed = 75});
+     chassis.moveToPoint(-59,47,++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        
+        
+        
+        
+        
+        750,{.maxSpeed = 75});
      intake.move(127);
     pros::delay(2000);
     chassis.moveToPoint(-59.4,45,2750,{.maxSpeed = 75});
