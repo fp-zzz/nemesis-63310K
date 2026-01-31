@@ -176,11 +176,7 @@ enum class Auto{
     Test,
 };
 
-<<<<<<< HEAD
-constexpr Auto AutoSelect = Auto::Test;
-=======
 constexpr Auto AutoSelect = Auto::Skills;
->>>>>>> 4020b04c9773eabd4bde8795c4c7a558d6484581
 
 void AutoLeft()
 {
