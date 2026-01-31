@@ -135,7 +135,7 @@ lemlib::ControllerSettings lateral_controller(
 
 // PID Controller settings for turning
 lemlib::ControllerSettings angular_controller(
-    2, 0, 10, 3,  // kP, kI, kD, anti-windup
+    2, 0, 17, 3,  // kP, kI, kD, anti-windup
     1, 100,        // Small error (degrees), timeout (ms)
     3, 500,        // Large error (degrees), timeout (ms)
     80             // Max acceleration (slew)
@@ -275,22 +275,22 @@ void AutoRight()
 
 
     //Intake from the loader
-     chassis.turnToPoint(-57,-47,900);
+     chassis.turnToPoint(-54,-46,900);
    clamp.set_value(true);
     intake.move(127);
-     chassis.moveToPoint(-57,-47,1750,{.maxSpeed = 70},false);
-     chassis.moveToPoint(-58.9,-47,750,{.maxSpeed = 75},false);
+     chassis.moveToPoint(-50,-46,1750,{.maxSpeed = 70},false);
+     chassis.moveToPoint(-52,-46,750,{.maxSpeed = 75},false);
      intake.move(127);
      pros::delay(750);
 
    //Scoring in the long goal
-   chassis.moveToPoint(-35,-47,1750,{.forwards = false,.maxSpeed = 70},false);
-   chassis.moveToPoint(-20,-43.25,1750,{.forwards = false,.maxSpeed = 70},false);
+  // chassis.moveToPoint(-35,-43.2,1750,{.forwards = false,.maxSpeed = 70},false);
+   chassis.moveToPoint(-20,-43.2,1750,{.forwards = false,.maxSpeed = 70},false);
    //clamp.set_value(false);
+   clamp.set_value(false);
     intake.move(-127);
-    pros::delay(100);
-    top.move(127)&& intake.move(127);
-    pros::delay(2000);//Scores
+    pros::delay(450);
+    top.move(127)&& intake.move(127);//Scores
 
 
 
@@ -312,13 +312,7 @@ void AutoSkills()
     clamp.set_value(true);
     intake.move(127);
      chassis.moveToPoint(-57,45,2750,{.maxSpeed = 70});
-     chassis.moveToPoint(-59,47,++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        
-        
-        
-        
-        
-        750,{.maxSpeed = 75});
+     chassis.moveToPoint(-59,47,750,{.maxSpeed = 75});
      intake.move(127);
     pros::delay(2000);
     chassis.moveToPoint(-59.4,45,2750,{.maxSpeed = 75});
