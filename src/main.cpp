@@ -316,7 +316,7 @@ void AutoSkills()
      chassis.moveToPoint(-59,47,750,{.maxSpeed = 75},false);
      intake.move(127);
     pros::delay(2000);
-    top.move(127);
+    intake.move(-127);
   pros::delay(500);
     intake.move(127)&& top.move(0);
     chassis.moveToPoint(-60,47,2750,{.maxSpeed = 75},false);
@@ -350,7 +350,7 @@ void AutoSkills()
      chassis.moveToPoint(59,42,750,{.maxSpeed = 75},false);
      intake.move(127);
     pros::delay(2000);
-    top.move(127);
+    intake.move(-127);
     pros::delay(500);
     intake.move(127)&& top.move(0);
     chassis.moveToPoint(60,44,3000,{.maxSpeed = 75},false);
