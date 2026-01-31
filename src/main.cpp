@@ -172,7 +172,8 @@ enum class Auto{
     Left,
     Right,
     WinPoint,
-    Skills
+    Skills,
+    Test,
 };
 
 constexpr Auto AutoSelect = Auto::Right;
@@ -436,6 +437,16 @@ void AutoSkills()
 
 }
 
+void TestAuto(){
+    chassis.setPose(0, 0, 0);
+
+    chassis.moveToPoint(0, 24, 3000, {.maxSpeed = 40});
+    chassis.turnToHeading(90, 1000, {.maxSpeed = 40});
+    chassis.moveToPoint(12, 24, 3000, {.maxSpeed = 40});
+    chassis.turnToHeading(0, 1000, {.maxSpeed = 40});
+    chassis.moveToPoint(12, 36, 3000, {.maxSpeed = 40});
+}
+
 void autonomous()
 {
     switch(AutoSelect)
@@ -451,6 +462,9 @@ void autonomous()
             break;
         case Auto::Skills:
             AutoSkills();
+            break;
+        case Auto::Test:
+            TestAuto();
             break;
     }
 }
