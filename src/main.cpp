@@ -215,21 +215,20 @@ void AutoLeft()
 
 
     //Intake from the loader
-    chassis.turnToPoint(-53,45,900);
+    chassis.turnToPoint(-56,42,900);
     clamp.set_value(true);
     intake.move(127);
-    chassis.moveToPoint(-54.5,45,1750,{.maxSpeed = 70},false);
-    chassis.moveToPoint(-56.5,45,750,{.maxSpeed = 75},false);
+    chassis.moveToPoint(-57.5,42,1750,{.maxSpeed = 70},false);
+    chassis.moveToPoint(-59.5,42,750,{.maxSpeed = 75},false);
     intake.move(127);
-    pros::delay(2000);
+    pros::delay(750);
     
 
     //Scoring in the long goal
     // chassis.moveToPoint(-35,-43.2,1750,{.forwards = false,.maxSpeed = 70},false);
-    chassis.moveToPoint(-20,44,1750,{.forwards = false,.maxSpeed = 70},false);
+    chassis.moveToPoint(-20.5,41.9,1750,{.forwards = false,.maxSpeed = 70},false);
     //clamp.set_value(false);
-    clamp.set_value(false);
-    //intake.move(-127);
+    intake.move(-127);
     pros::delay(450);
     top.move(127)&& intake.move(127);//Scores
 
@@ -285,7 +284,7 @@ void AutoRight()
 
     //Scoring in the long goal
     // chassis.moveToPoint(-35,-43.2,1750,{.forwards = false,.maxSpeed = 70},false);
-    chassis.moveToPoint(-20,-44.5,1750,{.forwards = false,.maxSpeed = 70},false);
+    chassis.moveToPoint(-20,-45,1750,{.forwards = false,.maxSpeed = 70},false);
     //clamp.set_value(false);
     clamp.set_value(false);
     //intake.move(-127);
@@ -330,8 +329,8 @@ void AutoSkills()
     chassis.moveToPoint(45,20,2000,{.maxSpeed = 70});
     chassis.turnToPoint(45,40,1000);
     chassis.moveToPoint(45,40,2750,{.maxSpeed = 70});
-    chassis.turnToHeading(90,900);
-    chassis.moveToPoint(21.5,43.7,2000,{.forwards = false,.maxSpeed = 70},false);
+    chassis.turnToHeading(90,1000,{},false);
+    chassis.moveToPoint(21,45,2000,{.forwards = false,.maxSpeed = 70},false);
     pros::delay(750);
     intake.move(-127);
     pros::delay(500);
@@ -340,8 +339,8 @@ void AutoSkills()
 
     //intake 
     top.move(0);
-    chassis.turnToPoint(45,42,1000);
-    chassis.moveToPoint(45,42,1000,{.maxSpeed = 70});
+    chassis.turnToPoint(45,40,1000);
+    chassis.moveToPoint(45,40,1000,{.maxSpeed = 70});
     chassis.turnToPoint(57,42,900);
     clamp.set_value(true);
     intake.move(127);
@@ -352,28 +351,29 @@ void AutoSkills()
     intake.move(-127);
     pros::delay(500);
     intake.move(127)&& top.move(0);
-    chassis.moveToPoint(60,44,3000,{.maxSpeed = 75},false);
+    chassis.moveToPoint(60,42,3000,{.maxSpeed = 75},false);
 
     //score
-    chassis.moveToPoint(21,44,2000,{.forwards = false,.maxSpeed = 70},false);
+    chassis.moveToPoint(21,45,2000,{.forwards = false,.maxSpeed = 70},false);
     pros::delay(750);
     top.move(-127) && intake.move(-127);
     pros::delay(500);
     top.move(127) && intake.move(127);
     pros::delay(3750);
-    chassis.moveToPoint(35,43.7,1000,{.maxSpeed = 70},false);
+    chassis.moveToPoint(35,44,1000,{.maxSpeed = 70},false);
     clamp.set_value(false);
 
     //move To Park
     chassis.turnToPoint(20,20,1000);
     chassis.moveToPoint(20,20,2000,{.maxSpeed = 70}, false);
-    chassis.turnToPoint(-35,20,1000);   
-    chassis.moveToPoint(-35,20,2000,{.maxSpeed = 70}, false);
-    chassis.turnToPoint(-35,-5,1000);
-    chassis.moveToPoint(-35,-5,2000,{.maxSpeed = 70},  false);
-    chassis.turnToPoint(-55,-5,1000);
+    chassis.turnToPoint(-30,20,1000);   
+    chassis.moveToPoint(-30,20,2000,{.maxSpeed = 70}, false);
+    chassis.turnToPoint(-30,-2,1000);
     intake.move(127) && top.move(127);
-    chassis.moveToPoint(-70,-5,1750,{.minSpeed = 100},false);
+    chassis.moveToPoint(-30,-2,2000,{.maxSpeed = 70},  false);
+    chassis.turnToPoint(-70,-2,900);
+    chassis.moveToPoint(-70,-2,900);
+   chassis.moveToPoint(-70,-2,1750,{.minSpeed = MAX_INPUT},false);
 
    /*//clear park
     top.move(0) && intake.move(0);
