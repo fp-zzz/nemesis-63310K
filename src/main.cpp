@@ -95,8 +95,8 @@ bool lockW = false;
 
 // MIDDLE PISTON
 pros::adi::DigitalOut clamp3('C');
-bool clampValue3 = true;
-bool lockM = true;
+bool clampValue3 = false;
+bool lockM = false;
 
 /*
 -----------------------------------------------------------
@@ -155,7 +155,7 @@ void initialize() {
     chassis.calibrate();  // Calibrate IMU & encoders
     clamp.set_value(false); // Ensure clamp is in initial state
     clamp2.set_value(false); // Ensure clamp is in initial state
-    clamp3.set_value(true);
+    clamp3.set_value(false);
 }
 
 /*
@@ -176,7 +176,7 @@ enum class Auto{
     Test,
 };
 
-constexpr Auto AutoSelect = Auto::Skills;
+constexpr Auto AutoSelect = Auto::Left;
 
 void AutoLeft()
 {
@@ -298,6 +298,27 @@ void AutoRight()
 }
 void AutoWinPoint()
 {
+    chassis.setPose(-45,-10,180);
+    chassis.turnToPoint(-54,-46,750);
+    chassis.moveToPoint(-54,-46,1000,{.maxSpeed = 90},false);
+    
+    //intake from loader
+    clamp.set_value(true);
+    intake.move(127);
+    chassis.moveToPoint(-51,-45.5,750,{.maxSpeed = 70},false);
+    chassis.moveToPoint(-53,-45.5,750,{.maxSpeed = 75},false);
+    intake.move(127);
+    pros::delay(750);
+
+    //Score
+    chassis.moveToPoint(-20,-43.2,1750,{.forwards = false,.maxSpeed = 70},false);
+   clamp.set_value(false);
+    pros::delay(450);
+    top.move(127)&& intake.move(127);
+    pros::delay(900);
+
+    
+
 
 
 }
@@ -521,10 +542,10 @@ void opcontrol() {
             intake.move(127);
             top.move(MAX_INPUT);
         }
-        else if(master.get_digital(middle)) {   
+        /*else if(master.get_digital(middle)) {   
             intake.move(MAX_INPUT);
             top.move(-MAX_INPUT);
-        }
+        }*/
         else {
             intake.brake();    // Stop (optional — can replace with .move(0))
             top.brake();
@@ -559,10 +580,16 @@ void opcontrol() {
             clampValue3 = !clampValue3;
             clamp3.set_value(clampValue3);
             lockM = true;
+            intake.move(127);
+            top.move(127);
         }
         else if(!(master.get_digital(middle))) {
-            clampValue3 = !clampValue3;
             lockM = false;
+        }
+        else {
+            clamp3.set_value(false);
+            intake.brake();
+            top.brake();
         }
         pros::delay(20); // Delay to reduce CPU usage
     }
