@@ -174,9 +174,10 @@ enum class Auto{
     WinPoint,
     Skills,
     Test,
+    Alliance
 };
 
-constexpr Auto AutoSelect = Auto::Left;
+constexpr Auto AutoSelect = Auto::Right;
 
 void AutoLeft()
 {
@@ -278,9 +279,6 @@ void AutoLeft()
     chassis.moveToPoint(-20,31.16,1000,{.forwards = false,.maxSpeed = 70},false);  
     clamp2.set_value(false);
     chassis.moveToPoint(-9,31.16,750,{.forwards = false,.maxSpeed = 100},false);
-
-
-
 }
     
 void AutoRight()
@@ -290,11 +288,12 @@ void AutoRight()
     chassis.setPose(-45,-10, 90); 
 
     //intaking the first 3 balls
-    chassis.turnToPoint(-40,-17.5,750,{},false );//Turns to the balls
-    chassis.moveToPoint(-40,-17.5,900,{},false);//Moves to the halfway point really fast
-    chassis.turnToHeading(90,900,{},false);//Moves to the balls slowly
+    chassis.turnToPoint(-20,-20,750,{},false );//Turns to the balls
     intake.move(127);
-    chassis.moveToPoint(-6,-20,1750,{.maxSpeed = 75},false);//Moves to the lower goal
+    chassis.moveToPoint(-20,-20,750,{},false);//Moves to the halfway point really fast
+    chassis.turnToHeading(90,900,{},false);//Moves to the balls slowly
+    
+   // chassis.moveToPoint(-13,-20,1000,{.maxSpeed = 85},false);//Moves to the lower goal
 
     /*//two balls
     chassis.turnToPoint(-5,-45,900);
@@ -311,35 +310,42 @@ void AutoRight()
   
 
     //Moving to the loader
-    chassis.moveToPoint(-40,-17.5, 1000,{.forwards = false,.maxSpeed = 85},false);
-    chassis.turnToPoint(-40,-42,1000);
-    chassis.moveToPoint(-40,-42,1750,{.maxSpeed = 70},false);
-    intake.move(127);
+    chassis.moveToPoint(-40,-17.5, 900,{.forwards = false,.maxSpeed = 85},false);
+    chassis.turnToPoint(-40,-42,750,{},false);
+    chassis.moveToPoint(-40,-42,750,{.maxSpeed = 70},false);
 
 
 
 
-    //Intake from the loader
+    /*//Intake from the loader
     chassis.turnToPoint(-53,-45,900);
     clamp.set_value(true);
     intake.move(127);
     chassis.moveToPoint(-53.5,-45,1750,{.maxSpeed = 70},false);
     chassis.moveToPoint(-55.5,-45,750,{.maxSpeed = 75},false);
     intake.move(127);
-    pros::delay(2000);
+    pros::delay(2000);*/
     
 
     //Scoring in the long goal
     // chassis.moveToPoint(-35,-43.2,1750,{.forwards = false,.maxSpeed = 70},false);
-    chassis.moveToPoint(-20,-45,1750,{.forwards = false,.maxSpeed = 70},false);
+    chassis.turnToHeading(270,750,{},false);
+    chassis.moveToPoint(-20,-44.5,1000,{.forwards = false,.maxSpeed = 70},false);
     //clamp.set_value(false);
-    clamp.set_value(false);
     //intake.move(-127);
     pros::delay(450);
     top.move(127)&& intake.move(127);//Scores
+    pros::delay(1500);
 
-
-
+    //wing
+    chassis.moveToPoint(-30,-45,750,{.maxSpeed = 90},false);
+    chassis.turnToPoint(-30,-26.25,750);
+    chassis.moveToPoint(-30,-26.25,750,{.maxSpeed = 90},false);
+    chassis.turnToHeading(90,750,{},false);
+    clamp2.set_value(true);
+    chassis.moveToPoint(-10,-26.25,1000,{.maxSpeed = 70},false);
+    clamp2.set_value(false);
+    chassis.moveToPoint(-5,-26.25,750,{.maxSpeed = 90},false);
 }
 void AutoWinPoint()
 {
@@ -414,7 +420,7 @@ void AutoSkills()
     intake.move(127);
     pros::delay(1000);
     intake.move(127);
-    chassis.moveToPoint(-59.5,45,1000,{.maxSpeed = 95});
+    chassis.moveToPoint(-59.75,45,1000,{.maxSpeed = 95});
 
     //Move to score
     chassis.moveToPoint(-45,45,1000,{.forwards = false,.maxSpeed = 70});
@@ -431,7 +437,7 @@ void AutoSkills()
    // intake.move(-127);
     pros::delay(600);
     intake.move(127) && top.move(127);
-    pros::delay(500);
+    pros::delay(450);
     intake.move(-127);
     pros::delay(650);
     top.move(127) && intake.move(127);
@@ -503,7 +509,7 @@ void AutoSkills()
     chassis.moveToPoint(57,-53,1750,{.maxSpeed = 90},false);
     chassis.moveToPoint(59,-53,1000,{.maxSpeed = 95});
     intake.move(127);
-    pros::delay(1500);
+    pros::delay(1750);
     intake.move(0);
 
 
@@ -604,10 +610,16 @@ void AutoSkills()
     chassis.turnToPoint(50,-15,900);
     chassis.moveToPoint(50,-15,2000,{.maxSpeed = 80});
 */
-
-
-
 }
+
+void AllianceWinPoint()
+{
+    chassis.setPose(-45,10,360);
+    chassis.moveToPoint(-45,25,1000, {.maxSpeed = 40},false);
+    chassis.turnToHeading(90, 1000, {.maxSpeed = 40},false);
+    chassis.moveToPoint(-55,25,1000, {.forwards = false,.maxSpeed = 40});
+}
+
 
 void TestAuto(){
     chassis.setPose(0, 0, 0);
@@ -639,6 +651,9 @@ void autonomous()
             break;
         case Auto::Test:
             TestAuto();
+            break;
+        case Auto::Alliance:
+            AllianceWinPoint();
             break;
     }
 }
