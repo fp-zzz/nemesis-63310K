@@ -45,12 +45,12 @@ Sections include:
 //controler delcatiaroin
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
-constexpr auto in = pros::E_CONTROLLER_DIGITAL_L2; // Intake & hold balls
-constexpr auto out = pros::E_CONTROLLER_DIGITAL_R2; // Outake balls that are being held
-constexpr auto intop = pros::E_CONTROLLER_DIGITAL_L1; // Outakes balls to score
-constexpr auto middle = pros::E_CONTROLLER_DIGITAL_R1; // Outake balls that are held; Both motors out
-constexpr auto tounge = pros::E_CONTROLLER_DIGITAL_Y; // Piston to control tongue
-constexpr auto wing = pros::E_CONTROLLER_DIGITAL_RIGHT; // Piston to control wing/descore
+constexpr auto in = pros::E_CONTROLLER_DIGITAL_L2; 
+constexpr auto out = pros::E_CONTROLLER_DIGITAL_R2; 
+constexpr auto intop = pros::E_CONTROLLER_DIGITAL_L1; 
+constexpr auto middle = pros::E_CONTROLLER_DIGITAL_R1; 
+constexpr auto tounge = pros::E_CONTROLLER_DIGITAL_Y; 
+constexpr auto wing = pros::E_CONTROLLER_DIGITAL_RIGHT; 
 
 
 // Left motor group on ports 1, 2, 3 (1 & 3 reversed)
@@ -59,9 +59,9 @@ pros::MotorGroup left_motors({-2,-6,-7},pros::MotorGears::blue);
 // Right motor group on ports 4, 5, 6 (5 reversed)
 pros::MotorGroup right_motors({8,13,21}, pros::MotorGears::blue);
 
-// Standalone intake motor (port 10)
-pros::Motor intake(-5, pros::MotorGears::blue);
-pros::Motor top(16, pros::MotorGears::blue);
+// FRANK CHANGE IF NEEDED!!!
+pros::Motor intake(-5, pros::MotorGears::blue);//change port
+pros::Motor lever(16, pros::MotorGears::red);//reverse if needed
 
 /*
 -----------------------------------------------------------
@@ -72,7 +72,7 @@ pros::Motor top(16, pros::MotorGears::blue);
 - IMU provides inertial heading tracking.
 */
 
-pros::Imu imu(20); // IMU on port 10
+pros::Imu imu(20); 
 
 /*
 -----------------------------------------------------------
@@ -82,6 +82,8 @@ pros::Imu imu(20); // IMU on port 10
 - Setting HIGH opens the solenoid.
 - Example button control included in opcontrol().
 */
+
+//FRANK CHANGE!!!
 
 // TONGUE PISTON
 pros::adi::DigitalOut clamp('A');  // Pneumatic clamp on ADI port A
@@ -106,6 +108,7 @@ bool lockM = false;
 - Adjust parameters based on robot geometry and wheel setup.
 */
 
+//FRANK CHANGE THE WIDTH AND RPM!!
 lemlib::Drivetrain drivetrain(
     &left_motors,                // Left motor group
     &right_motors,               // Right motor group
@@ -172,239 +175,67 @@ enum class Auto{
     Left,
     Right,
     WinPoint,
-    Skills,
+    Skills1,
     Test,
-    Alliance
+    Alliance,
+    Skills2
 };
 
 constexpr Auto AutoSelect = Auto::Right;
 
 void AutoLeft()
 {
-     //** All coordinates are in INCHES and are CLOSE APPROXIMARIONS 
-    //Sets position on right edge of the parking zone **Learn how the Theta works**(for Shriyans)
-    chassis.setPose(-45,10, 90); 
+//start position
+    chassis.setpose(-47,12,70);
 
-    /*//intaking the first 3 balls
-    chassis.turnToPoint(-40,17.5,750,{},false );//Turns to the balls
-    chassis.moveToPoint(-40,17.5,900,{},false);//Moves to the halfway point really fast
-    chassis.turnToHeading(90,900,{},false);//Moves to the balls slowly
-    intake.move(127);
-    chassis.moveToPoint(-6,20,1750,{.maxSpeed = 75},false);//Moves to the lower goal
+//intake first three blocks
+    chassis.turnToPoint(-22,22,500,{},false);
+    //turn inake on 
+    chassis.moveToPoint(-22,22,750,{.maxSpeed = 100},false);//change for accurrcy and consistanty of intake
 
-    //two balls
-    chassis.turnToPoint(-5,-45,900);
-    chassis.moveToPoint(-5,-45,2000,{.maxSpeed = 65});
-    
-    //Scoring in the low goal
-    chassis.turnToPoint(-20,-20,750);
-    chassis.moveToPoint(-20,-20,1750,{.forwards = false,.maxSpeed = 70});
-    chassis.turnToPoint(-10,-10,750);
-    chassis.moveToPoint(-10,-10,1750,{ .maxSpeed = 60});
-    intake.move(127);
-    pros::delay(1750);
+//Score in middle(4 balls)
+    //intake off
+    chassis.turnToHeading(315,500,{},false);//change for consistancy
+    chassis.moveToPoint(-13,14,750,{.forwards = false,.maxSpeed = 85},false);//decrease speed for accurecy, increase for arrive faster
+    //score with lever SLOWL:Y
 
-  
+//match load
+    //tounge down
+    chassis.moveToPose(-57,47,270,900,{.maxSpeed = 100,.lead = 0.3,.horizontalDrift = 8},false);//check if right
+    //adjust by adding points if needed
+    //intake for 500ms
 
-    //Moving to the loader
-    chassis.moveToPoint(-40,17.5, 1000,{.forwards = false,.maxSpeed = 85},false);
-    chassis.turnToPoint(-40,42,1000);
-    chassis.moveToPoint(-40,42,1750,{.maxSpeed = 70},false);
-    intake.move(127);
+//Score in long(3 balls)
+    chassis.moveToPoint(-30,47,750,{.forwards = false,.maxSpeed = 90},false);
+    //score with lever
 
-
-
-
-    //Intake from the loader
-    chassis.turnToPoint(-56,42,900);
-    clamp.set_value(true);
-    intake.move(127);
-    chassis.moveToPoint(-57.5,42,1750,{.maxSpeed = 70},false);
-    chassis.moveToPoint(-59.5,42,750,{.maxSpeed = 75},false);
-    intake.move(127);
-    pros::delay(750);
-    
-
-    //Scoring in the long goal
-    // chassis.moveToPoint(-35,-43.2,1750,{.forwards = false,.maxSpeed = 70},false);
-    chassis.moveToPoint(-20.5,41.9,1750,{.forwards = false,.maxSpeed = 70},false);
-    //clamp.set_value(false);
-    intake.move(-127);
-    pros::delay(450);
-    top.move(127)&& intake.move(127);//Scores8*/
-
-
-//new version 
-    //set pose
-    chassis.setPose(-45,10, 90); 
-
-    //intake three balls
-    chassis.turnToPoint(-21,21,500,{},false);
-    intake.move(127);
-    chassis.moveToPoint(-21,21,750,{.maxSpeed = 86},false);
-    chassis.moveToPoint(-20,20,750,{.forwards = false},false);
-    intake.move(0);
-
-
-    //Score middle goal
-    chassis.turnToHeading(315,750,{},false);
-    chassis.moveToPoint(-9,0.8,1000,{.forwards = false,.maxSpeed = 75},false);
-    clamp3.set_value(false) && intake.move(127);
-    pros::delay(1600);
-
-    //Move to loader
-    chassis.turnToPoint(-40,41,750,{},false);
-    chassis.moveToPoint(-40,41,1000,{.maxSpeed = 140},false);
-    clamp3.set_value(true);
-    clamp.set_value(true);
-    chassis.turnToPoint(-57,41,750,{},false);
-
-    //Intake from loader
-    intake.move(127);
-    chassis.moveToPoint(-57,41,1000,{.maxSpeed = 90},false);
-    chassis.moveToPoint(-59,41,750,{.maxSpeed = 95},false);
-    pros::delay(20);
-    
-    //Score
-    chassis.moveToPoint(-20,41,750,{.forwards = false,.maxSpeed = 90},false);
-    intake.move(127) && top.move(127);
-    pros::delay(900);
-
-    //descore
-    chassis.moveToPoint(-30,42,750,{.maxSpeed = 70},false);
-    chassis.turnToPoint(-30,31.16,750,{},false);
-    chassis.moveToPoint(-30,31.16,750,{.maxSpeed = 70},false);
-    chassis.turnToHeading(270,750,{},false);
-    clamp2.set_value(true);
-    chassis.moveToPoint(-20,31.16,1000,{.forwards = false,.maxSpeed = 70},false);  
-    clamp2.set_value(false);
-    chassis.moveToPoint(-9,31.16,750,{.forwards = false,.maxSpeed = 100},false);
+//wing in the control(Do this if there is time)   
 }
     
 void AutoRight()
 {
-    //** All coordinates are in INCHES and are CLOSE APPROXIMARIONS 
-    //Sets position on right edge of the parking zone **Learn how the Theta works**(for Shriyans)
-    chassis.setPose(-45,-10, 90); 
+//Set position
+    chassis.setpose(-47,-12,110);
 
-    //intaking the first 3 balls
-    chassis.turnToPoint(-20,-20,750,{},false );//Turns to the balls
-    intake.move(127);
-    chassis.moveToPoint(-20,-20,750,{},false);//Moves to the halfway point really fast
-    chassis.turnToHeading(90,900,{},false);//Moves to the balls slowly
+//collection 3 blocks
+    chassis.turnToPoint(-22,-22,500,{},false);
+    //intake on
+    chassis.moveToPoint(-22,-22,750,{.maxSpeed = 100},false);//adjust speed
+
+//score in middle(4 balls)
+    //intake off
     
-   // chassis.moveToPoint(-13,-20,1000,{.maxSpeed = 85},false);//Moves to the lower goal
-
-    /*//two balls
-    chassis.turnToPoint(-5,-45,900);
-    chassis.moveToPoint(-5,-45,2000,{.maxSpeed = 65});
     
-    //Scoring in the low goal
-    chassis.turnToPoint(-20,-20,750);
-    chassis.moveToPoint(-20,-20,1750,{.forwards = false,.maxSpeed = 70});
-    chassis.turnToPoint(-10,-10,750);
-    chassis.moveToPoint(-10,-10,1750,{ .maxSpeed = 60});
-    intake.move(127);
-    pros::delay(1750);
-*/
-  
-
-    //Moving to the loader
-    chassis.moveToPoint(-40,-17.5, 900,{.forwards = false,.maxSpeed = 85},false);
-    chassis.turnToPoint(-40,-42,750,{},false);
-    chassis.moveToPoint(-40,-42,750,{.maxSpeed = 70},false);
-
-
-
-
-    /*//Intake from the loader
-    chassis.turnToPoint(-53,-45,900);
-    clamp.set_value(true);
-    intake.move(127);
-    chassis.moveToPoint(-53.5,-45,1750,{.maxSpeed = 70},false);
-    chassis.moveToPoint(-55.5,-45,750,{.maxSpeed = 75},false);
-    intake.move(127);
-    pros::delay(2000);*/
-    
-
-    //Scoring in the long goal
-    // chassis.moveToPoint(-35,-43.2,1750,{.forwards = false,.maxSpeed = 70},false);
-    chassis.turnToHeading(270,750,{},false);
-    chassis.moveToPoint(-20,-44.5,1000,{.forwards = false,.maxSpeed = 70},false);
-    //clamp.set_value(false);
-    //intake.move(-127);
-    pros::delay(450);
-    top.move(127)&& intake.move(127);//Scores
-    pros::delay(1500);
-
-    //wing
-    chassis.moveToPoint(-30,-45,750,{.maxSpeed = 90},false);
-    chassis.turnToPoint(-30,-26.25,750);
-    chassis.moveToPoint(-30,-26.25,750,{.maxSpeed = 90},false);
-    chassis.turnToHeading(90,750,{},false);
-    clamp2.set_value(true);
-    chassis.moveToPoint(-10,-26.25,1000,{.maxSpeed = 70},false);
-    clamp2.set_value(false);
-    chassis.moveToPoint(-5,-26.25,750,{.maxSpeed = 90},false);
 }
 void AutoWinPoint()
 {
-    chassis.setPose(-45,-10,180);
-    chassis.turnToPoint(-45,-47,750,{},false);
-    chassis.moveToPoint(-45,-47,1000,{.maxSpeed = 140},false);
     
-    //intake from loader
-    clamp.set_value(true);
-    intake.move(127);
-    chassis.turnToPoint(-57,-47,500,{},false);
-    chassis.moveToPoint(-57,-47,900,{.maxSpeed = 90},false);
-    chassis.moveToPoint(-59,-47,750,{.maxSpeed = 95},false);
-    intake.move(127);
-
-    //Score
-    chassis.moveToPoint(-35,-49,800,{.forwards = false,.maxSpeed = 140},false);
-    chassis.moveToPoint(-20,-50,750,{.forwards = false,.maxSpeed = 100},false);
-    clamp.set_value(false);
-    top.move(127)&& intake.move(127);
-
-
-    //middle goal
-    chassis.moveToPoint(-35,-50,750,{.maxSpeed = 140},false);
-    chassis.turnToPoint(-20,-20,500);
-    chassis.moveToPoint(-20,-20,750,{.maxSpeed = 140},false);
-    chassis.turnToPoint(-20,20,500);
-    chassis.moveToPoint(-20,20,750,{.maxSpeed = 140},false);
-    chassis.turnToHeading(315,500);
-    chassis.moveToPoint(-10,10,750,{.forwards = false,.maxSpeed = 100},false);
-    clamp3.set_value(true);
-    intake.move(127);
-    pros::delay(900);
-
-    //Match load
-    clamp3.set_value(false);
-    chassis.turnToPoint(-45,42,500,{},false);
-    chassis.moveToPoint(-45,42,750,{.maxSpeed = 140},false);
-    chassis.turnToPoint(-57.5,42,500,{},false);
-    clamp.set_value(true);
-    intake.move(127);
-    chassis.moveToPoint(-57.5,42,750,{.maxSpeed = 90},false);
-    chassis.moveToPoint(-59.5,42,750,{.maxSpeed = 95},false);
-    intake.move(127);
-
-    //Score
-     chassis.moveToPoint(-35,41.9,900,{.forwards = false,.maxSpeed = 140},false);
-     chassis.moveToPoint(-20,41.9,750,{.forwards = false,.maxSpeed = 100},false);
-    //clamp.set_value(false);
-    pros::delay(450);
-    top.move(127)&& intake.move(127);
-    
-
-    
-
-
+}
+void AutoSkills2()//MIDDLE AND LOW GOALS
+{
 
 }
-void AutoSkills()
+void AutoSkills1()//3 LOADERS AND LONG GOALS
 {
     //Sets position on the edge of the parking zone **Learn how the Theta works**(for Shriyans);
     chassis.setPose(-45,10,360); 
@@ -468,30 +299,9 @@ void AutoSkills()
    pros::delay(650);
     top.move(127) && intake.move(127);
     pros::delay(3500);
-    //clamp.set_value(false);
+    
     
 
-    /*//move To Park
-    chassis.turnToPoint(20,20,1000);
-    chassis.moveToPoint(20,20,2000,{.maxSpeed = 70}, false);
-    chassis.turnToPoint(-30,20,1000);   
-    chassis.moveToPoint(-30,20,2000,{.maxSpeed = 70}, false);
-    chassis.turnToPoint(-30,-2,1000);
-    intake.move(127) && top.move(127);
-    chassis.moveToPoint(-30,-2,2000,{.maxSpeed = 70},  false);
-    chassis.turnToPoint(-70,-2,900);
-    chassis.moveToPoint(-70,-2,900);
-   chassis.moveToPoint(-70,-2,1750,{.minSpeed = MAX_INPUT},false);*/
-
-   /*//clear park
-    top.move(0) && intake.move(0);
-    clamp.set_value(false);
-    chassis.turnToPoint(55,25,900);
-    chassis.moveToPoint(56,25,2000,{.maxSpeed = 70});
-    chassis.turnToPoint(56,-25,900);
-    intake.move(127);
-    chassis.moveToPoint(56,-25,4000,{.minSpeed = MAX_INPUT});
-    top.move(127);*/
 
     //moving
    chassis.moveToPoint(45,-45,1000,{.maxSpeed = 70});
@@ -533,27 +343,6 @@ void AutoSkills()
     top.move(127) && intake.move(127);
     pros::delay(2900);
 
-   /*/ //intake
-    top.move(0)&&intake.move(-127);
-    pros::delay(600);
-    intake.move(127);
-    chassis.turnToPoint(-45,-43,750);
-    chassis.moveToPoint(-45,-43,750,{.maxSpeed = 70});
-    chassis.turnToPoint(-59,-43,750);
-    clamp.set_value(true);
-    intake.move(127);
-    chassis.moveToPoint(-60,-43,1000,{.maxSpeed = 90},false);
-    chassis.moveToPoint(-61.75,-43,900,{.maxSpeed = 95},false);
-    intake.move(127);
-    pros::delay(2000);
-
-    //score
-    chassis.moveToPoint(-21,-47,900,{.forwards = false,.maxSpeed = 70},false);
-    pros::delay(750);
-    top.move(127) && intake.move(127);
-    pros::delay(2750);
-    clamp.set_value(false);*/
-
     //park
     clamp.set_value(false);
     chassis.moveToPoint(-35,-45,750,{.maxSpeed = 70});
@@ -566,50 +355,6 @@ void AutoSkills()
     chassis.moveToPoint(-70,8,4000,{.minSpeed = 140});
 
 
-    /*/move 
-    chassis.moveToPoint(45,-45,1000,{.forwards = false,.maxSpeed = 70});
-    chassis.turnToPoint(20,-20,900);
-    chassis.moveToPoint(20,-20,2000,{.maxSpeed = 70});
-    chassis.turnToPoint(-45,-20,900);
-    chassis.moveToPoint(-45,-20,2000,{.maxSpeed = 70});
-    chassis.turnToPoint(-45,-39,1000);
-    chassis.moveToPoint(-45,-39,2000,{.maxSpeed = 70});
-
-    //score
-    chassis.turnToPoint(-61,-39,1000);;
-    chassis.moveToPoint(-18,-44.5,2000,{.forwards = false,.maxSpeed = 70});
-    intake.move(127) && top.move(127);
-    pros::delay(3000);
-
-    //intake
-    chassis.turnToPoint(-59.70,-45,900);
-    clamp.set_value(true);
-    chassis.moveToPoint(-59.70,-45,2000,{.maxSpeed = 60});
-    top.move(0) && intake.move(127);
-    pros::delay(3000);
-
-    //score
-    chassis.moveToPoint(-18,-44.5,2000,{.forwards = false,.maxSpeed = 70});
-    intake.move(127) && top.move(127);
-    pros::delay(2000);
-    clamp.set_value(false);
-
-    //clear park and park
-    chassis.turnToPoint(-75,-15,900);
-    chassis.moveToPoint(-75,-15,1750,{.maxSpeed = 70});
-    chassis.turnToPoint(-75,0,900);
-    intake.move(127) && top.move(127);
-    chassis.moveToPoint(-75,0,2000,{.maxSpeed = 70});
-   
-
-   * //clear
-    chassis.moveToPoint(45,45,1000,{.forwards = false,.maxSpeed = 70});
-    clamp.set_value(false);
-    chassis.turnToPoint(50,15,900);
-    chassis.moveToPoint(50,15,2000,{.maxSpeed = 70});
-    chassis.turnToPoint(50,-15,900);
-    chassis.moveToPoint(50,-15,2000,{.maxSpeed = 80});
-*/
 }
 
 void AllianceWinPoint()
@@ -646,14 +391,17 @@ void autonomous()
         case Auto::WinPoint:
             AutoWinPoint();
             break;
-        case Auto::Skills:
-            AutoSkills();
+        case Auto::Skills1:
+            AutoSkills1();
             break;
         case Auto::Test:
             TestAuto();
             break;
         case Auto::Alliance:
             AllianceWinPoint();
+            break;
+        case Auto::Skills2:
+            AutoSkills2();
             break;
     }
 }
