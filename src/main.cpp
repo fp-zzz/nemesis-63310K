@@ -436,7 +436,7 @@ void opcontrol() {
         else if (master.get_digital(outtake)) {
             intake.move(MAX_INPUT); // Full reverse
         } 
-        else if (master.get_digital(score) && lever.get_position() < leverMax && !leverLock) {
+        else if (master.get_digital(score) && lever.get_position() > leverMax && !leverLock) {
             //0 is bottom, -233 is max
 
             lever.move_absolute(leverMax, 100);
@@ -451,7 +451,7 @@ void opcontrol() {
             //     pros::delay(2);
             // }
         }
-        else if (!(master.get_digital(score)) && lever.get_position() >= leverMax){
+        else if (!(master.get_digital(score)) && lever.get_position() <= leverMax){
             lever.brake();
             lever.move_absolute(1, 100);
             leverLock = false;
