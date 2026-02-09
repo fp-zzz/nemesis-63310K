@@ -158,6 +158,7 @@ void initialize() {
     tongue_piston.set_value(false); // Ensure clamp is in initial state
     wing_piston.set_value(false); // Ensure clamp is in initial state
     mid_piston.set_value(true);
+    lever.tare_position();
 }
 
 /*
@@ -439,7 +440,7 @@ void opcontrol() {
         else if (master.get_digital(score) && lever.get_position() > leverMax && !leverLock) {
             //0 is bottom, -233 is max
 
-            lever.move_relative(leverMax, 100);
+            lever.move_absolute(leverMax, 100);
             leverLock = true;
             
             // lever.move_absolute(-240, 100);
