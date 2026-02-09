@@ -476,6 +476,8 @@ void opcontrol() {
                     lever.move_absolute(leverMax, -100);
                 }
             });
+
+            leverLock = true;
             
             // lever.move_absolute(-240, 100);
             // pros::delay(500);
