@@ -171,6 +171,7 @@ void initialize() {
     wing_piston.set_value(false); // Ensure clamp is in initial state
     mid_piston.set_value(true);
     lever.tare_position();
+    lever.set_zero_position(0);
 }
 
 /*
