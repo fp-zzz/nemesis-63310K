@@ -46,8 +46,8 @@ Sections include:
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 constexpr auto in = pros::E_CONTROLLER_DIGITAL_L2; 
-constexpr auto out = pros::E_CONTROLLER_DIGITAL_R2; 
-constexpr auto intop = pros::E_CONTROLLER_DIGITAL_L1; 
+constexpr auto outtake = pros::E_CONTROLLER_DIGITAL_R2; 
+constexpr auto score = pros::E_CONTROLLER_DIGITAL_L1; 
 constexpr auto middle = pros::E_CONTROLLER_DIGITAL_R1; 
 constexpr auto tounge = pros::E_CONTROLLER_DIGITAL_Y; 
 constexpr auto wing = pros::E_CONTROLLER_DIGITAL_RIGHT; 
@@ -59,9 +59,9 @@ pros::MotorGroup left_motors({-2,-6,-7},pros::MotorGears::blue);
 // Right motor group on ports 4, 5, 6 (5 reversed)
 pros::MotorGroup right_motors({8,13,21}, pros::MotorGears::blue);
 
-// FRANK CHANGE IF NEEDED!!!
-pros::Motor intake(-5, pros::MotorGears::blue);//change port
-pros::Motor lever(16, pros::MotorGears::red);//reverse if needed
+// Lever and intake motors
+pros::Motor intake(-5, pros::MotorGears::blue); // Motor for intake
+pros::Motor lever(16, pros::MotorGears::red); // Motor for lever mech
 
 /*
 -----------------------------------------------------------
@@ -72,7 +72,7 @@ pros::Motor lever(16, pros::MotorGears::red);//reverse if needed
 - IMU provides inertial heading tracking.
 */
 
-pros::Imu imu(20); 
+pros::Imu imu(20); // IMU on port 20
 
 /*
 -----------------------------------------------------------
@@ -82,8 +82,6 @@ pros::Imu imu(20);
 - Setting HIGH opens the solenoid.
 - Example button control included in opcontrol().
 */
-
-//FRANK CHANGE!!!
 
 // TONGUE PISTON
 pros::adi::DigitalOut clamp('A');  // Pneumatic clamp on ADI port A
@@ -108,7 +106,6 @@ bool lockM = false;
 - Adjust parameters based on robot geometry and wheel setup.
 */
 
-//FRANK CHANGE THE WIDTH AND RPM!!
 lemlib::Drivetrain drivetrain(
     &left_motors,                // Left motor group
     &right_motors,               // Right motor group
@@ -186,7 +183,7 @@ constexpr Auto AutoSelect = Auto::Right;
 void AutoLeft()
 {
 //start position
-    chassis.setpose(-47,12,70);
+    chassis.setPose(-47,12,70);
 
 //intake first three blocks
     chassis.turnToPoint(-22,22,500,{},false);
@@ -201,7 +198,7 @@ void AutoLeft()
 
 //match load
     //tounge down
-    chassis.moveToPose(-57,47,270,900,{.maxSpeed = 100,.lead = 0.3,.horizontalDrift = 8},false);//check if right
+    // dont knwow wtf happened here *****chassis.moveToPose(-57,47,270,900,{.maxSpeed = 100,.lead = 0.3,.horizontalDrift = 8},false);//check if right
     //adjust by adding points if needed
     //intake for 500ms
 
@@ -215,7 +212,7 @@ void AutoLeft()
 void AutoRight()
 {
 //Set position
-    chassis.setpose(-47,-12,110);
+    chassis.setPose(-47,-12,110);
 
 //collection 3 blocks
     chassis.turnToPoint(-22,-22,500,{},false);
@@ -267,15 +264,15 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.moveToPoint(21,47.5,750,{.forwards = false,.maxSpeed = 70},false);
    // intake.move(-127);
     pros::delay(600);
-    intake.move(127) && top.move(127);
+    intake.move(127) && lever.move(127);
     pros::delay(450);
     intake.move(-127);
     pros::delay(650);
-    top.move(127) && intake.move(127);
+    lever.move(127) && intake.move(127);
     pros::delay(3500);
 
     //intake 
-    top.move(0)&&intake.move(127);
+    lever.move(0)&&intake.move(127);
     chassis.turnToPoint(45,41,1000);
     chassis.moveToPoint(45,41,1000,{.maxSpeed = 70});
     chassis.turnToPoint(59,41,900);
@@ -293,11 +290,11 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     //score
     chassis.moveToPoint(20.5,47.5,900,{.forwards = false,.maxSpeed = 70},false);
     pros::delay(650);
-   intake.move(127)&& top.move(127);
+   intake.move(127)&& lever.move(127);
     pros::delay(500);
    intake.move(-127);
    pros::delay(650);
-    top.move(127) && intake.move(127);
+    lever.move(127) && intake.move(127);
     pros::delay(3500);
     
     
@@ -315,7 +312,7 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.turnToPoint(57,-53,750,{},false);
 
     //intake
-    intake.move(127)&&top.move(0);
+    intake.move(127)&&lever.move(0);
     chassis.moveToPoint(57,-53,1750,{.maxSpeed = 90},false);
     chassis.moveToPoint(59,-53,1000,{.maxSpeed = 95});
     intake.move(127);
@@ -336,11 +333,11 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.turnToHeading(270,750,{},false);
     chassis.moveToPoint(-20.5,-47,900,{.forwards = false,.maxSpeed = 70},false);
     pros::delay(750);
-    intake.move(127)&& top.move(127);
+    intake.move(127)&& lever.move(127);
     pros::delay(650);
     intake.move(-127);
     pros::delay(650);
-    top.move(127) && intake.move(127);
+    lever.move(127) && intake.move(127);
     pros::delay(2900);
 
     //park
@@ -351,7 +348,7 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.turnToPoint(-20,8,900);
     chassis.moveToPoint(-20,8,750,{.maxSpeed = 140},false);
     chassis.turnToPoint(-70,8,900);
-    intake.move(127) && top.move(127);
+    intake.move(127) && lever.move(127);
     chassis.moveToPoint(-70,8,4000,{.minSpeed = 140});
 
 
@@ -432,22 +429,30 @@ void opcontrol() {
         // --- Intake Motor Control ---
         // L2 = forward, L1 = reverse
         if (master.get_digital(in)) {
-            intake.move(127);  // Full forward
+            intake.move(-127);  // Full forward
         } 
-        else if (master.get_digital(out)) {
-            intake.move(-127); // Full reverse
+        else if (master.get_digital(outtake)) {
+            intake.move(127); // Full reverse
         } 
-        else if (master.get_digital(intop)) {
-            intake.move(127);
-            top.move(MAX_INPUT);
+        else if (master.get_digital(score)) {
+            lever.tare_position();
+            // lever.move(-127); // Full fowrard then back
+            lever.move_absolute(-240, 100);
+            pros::delay(500);
+            // lever.move(127);
+            // Move to 900 degrees (e.g., 90-degree lift turn) at 100 RPM
+            lever.move_absolute(248, 100);
+            while (!((lever.get_position() < (248 + 5)) && (lever.get_position() > (248 - 5)))) {
+                pros::delay(2);
+            }
         }
-        else if(master.get_digital(middle)) {   
-            intake.move(MAX_INPUT);
-            top.move(-MAX_INPUT);
+        else if (master.get_digital(middle)) {
+            intake.move(127);
+            // piston actuates to middle position
         }
         else {
             intake.brake();    // Stop (optional — can replace with .move(0))
-            top.brake();
+            lever.brake();
         }
 
         // --- Pneumatics Toggle ---
