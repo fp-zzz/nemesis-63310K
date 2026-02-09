@@ -64,6 +64,7 @@ pros::Motor intake(5, pros::MotorGears::blue); // Motor for intake
 pros::Motor lever(16, pros::MotorGears::red); // Motor for lever mech
 int leverMax = -555;
 bool leverLock = false;
+int tolerance = 5;
 
 /*
 -----------------------------------------------------------
@@ -469,9 +470,12 @@ void opcontrol() {
         } 
         else if (master.get_digital(score) && lever.get_position() > leverMax && !leverLock) {
             //0 is bottom, -555 is max
-
-            lever.move_absolute(leverMax, -100);
-            leverLock = true;
+            pros::Task leverTask([&]() {
+                while(!(lever.get_position() > leverMax - tolerance && lever.get_position() < leverMax + tolerance))
+                {
+                    lever.move_absolute(leverMax, -100);
+                }
+            });
             
             // lever.move_absolute(-240, 100);
             // pros::delay(500);
@@ -482,12 +486,17 @@ void opcontrol() {
             //     pros::delay(2);
             // }
         }
-        // else if (!(master.get_digital(score)) && lever.get_position() <= leverMax && leverLock){
-        //     lever.brake();
-        //     lever.move_absolute(1, 100);
-        //     leverLock = false;
+        else if (!(master.get_digital(score)) && lever.get_position() <= leverMax && leverLock){
+            lever.brake();
+            pros::Task leverTask([&]() {
+                while(!(lever.get_position() > 0 - tolerance && lever.get_position() < 0 + tolerance))
+                {
+                    lever.move_absolute(1, 100);
+                }
+            });
+            leverLock = false;
 
-        // }
+        }
         else {
             intake.brake();    // Stop (optional — can replace with .move(0))
             lever.brake();
