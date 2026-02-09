@@ -475,6 +475,11 @@ void opcontrol() {
                 {
                     lever.move_absolute(leverMax, -100);
                 }
+
+                while(!(lever.get_position() > 0 - tolerance && lever.get_position() < 0 + tolerance))
+                {
+                    lever.move_absolute(1, 100);
+                }
             });
 
             leverLock = true;
@@ -490,12 +495,6 @@ void opcontrol() {
         }
         else if (!(master.get_digital(score)) && leverLock){
             lever.brake();
-            pros::Task leverTaskdown([&]() {
-                while(!(lever.get_position() > 0 - tolerance && lever.get_position() < 0 + tolerance))
-                {
-                    lever.move_absolute(1, 100);
-                }
-            });
             leverLock = false;
 
         }
