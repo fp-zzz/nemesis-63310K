@@ -452,7 +452,7 @@ void opcontrol() {
         else if (master.get_digital(score) && lever.get_position() > leverMax && !leverLock) {
             //0 is bottom, -555 is max
 
-            lever.move_absolute(leverMax, 100);
+            lever.move_absolute(leverMax, -100);
             leverLock = true;
             
             // lever.move_absolute(-240, 100);
