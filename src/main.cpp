@@ -60,7 +60,7 @@ pros::MotorGroup left_motors({-2,-6,-13},pros::MotorGears::blue);
 pros::MotorGroup right_motors({21,8,7}, pros::MotorGears::blue);
 
 // Lever and intake motors
-pros::Motor intake(-5, pros::MotorGears::blue); // Motor for intake
+pros::Motor intake(5, pros::MotorGears::blue); // Motor for intake
 pros::Motor lever(16, pros::MotorGears::red); // Motor for lever mech
 int leverMax = 233;
 bool leverLock = false;
