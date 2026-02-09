@@ -62,7 +62,7 @@ pros::MotorGroup right_motors({21,8,7}, pros::MotorGears::blue);
 // Lever and intake motors
 pros::Motor intake(5, pros::MotorGears::blue); // Motor for intake
 pros::Motor lever(16, pros::MotorGears::red); // Motor for lever mech
-int leverMax = 233;
+int leverMax = -555;
 bool leverLock = false;
 
 /*
@@ -450,7 +450,7 @@ void opcontrol() {
             intake.move(-MAX_INPUT); // Full reverse
         } 
         else if (master.get_digital(score) && lever.get_position() > leverMax && !leverLock) {
-            //0 is bottom, -233 is max
+            //0 is bottom, -555 is max
 
             lever.move_absolute(leverMax, 100);
             leverLock = true;
