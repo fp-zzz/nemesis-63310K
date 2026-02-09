@@ -470,28 +470,20 @@ void opcontrol() {
         } 
         else if (master.get_digital(score) && !leverLock) {
             //0 is bottom, -555 is max
+
+            leverLock = true;
+            lever.move(0); //unlock motor if something else is using it
             pros::Task leverTaskup([&]() {
-                while(!(lever.get_position() > leverMax - tolerance && lever.get_position() < leverMax + tolerance))
+                while(fabs(lever.get_position()) < abs(leverMax) - tolerance) //score
                 {
                     lever.move_absolute(leverMax, -100);
                 }
-
-                while(!(lever.get_position() > 0 - tolerance && lever.get_position() < 0 + tolerance))
+                lever.brake(); //stop before hitting hard stop
+                while(fabs(lever.get_position()) > 0 + tolerance) //bring back
                 {
-                    lever.move_absolute(1, 100);
+                    lever.move_absolute(0, 100);
                 }
             });
-
-            leverLock = true;
-            
-            // lever.move_absolute(-240, 100);
-            // pros::delay(500);
-            // // lever.move(127);
-            // // Move to 900 degrees (e.g., 90-degree lift turn) at 100 RPM
-            // lever.move_absolute(248, 100);
-            // while (!((lever.get_position() < (248 + 5)) && (lever.get_position() > (248 - 5)))) {
-            //     pros::delay(2);
-            // }
         }
         else if (!(master.get_digital(score)) && leverLock){
             lever.brake();
