@@ -431,10 +431,10 @@ void opcontrol() {
         // --- Intake Motor Control ---
         // L2 = forward, L1 = reverse
         if (master.get_digital(in)) {
-            intake.move(MAX_INPUT);  // Full forward
+            intake.move(-MAX_INPUT);  // Full forward
         } 
         else if (master.get_digital(outtake)) {
-            intake.move(-MAX_INPUT); // Full reverse
+            intake.move(MAX_INPUT); // Full reverse
         } 
         else if (master.get_digital(score) && lever.get_position() < leverMax && !leverLock) {
             //0 is bottom, -233 is max
