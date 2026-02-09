@@ -468,7 +468,7 @@ void opcontrol() {
         else if (master.get_digital(outtake)) {
             intake.move(-MAX_INPUT); // Full reverse
         } 
-        else if (master.get_digital(score) && lever.get_position() > leverMax && !leverLock) {
+        else if (master.get_digital(score) && !leverLock) {
             //0 is bottom, -555 is max
             pros::Task leverTask([&]() {
                 while(!(lever.get_position() > leverMax - tolerance && lever.get_position() < leverMax + tolerance))
@@ -486,7 +486,7 @@ void opcontrol() {
             //     pros::delay(2);
             // }
         }
-        else if (!(master.get_digital(score)) && lever.get_position() <= leverMax && leverLock){
+        else if (!(master.get_digital(score)) && leverLock){
             lever.brake();
             pros::Task leverTask([&]() {
                 while(!(lever.get_position() > 0 - tolerance && lever.get_position() < 0 + tolerance))
