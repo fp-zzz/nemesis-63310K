@@ -253,8 +253,14 @@ void AutoRight()
     //intake on
     chassis.moveToPoint(-22,-22,750,{.maxSpeed = 100},false);//adjust speed
 
-//score in middle(4 balls)
+//score in low(4 balls)
     //intake off
+    chassis.turnToPoint(-13,-14,500,{},false);
+    chassis.moveToPoint(-13,-14,750,{.maxSpeed = 90},false);
+    //reverse intake
+    pros::delay(1000);
+
+//match load
     
     
 }
