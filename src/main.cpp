@@ -154,7 +154,7 @@ lemlib::Chassis chassis(drivetrain, lateral_controller, angular_controller, sens
 */
 
 void initialize() {
-
+    pros::lcd::initialize();
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
