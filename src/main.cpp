@@ -54,10 +54,10 @@ constexpr auto wing = pros::E_CONTROLLER_DIGITAL_RIGHT;
 
 
 // Left motor group on ports 1, 2, 3 (1 & 3 reversed)
-pros::MotorGroup left_motors({-2,-6,-7},pros::MotorGears::blue);
+pros::MotorGroup left_motors({-2,-6,-13},pros::MotorGears::blue);
 
 // Right motor group on ports 4, 5, 6 (5 reversed)
-pros::MotorGroup right_motors({8,13,21}, pros::MotorGears::blue);
+pros::MotorGroup right_motors({21,8,7}, pros::MotorGears::blue);
 
 // Lever and intake motors
 pros::Motor intake(-5, pros::MotorGears::blue); // Motor for intake
