@@ -153,12 +153,29 @@ lemlib::Chassis chassis(drivetrain, lateral_controller, angular_controller, sens
 💡 Runs on startup to initialize devices and calibrate sensors.
 */
 
+float avg(std::vector<double> vars) {
+    float sum = 0;
+    for (size_t i = 0; i < vars.size(); i++)
+        sum += vars[i];
+    return sum / vars.size();
+}
+
 void initialize() {
     pros::lcd::initialize();
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
             pros::lcd::print(0, "Lever: %f", lever.get_position());
+            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            // log position telemetry
+            // lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
+            // delay to save resources
+            pros::lcd::print(4, "C Temp: %.0f", intake.get_temperature());
+            pros::lcd::print(5, "S Temp: %.0f", lever.get_temperature());
+            pros::lcd::print(6, "L DT Temp: %.0f", avg(left_motors.get_temperature_all()));
+            pros::lcd::print(7, "R DT Temp: %.0f", avg(right_motors.get_temperature_all()));
             // pros::lcd::print(6, "L: %f", controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
             // pros::lcd::print(7, "R: %f", controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
             pros::delay(50);
