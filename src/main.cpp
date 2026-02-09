@@ -464,12 +464,12 @@ void opcontrol() {
             //     pros::delay(2);
             // }
         }
-        else if (!(master.get_digital(score)) && lever.get_position() <= leverMax && leverLock){
-            lever.brake();
-            lever.move_absolute(1, 100);
-            leverLock = false;
+        // else if (!(master.get_digital(score)) && lever.get_position() <= leverMax && leverLock){
+        //     lever.brake();
+        //     lever.move_absolute(1, 100);
+        //     leverLock = false;
 
-        }
+        // }
         else {
             intake.brake();    // Stop (optional — can replace with .move(0))
             lever.brake();
