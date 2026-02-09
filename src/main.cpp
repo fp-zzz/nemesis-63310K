@@ -154,6 +154,18 @@ lemlib::Chassis chassis(drivetrain, lateral_controller, angular_controller, sens
 */
 
 void initialize() {
+
+    pros::Task screenTask([&]() {
+        while (true) {
+            // print robot location to the brain screen
+            pros::lcd::print(0, "Lever: %f", lever.get_position());
+            // pros::lcd::print(6, "L: %f", controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
+            // pros::lcd::print(7, "R: %f", controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+            pros::delay(50);
+        }
+
+    });
+
     chassis.calibrate();  // Calibrate IMU & encoders
     tongue_piston.set_value(false); // Ensure clamp is in initial state
     wing_piston.set_value(false); // Ensure clamp is in initial state
