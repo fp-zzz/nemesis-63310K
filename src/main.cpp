@@ -431,15 +431,15 @@ void opcontrol() {
         // --- Intake Motor Control ---
         // L2 = forward, L1 = reverse
         if (master.get_digital(in)) {
-            intake.move(-MAX_INPUT);  // Full forward
+            intake.move(MAX_INPUT);  // Full forward
         } 
         else if (master.get_digital(outtake)) {
-            intake.move(MAX_INPUT); // Full reverse
+            intake.move(-MAX_INPUT); // Full reverse
         } 
         else if (master.get_digital(score) && lever.get_position() > leverMax && !leverLock) {
             //0 is bottom, -233 is max
 
-            lever.move_absolute(leverMax, 100);
+            lever.move_relative(leverMax, 100);
             leverLock = true;
             
             // lever.move_absolute(-240, 100);
@@ -451,7 +451,7 @@ void opcontrol() {
             //     pros::delay(2);
             // }
         }
-        else if (!(master.get_digital(score)) && lever.get_position() <= leverMax){
+        else if (!(master.get_digital(score)) && lever.get_position() <= leverMax && leverLock){
             lever.brake();
             lever.move_absolute(1, 100);
             leverLock = false;
