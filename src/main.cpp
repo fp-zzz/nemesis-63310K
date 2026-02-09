@@ -478,16 +478,15 @@ void opcontrol() {
             //0 is bottom, -555 is max
 
             leverLock = true;
-            lever.move(0); //unlock motor if something else is using it
             pros::Task leverTaskup([&]() {
                 while(fabs(lever.get_position()) < abs(leverMax) - tolerance) //score
                 {
-                    lever.move_absolute(leverMax, -100);
+                    lever.move_absolute(leverMax, -1000);
                 }
                 lever.brake(); //stop before hitting hard stop
                 while(fabs(lever.get_position()) > 0 + tolerance) //bring back
                 {
-                    lever.move_absolute(0, 100);
+                    lever.move_absolute(0, 1000);
                 }
             });
         }
