@@ -62,6 +62,8 @@ pros::MotorGroup right_motors({21,8,7}, pros::MotorGears::blue);
 // Lever and intake motors
 pros::Motor intake(-5, pros::MotorGears::blue); // Motor for intake
 pros::Motor lever(16, pros::MotorGears::red); // Motor for lever mech
+int leverMax = 233;
+bool leverLock = false;
 
 /*
 -----------------------------------------------------------
@@ -84,18 +86,18 @@ pros::Imu imu(20); // IMU on port 20
 */
 
 // TONGUE PISTON
-pros::adi::DigitalOut clamp('A');  // Pneumatic clamp on ADI port A
-bool clampValue = false;           // Initial state of pneumatic clamp
+pros::adi::DigitalOut tongue_piston('A');  // Pneumatic clamp on ADI port A
+bool tongueValue = false;           // Initial state of pneumatic clamp
 bool lockT = false;
 
 //  WING PISTON
-pros::adi::DigitalOut clamp2('B'); // Pneumatic clamp on ADI port B
-bool clampValue2 = false;
+pros::adi::DigitalOut wing_piston('B'); // Pneumatic clamp on ADI port B
+bool wingValue = false;
 bool lockW = false;
 
 // MIDDLE PISTON
-pros::adi::DigitalOut clamp3('C');
-bool clampValue3 = false;
+pros::adi::DigitalOut mid_piston('C');
+bool midValue = false;
 bool lockM = false;
 
 /*
@@ -153,9 +155,9 @@ lemlib::Chassis chassis(drivetrain, lateral_controller, angular_controller, sens
 
 void initialize() {
     chassis.calibrate();  // Calibrate IMU & encoders
-    clamp.set_value(false); // Ensure clamp is in initial state
-    clamp2.set_value(false); // Ensure clamp is in initial state
-    clamp3.set_value(true);
+    tongue_piston.set_value(false); // Ensure clamp is in initial state
+    wing_piston.set_value(false); // Ensure clamp is in initial state
+    mid_piston.set_value(true);
 }
 
 /*
@@ -240,7 +242,7 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     //intake
     chassis.turnToPoint(-45,46,750);
     chassis.moveToPoint(-45,46,1750,{.maxSpeed = 70},false);
-    clamp.set_value(true);
+    tongue_piston.set_value(true);
     chassis.turnToPoint(-59,45,750,{},false);
     intake.move(127);
     chassis.moveToPoint(-57,45,1000,{.maxSpeed = 90},false);
@@ -276,7 +278,7 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.turnToPoint(45,41,1000);
     chassis.moveToPoint(45,41,1000,{.maxSpeed = 70});
     chassis.turnToPoint(59,41,900);
-    clamp.set_value(true);
+    tongue_piston.set_value(true);
     intake.move(127);
     chassis.moveToPoint(59,41,1750,{.maxSpeed = 90},false);
     chassis.moveToPoint(61.5,41,1000,{.maxSpeed = 95},false);
@@ -308,7 +310,7 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.moveToPoint(25,-25,2000,{.maxSpeed = 140},false);
     chassis.turnToPoint(45,-53,750,{},false);
     chassis.moveToPoint(45,-53,2750,{.maxSpeed = 140},false);
-    clamp.set_value(true);
+    tongue_piston.set_value(true);
     chassis.turnToPoint(57,-53,750,{},false);
 
     //intake
@@ -341,7 +343,7 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     pros::delay(2900);
 
     //park
-    clamp.set_value(false);
+    tongue_piston.set_value(false);
     chassis.moveToPoint(-35,-45,750,{.maxSpeed = 70});
     chassis.turnToPoint(-20,20,750,{},false);
     chassis.moveToPoint(-20,20,750,{.maxSpeed = 140});
@@ -429,26 +431,31 @@ void opcontrol() {
         // --- Intake Motor Control ---
         // L2 = forward, L1 = reverse
         if (master.get_digital(in)) {
-            intake.move(-127);  // Full forward
+            intake.move(MAX_INPUT);  // Full forward
         } 
         else if (master.get_digital(outtake)) {
-            intake.move(127); // Full reverse
+            intake.move(-MAX_INPUT); // Full reverse
         } 
-        else if (master.get_digital(score)) {
-            lever.tare_position();
-            // lever.move(-127); // Full fowrard then back
-            lever.move_absolute(-240, 100);
-            pros::delay(500);
-            // lever.move(127);
-            // Move to 900 degrees (e.g., 90-degree lift turn) at 100 RPM
-            lever.move_absolute(248, 100);
-            while (!((lever.get_position() < (248 + 5)) && (lever.get_position() > (248 - 5)))) {
-                pros::delay(2);
-            }
+        else if (master.get_digital(score) && lever.get_position() < leverMax && !leverLock) {
+            //0 is bottom, -233 is max
+
+            lever.move_absolute(leverMax, 100);
+            leverLock = true;
+            
+            // lever.move_absolute(-240, 100);
+            // pros::delay(500);
+            // // lever.move(127);
+            // // Move to 900 degrees (e.g., 90-degree lift turn) at 100 RPM
+            // lever.move_absolute(248, 100);
+            // while (!((lever.get_position() < (248 + 5)) && (lever.get_position() > (248 - 5)))) {
+            //     pros::delay(2);
+            // }
         }
-        else if (master.get_digital(middle)) {
-            intake.move(127);
-            // piston actuates to middle position
+        else if (!(master.get_digital(score)) && lever.get_position() >= leverMax){
+            lever.brake();
+            lever.move_absolute(1, 100);
+            leverLock = false;
+
         }
         else {
             intake.brake();    // Stop (optional — can replace with .move(0))
@@ -458,8 +465,8 @@ void opcontrol() {
         // --- Pneumatics Toggle ---
         //  TONGUE PISTON CONTROL
         if (master.get_digital(tounge) && !lockT) {
-            clampValue = !clampValue;
-            clamp.set_value(clampValue);
+            tongueValue = !tongueValue;
+            tongue_piston.set_value(tongueValue);
             lockT = true;
         }
         else if(!(master.get_digital(tounge)))
@@ -469,8 +476,8 @@ void opcontrol() {
 
         //  WING PISTON CONTROL
         if (master.get_digital(wing) && !lockW) {
-            clampValue2 = !clampValue2;
-            clamp2.set_value(clampValue2);
+            wingValue = !wingValue;
+            wing_piston.set_value(wingValue);
             lockW = true;
         }
         else if(!(master.get_digital(wing)))
@@ -481,8 +488,8 @@ void opcontrol() {
         // MIDDLE PISTON CONTROL
         
         if (master.get_digital(middle) && !lockM) {
-            clampValue3 = !clampValue3;
-            clamp3.set_value(clampValue3);
+            midValue = !midValue;
+            mid_piston.set_value(midValue);
             lockM = true;
         }
         else if(!(master.get_digital(middle))) {
