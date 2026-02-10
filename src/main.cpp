@@ -462,6 +462,7 @@ void leverScore() {
     {
         lever.move_absolute(0, 100);
     }
+    leverLock = false;
 }
 
 void opcontrol() {
@@ -495,8 +496,6 @@ pros::Task* leverTask = nullptr;
         }
         else if (!(master.get_digital(score)) && leverLock){
             lever.brake();
-            leverLock = false;
-
         }
         else {
             intake.brake();    // Stop (optional — can replace with .move(0))
