@@ -97,7 +97,7 @@ bool wingValue = false;
 bool lockW = false;
 
 // MIDDLE PISTON
-pros::adi::DigitalOut mid_piston('C');
+pros::adi::DigitalOut mid_piston('F');
 bool midValue = false;
 bool lockM = false;
 
