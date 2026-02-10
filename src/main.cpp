@@ -456,11 +456,13 @@ void leverScore() {
     while(fabs(lever.get_position()) < abs(leverMax) - tolerance) //score
     {
         lever.move_absolute(leverMax, -100);
+        pros::delay(10);
     }
     lever.brake(); //stop before hitting hard stop
     while(fabs(lever.get_position()) > 0 + tolerance) //bring back
     {
         lever.move_absolute(0, 100);
+        pros::delay(10);
     }
     leverLock = false;
 }
