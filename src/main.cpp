@@ -490,12 +490,8 @@ pros::Task* leverTask = nullptr;
             pros::Task leverTask(leverScore);
             
         }
-        else if (!(master.get_digital(score)) && leverLock){
-            lever.brake();
-        }
         else {
             intake.brake();    // Stop (optional — can replace with .move(0))
-            lever.brake();
         }
 
         // --- Pneumatics Toggle ---
