@@ -143,6 +143,32 @@ float avg(std::vector<double> vars) {
     return sum / vars.size();
 }
 
+//MUTEX function for leverScore
+void leverScore() {
+    // Move to max position (score)
+    lever.move_absolute(leverMax, 100);  // Positive velocity to move toward negative position
+    
+    // Wait until reaching target
+    while(fabs(lever.get_position() - leverMax) > tolerance) {
+        pros::delay(20);
+    }
+    
+    lever.brake(); // Stop at scoring position
+    pros::delay(100);
+    
+    // Return to starting position
+    lever.move_absolute(0, 100);
+    
+    // Wait until back at zero
+    while(fabs(lever.get_position() - 0) > tolerance) {
+        pros::delay(20);
+    }
+    
+    lever.brake();
+    leverLock = false;
+}
+
+
 void initialize() {
     pros::lcd::initialize();
     pros::Task screenTask([&]() {
@@ -434,30 +460,6 @@ void autonomous()
 7️⃣ DRIVER CONTROL (OPCONTROL)
 -----------------------------------------------------------
 */
-
-void leverScore() {
-    // Move to max position (score)
-    lever.move_absolute(leverMax, 100);  // Positive velocity to move toward negative position
-    
-    // Wait until reaching target
-    while(fabs(lever.get_position() - leverMax) > tolerance) {
-        pros::delay(20);
-    }
-    
-    lever.brake(); // Stop at scoring position
-    pros::delay(100);
-    
-    // Return to starting position
-    lever.move_absolute(0, 100);
-    
-    // Wait until back at zero
-    while(fabs(lever.get_position() - 0) > tolerance) {
-        pros::delay(20);
-    }
-    
-    lever.brake();
-    leverLock = false;
-}
 
 void opcontrol() {
     
