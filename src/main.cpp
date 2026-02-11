@@ -436,17 +436,26 @@ void autonomous()
 */
 
 void leverScore() {
-    while(fabs(lever.get_position()) < abs(leverMax) - tolerance) //score
-    {
-        lever.move_absolute(leverMax, -100);
-        pros::delay(10);
+    // Move to max position (score)
+    lever.move_absolute(leverMax, 100);  // Positive velocity to move toward negative position
+    
+    // Wait until reaching target
+    while(fabs(lever.get_position() - leverMax) > tolerance) {
+        pros::delay(20);
     }
-    lever.brake(); //stop before hitting hard stop
-    while(fabs(lever.get_position()) > 0 + tolerance) //bring back
-    {
-        lever.move_absolute(0, 100);
-        pros::delay(10);
+    
+    lever.brake(); // Stop at scoring position
+    pros::delay(100);
+    
+    // Return to starting position
+    lever.move_absolute(0, 100);
+    
+    // Wait until back at zero
+    while(fabs(lever.get_position() - 0) > tolerance) {
+        pros::delay(20);
     }
+    
+    lever.brake();
     leverLock = false;
 }
 
