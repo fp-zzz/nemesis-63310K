@@ -156,7 +156,7 @@ void leverScore() {
     while(fabs(lever.get_position() - leverMax) > tolerance) {
         pros::delay(20);
         loopCount++;
-        if(loopCount * 20 > 1000) break;
+        if(loopCount * 20 > 1500) break;
     }
     loopCount = 0;
     lever.brake(); // Stop at scoring position
@@ -168,7 +168,7 @@ void leverScore() {
     while(fabs(lever.get_position() - bottomPos) > bottomPos) {
         pros::delay(20);
         loopCount++;
-        if(loopCount * 20 > 1000) break;
+        if(loopCount * 20 > 1500) break;
     }
     
     lever.brake();
