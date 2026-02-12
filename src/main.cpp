@@ -52,9 +52,10 @@ pros::MotorGroup right_motors({21,8,7}, pros::MotorGears::blue);
 // Lever and intake motors
 pros::Motor intake(5, pros::MotorGears::blue); // Motor for intake
 pros::Motor lever(16, pros::MotorGears::red); // Motor for lever mech
-int leverMax = -555;
+int leverMax = -580;
 bool leverLock = false;
-int tolerance = 5;
+int tolerance = 20;
+int bottomPos = 0;
 
 /*
 -----------------------------------------------------------
@@ -155,7 +156,7 @@ void leverScore() {
     while(fabs(lever.get_position() - leverMax) > tolerance) {
         pros::delay(20);
         loopCount++;
-        if(loopCount * 20 > 2000) break;
+        if(loopCount * 20 > 1000) break;
     }
     loopCount = 0;
     lever.brake(); // Stop at scoring position
@@ -164,10 +165,10 @@ void leverScore() {
     lever.move_absolute(0, 100);
     
     // Wait until back at zero
-    while(fabs(lever.get_position() - 0) > tolerance) {
+    while(fabs(lever.get_position() - bottomPos) > bottomPos) {
         pros::delay(20);
         loopCount++;
-        if(loopCount * 20 > 2000) break;
+        if(loopCount * 20 > 1000) break;
     }
     
     lever.brake();
@@ -176,6 +177,7 @@ void leverScore() {
 
 
 void initialize() {
+    lever.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     pros::lcd::initialize();
     pros::Task screenTask([&]() {
         // Variables for screen colors
