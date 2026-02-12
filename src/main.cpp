@@ -467,7 +467,6 @@ void autonomous()
     }
 }
 
-
 /*
 -----------------------------------------------------------
 7️⃣ DRIVER CONTROL (OPCONTROL)
@@ -497,11 +496,8 @@ pros::Task* leverTask = nullptr;
             intake.move(-MAX_INPUT); // Full reverse
         } 
         else if (master.get_digital(score) && !leverLock) {
-            //0 is bottom, -555 is max
-
             leverLock = true;
-            leverScore();
-            
+            leverScore();    
         }
         else {
             intake.brake();    // Stop (optional — can replace with .move(0))
