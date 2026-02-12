@@ -51,7 +51,7 @@ pros::MotorGroup right_motors({21,8,7}, pros::MotorGears::blue);
 
 // Lever and intake motors
 pros::Motor intake(5, pros::MotorGears::blue); // Motor for intake
-pros::Motor lever(16, pros::MotorGears::red); // Motor for lever mech
+pros::Motor lever(-16, pros::MotorGears::red); // Motor for lever mech
 int leverMax = -580;
 bool leverLock = false;
 int tolerance = 20;
@@ -145,20 +145,21 @@ float avg(std::vector<double> vars) {
 }
 
 //MUTEX function for leverScore
-void leverScore() {
+void leverScoreLogic() {
     // Move to max position (score)
     //lever.move_absolute(leverMax, 100);  // Positive velocity to move toward negative position
-    lever.move(-MAX_INPUT);
-    
     int loopCount = 0;
+    int timeout = 1500;
+
+    lever.move(MAX_INPUT);
 
     // Wait until reaching target
     while(fabs(lever.get_position() - leverMax) > tolerance) {
         pros::delay(20);
         loopCount++;
-        if(loopCount * 20 > 1500) break;
+        if(loopCount * 20 > timeout) break;
     }
-    loopCount = 0;
+    loopCount = 0; //reset
     lever.brake(); // Stop at scoring position
     
     // Return to starting position
@@ -168,13 +169,16 @@ void leverScore() {
     while(fabs(lever.get_position() - bottomPos) > bottomPos) {
         pros::delay(20);
         loopCount++;
-        if(loopCount * 20 > 1500) break;
+        if(loopCount * 20 > timeout) break;
     }
     
     lever.brake();
-    leverLock = false;
+    leverLock = false; //allow to score again
 }
 
+void leverScore(){
+    pros::Task leverTask(leverScoreLogic);
+}
 
 void initialize() {
     lever.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -496,7 +500,7 @@ pros::Task* leverTask = nullptr;
             //0 is bottom, -555 is max
 
             leverLock = true;
-            pros::Task leverTask(leverScore);
+            leverScore();
             
         }
         else {
