@@ -252,7 +252,7 @@ void AutoLeft()
     chassis.turnToPoint(-55,47,750,{},false);
     chassis.moveToPoint(-55,47,900,{.maxSpeed = 100},false);
     chassis.turnToPoint(-57,47,750,{},false);
-    chassis.moveToPoint(-57,47,{.maxSpeed = 90},false);
+    //chassis.moveToPoint(-57,47,{.maxSpeed = 90},false);
     //adjust by adding points if needed
     //intake for 500ms
 
@@ -284,7 +284,7 @@ void AutoRight()
     chassis.turnToPoint(-55,-47,750,{},false);
     chassis.moveToPoint(-55,-47,900,{.maxSpeed = 100},false);
     chassis.turnToPoint(-57,-47,750,{},false);
-    chassis.moveToPoint(-57,-47,{.maxSpeed = 90},false);
+    //chassis.moveToPoint(-57,-47,{.maxSpeed = 90},false);
     //adjust by adding points if needed
     //intake for 500ms
 
