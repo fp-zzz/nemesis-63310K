@@ -249,12 +249,15 @@ void AutoLeft()
 
 //match load
     //tounge down
-    // dont knwow wtf happened here *****chassis.moveToPose(-57,47,270,900,{.maxSpeed = 100,.lead = 0.3,.horizontalDrift = 8},false);//check if right
+    chassis.turnToPoint(-55,47,750,{},false);
+    chassis.moveToPoint(-55,47,900,{.maxSpeed = 100},false);
+    chassis.turnToPoint(-57,47,750,{},false);
+    chassis.moveToPoint(-57,47,{.maxSpeed = 90},false);
     //adjust by adding points if needed
     //intake for 500ms
 
 //Score in long(3 balls)
-    chassis.moveToPoint(-30,47,750,{.forwards = false,.maxSpeed = 90},false);
+    chassis.moveToPoint(-30,47,900,{.forwards = false,.maxSpeed = 90},false);
     //score with lever
 
 //wing in the control(Do this if there is time)   
@@ -262,23 +265,34 @@ void AutoLeft()
     
 void AutoRight()
 {
-//Set position
-    chassis.setPose(-47,-12,110);
+//start position
+    chassis.setPose(-47,-12,70);
 
-//collection 3 blocks
+//intake first three blocks
     chassis.turnToPoint(-22,-22,500,{},false);
-    //intake on
-    chassis.moveToPoint(-22,-22,750,{.maxSpeed = 100},false);//adjust speed
+    //turn inake on 
+    chassis.moveToPoint(-22,-22,750,{.maxSpeed = 100},false);//change for accurrcy and consistanty of intake
 
-//score in low(4 balls)
+//Score in middle(4 balls)
     //intake off
-    chassis.turnToPoint(-13,-14,500,{},false);
-    chassis.moveToPoint(-13,-14,750,{.maxSpeed = 90},false);
-    //reverse intake
-    pros::delay(1000);
+    chassis.turnToHeading(225,500,{},false);//change for consistancy
+    chassis.moveToPoint(-13,-14,750,{.forwards = false,.maxSpeed = 85},false);//decrease speed for accurecy, increase for arrive faster
+    //score with lever SLOWL:Y
 
 //match load
-    
+    //tounge down
+    chassis.turnToPoint(-55,-47,750,{},false);
+    chassis.moveToPoint(-55,-47,900,{.maxSpeed = 100},false);
+    chassis.turnToPoint(-57,-47,750,{},false);
+    chassis.moveToPoint(-57,-47,{.maxSpeed = 90},false);
+    //adjust by adding points if needed
+    //intake for 500ms
+
+//Score in long(3 balls)
+    chassis.moveToPoint(-30,-47,900,{.forwards = false,.maxSpeed = 90},false);
+    //score with lever
+
+//wing in the control(Do this if there is time)   
     
 }
 void AutoWinPoint()
@@ -313,23 +327,17 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     intake.move(0);
     chassis.moveToPoint(-20,20,2000,{.maxSpeed = 140},false);
     chassis.turnToPoint(45,20,750);
-    intake.move(127);
     chassis.moveToPoint(45,20,2000,{.maxSpeed = 140},false);
     chassis.turnToPoint(45,40,750);
     chassis.moveToPoint(45,40,750,{.maxSpeed = 140},false);
     chassis.turnToHeading(90,750,{},false);
     chassis.moveToPoint(21,47.5,750,{.forwards = false,.maxSpeed = 70},false);
-   // intake.move(-127);
     pros::delay(600);
-    intake.move(127) && lever.move(127);
-    pros::delay(450);
-    intake.move(-127);
-    pros::delay(650);
-    lever.move(127) && intake.move(127);
-    pros::delay(3500);
+    lever.move_absolute(leverMax,-100);
+    lever.move_absolute(1,100);
 
     //intake 
-    lever.move(0)&&intake.move(127);
+    intake.move(127);
     chassis.turnToPoint(45,41,1000);
     chassis.moveToPoint(45,41,1000,{.maxSpeed = 70});
     chassis.turnToPoint(59,41,900);
@@ -339,20 +347,13 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.moveToPoint(61.5,41,1000,{.maxSpeed = 95},false);
     intake.move(127);
     pros::delay(850);
-   // intake.move(-127);
-    //pros::delay(600);
-   // intake.move(127)&& top.move(0);
     chassis.moveToPoint(62,40,1000,{.maxSpeed = 95});
 
     //score
     chassis.moveToPoint(20.5,47.5,900,{.forwards = false,.maxSpeed = 70},false);
     pros::delay(650);
-   intake.move(127)&& lever.move(127);
-    pros::delay(500);
-   intake.move(-127);
-   pros::delay(650);
-    lever.move(127) && intake.move(127);
-    pros::delay(3500);
+    lever.move_absolute(leverMax,-100);
+    lever.move_absolute(1,100);
     
     
 
@@ -369,7 +370,7 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.turnToPoint(57,-53,750,{},false);
 
     //intake
-    intake.move(127)&&lever.move(0);
+    intake.move(127);
     chassis.moveToPoint(57,-53,1750,{.maxSpeed = 90},false);
     chassis.moveToPoint(59,-53,1000,{.maxSpeed = 95});
     intake.move(127);
