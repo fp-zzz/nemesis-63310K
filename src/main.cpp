@@ -161,7 +161,7 @@ void leverScore() {
     lever.brake(); // Stop at scoring position
     
     // Return to starting position
-    lever.move(MAX_INPUT);
+    lever.move_absolute(0, 100);
     
     // Wait until back at zero
     while(fabs(lever.get_position() - 0) > tolerance) {
