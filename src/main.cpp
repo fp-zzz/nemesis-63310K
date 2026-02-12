@@ -14,11 +14,8 @@
 VEX V5 Robot Program — PROS + LemLib Template
 Author: Bhargav Trivedi
 ===========================================================
-📘 Overview:
-This template combines PROS (for low-level robot control)
-and LemLib (for odometry & motion control).
 
-Sections include:
+Table of Contents:
   1. Motor Configuration
   2. Sensor Configuration
   3. Pneumatics (ADI Example)
@@ -33,30 +30,23 @@ Sections include:
 -----------------------------------------------------------
 1️⃣ MOTOR CONFIGURATION
 -----------------------------------------------------------
-💡 NOTES:
-- Port numbers correspond to the V5 Brain labels.
-- Use negative ports to reverse motor direction.
-- Motors can be grouped using `pros::MotorGroup` or defined individually.
 */
 
-// Example of standalone motor declaration
-// pros::Motor exampleMotor(7, pros::MotorGears::blue, false);
-
-//controler delcatiaroin
+// Controller declaration for driver control
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
-constexpr auto in = pros::E_CONTROLLER_DIGITAL_L2; 
-constexpr auto outtake = pros::E_CONTROLLER_DIGITAL_R2; 
-constexpr auto score = pros::E_CONTROLLER_DIGITAL_L1; 
-constexpr auto middle = pros::E_CONTROLLER_DIGITAL_R1; 
-constexpr auto tounge = pros::E_CONTROLLER_DIGITAL_Y; 
-constexpr auto wing = pros::E_CONTROLLER_DIGITAL_RIGHT; 
+constexpr auto in = pros::E_CONTROLLER_DIGITAL_L2; // Intake
+constexpr auto outtake = pros::E_CONTROLLER_DIGITAL_R2; // Lower goal score/outtake. Reverses intake
+constexpr auto score = pros::E_CONTROLLER_DIGITAL_L1; // Raise lever to score
+constexpr auto middle = pros::E_CONTROLLER_DIGITAL_R1; // Lowers 4 arm to middle pos
+constexpr auto tounge = pros::E_CONTROLLER_DIGITAL_Y; // Tongue piston control
+constexpr auto wing = pros::E_CONTROLLER_DIGITAL_RIGHT; // Wing piston control
 
 
-// Left motor group on ports 1, 2, 3 (1 & 3 reversed)
+// Left motor group on ports 2, 6, 13 (All reversed)
 pros::MotorGroup left_motors({-2,-6,-13},pros::MotorGears::blue);
 
-// Right motor group on ports 4, 5, 6 (5 reversed)
+// Right motor group on ports 21, 8, 7 (None reversed)
 pros::MotorGroup right_motors({21,8,7}, pros::MotorGears::blue);
 
 // Lever and intake motors
@@ -70,20 +60,14 @@ int tolerance = 5;
 -----------------------------------------------------------
 2️⃣ SENSOR CONFIGURATION
 -----------------------------------------------------------
-💡 Includes IMU, tracking wheels, encoders, etc.
-- Tracking wheels measure distance and direction.
-- IMU provides inertial heading tracking.
 */
 
 pros::Imu imu(20); // IMU on port 20
 
 /*
 -----------------------------------------------------------
-3️⃣ PNEUMATICS (ADI EXAMPLE)
+3️⃣ PNEUMATICS CONFIGURATION
 -----------------------------------------------------------
-💡 Pneumatics are controlled via ADI digital outputs.
-- Setting HIGH opens the solenoid.
-- Example button control included in opcontrol().
 */
 
 // TONGUE PISTON
@@ -97,7 +81,7 @@ bool wingValue = false;
 bool lockW = false;
 
 // MIDDLE PISTON
-pros::adi::DigitalOut mid_piston('C');
+pros::adi::DigitalOut mid_piston('F'); // Pneumatic clamp on ADI port F
 bool midValue = false;
 bool lockM = false;
 
@@ -105,8 +89,6 @@ bool lockM = false;
 -----------------------------------------------------------
 4️⃣ LEMLIB DRIVETRAIN & CONTROLLERS
 -----------------------------------------------------------
-💡 LemLib handles odometry, PID control, and autonomous motion.
-- Adjust parameters based on robot geometry and wheel setup.
 */
 
 lemlib::Drivetrain drivetrain(
@@ -151,9 +133,9 @@ lemlib::Chassis chassis(drivetrain, lateral_controller, angular_controller, sens
 -----------------------------------------------------------
 5️⃣ INITIALIZATION & CALIBRATION
 -----------------------------------------------------------
-💡 Runs on startup to initialize devices and calibrate sensors.
 */
 
+// Helper function to calculate average of drive motor temperatures
 float avg(std::vector<double> vars) {
     float sum = 0;
     for (size_t i = 0; i < vars.size(); i++)
@@ -161,34 +143,64 @@ float avg(std::vector<double> vars) {
     return sum / vars.size();
 }
 
+//MUTEX function for leverScore
+void leverScore() {
+    // Move to max position (score)
+    //lever.move_absolute(leverMax, 100);  // Positive velocity to move toward negative position
+    lever.move(-MAX_INPUT);
+    
+    // Wait until reaching target
+    while(fabs(lever.get_position() - leverMax) > tolerance) {
+        pros::delay(20);
+    }
+    
+    lever.brake(); // Stop at scoring position
+    
+    // Return to starting position
+    lever.move(MAX_INPUT);
+    
+    // Wait until back at zero
+    while(fabs(lever.get_position() - 0) > tolerance) {
+        pros::delay(20);
+    }
+    
+    lever.brake();
+    leverLock = false;
+}
+
+
 void initialize() {
     pros::lcd::initialize();
     pros::Task screenTask([&]() {
+        // Variables for screen colors
+        const uint32_t BLACK = 0x000000;
+        const uint32_t WHITE = 0xFFFFFF;
+        // Set background to black and clear screen
+        pros::screen::set_eraser(BLACK);
+        pros::screen::erase();
+        // Set text color to white
+        pros::screen::set_pen(WHITE);
+        // Print info to brain screen
         while (true) {
-            // print robot location to the brain screen
-            pros::lcd::print(0, "Lever: %f", lever.get_position());
-            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            // log position telemetry
-            // lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
-            // delay to save resources
-            pros::lcd::print(4, "C Temp: %.0f", intake.get_temperature());
-            pros::lcd::print(5, "S Temp: %.0f", lever.get_temperature());
-            pros::lcd::print(6, "L DT Temp: %.0f", avg(left_motors.get_temperature_all()));
-            pros::lcd::print(7, "R DT Temp: %.0f", avg(right_motors.get_temperature_all()));
-            // pros::lcd::print(6, "L: %f", controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
-            // pros::lcd::print(7, "R: %f", controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+            // Print robot location to the brain screen
+            pros::screen::print(pros::E_TEXT_MEDIUM, 0, "Lever: %f", lever.get_position()); // Lever position
+            pros::screen::print(pros::E_TEXT_MEDIUM, 1, "X: %f", chassis.getPose().x);
+            pros::screen::print(pros::E_TEXT_MEDIUM, 2, "Y: %f", chassis.getPose().y);
+            pros::screen::print(pros::E_TEXT_MEDIUM, 3, "Theta: %f", chassis.getPose().theta);
+            pros::screen::print(pros::E_TEXT_MEDIUM, 4, "IN Temp: %.0f", intake.get_temperature()); // Intake motor temp
+            pros::screen::print(pros::E_TEXT_MEDIUM, 5, "LVR Temp: %.0f", lever.get_temperature()); // Lever motor temp
+            pros::screen::print(pros::E_TEXT_MEDIUM, 6, "L DT Temp: %.0f", avg(left_motors.get_temperature_all())); // Average temp of left motor drive temps
+            pros::screen::print(pros::E_TEXT_MEDIUM, 7, "R DT Temp: %.0f", avg(right_motors.get_temperature_all())); // Average temp of right motor drive temps
+            // Delay
             pros::delay(50);
         }
-
     });
-
+    // Calibration of sensors and initial states of motors/pneumatics
     chassis.calibrate();  // Calibrate IMU & encoders
     tongue_piston.set_value(false); // Ensure clamp is in initial state
     wing_piston.set_value(false); // Ensure clamp is in initial state
-    mid_piston.set_value(true);
-    lever.tare_position();
+    mid_piston.set_value(true); // Ensure clamp is in initial state
+    lever.tare_position(); 
     lever.set_zero_position(0);
 }
 
@@ -196,7 +208,6 @@ void initialize() {
 -----------------------------------------------------------
 6️⃣ COMPETITION TEMPLATE FUNCTIONS
 -----------------------------------------------------------
-💡 These are standard PROS functions for competition control.
 */
 
 void disabled() {}
@@ -449,13 +460,11 @@ void autonomous()
 -----------------------------------------------------------
 7️⃣ DRIVER CONTROL (OPCONTROL)
 -----------------------------------------------------------
-💡 Handles user control using the VEX Controller.
-Includes examples for drive, motor control, and pneumatics.
 */
 
 void opcontrol() {
     
-
+pros::Task* leverTask = nullptr;
     while (true) {
         // --- Drive Controls ---
         // Arcade drive (single-stick)
@@ -477,37 +486,13 @@ void opcontrol() {
         } 
         else if (master.get_digital(score) && !leverLock) {
             //0 is bottom, -555 is max
-            pros::Task leverTaskup([&]() {
-                while(!(lever.get_position() > leverMax - tolerance && lever.get_position() < leverMax + tolerance))
-                {
-                    lever.move_absolute(leverMax, -100);
-                }
-
-                while(!(lever.get_position() > 0 - tolerance && lever.get_position() < 0 + tolerance))
-                {
-                    lever.move_absolute(1, 100);
-                }
-            });
 
             leverLock = true;
+            pros::Task leverTask(leverScore);
             
-            // lever.move_absolute(-240, 100);
-            // pros::delay(500);
-            // // lever.move(127);
-            // // Move to 900 degrees (e.g., 90-degree lift turn) at 100 RPM
-            // lever.move_absolute(248, 100);
-            // while (!((lever.get_position() < (248 + 5)) && (lever.get_position() > (248 - 5)))) {
-            //     pros::delay(2);
-            // }
-        }
-        else if (!(master.get_digital(score)) && leverLock){
-            lever.brake();
-            leverLock = false;
-
         }
         else {
             intake.brake();    // Stop (optional — can replace with .move(0))
-            lever.brake();
         }
 
         // --- Pneumatics Toggle ---
