@@ -293,10 +293,10 @@ void AutoRight()
     intake.move(127);
 
 //match load
-    chassis.moveToPoint(-55,-47,900,{.maxSpeed = 100,forwards = false},false);
+  //  chassis.moveToPoint(-55,-47,900,{.maxSpeed = 100,forwards = false},false);
     chassis.turnToPoint(-57,-47,750,{},false);
     tongue_piston.set_value(true) && intake.move(127);
-    chassis.moveToPoint(-57,-47,{.maxSpeed = 90},false);
+    //chassis.moveToPoint(-57,-47,{.maxSpeed = 90},false);
     pros::delay(500);
     //adjust by adding points if needed
     //intake for 500ms
@@ -321,8 +321,8 @@ void AutoSkills2()//MIDDLE AND LOW GOALS
 //Intake six balls
     intake.move(127);
     chassis.moveToPoint(-60,0,4000,{.maxSpeed = 90});//add false if needed
-    chassis.moveToPoint(-50,0,3500,{.maxSpeed = 90,forwards = false});
-    chassis.moveToPoint(-60,0,2000,{.maxSpeed = 90,forwards = false});
+    //chassis.moveToPoint(-50,0,3500,{.maxSpeed = 90,forwards = false});
+    //chassis.moveToPoint(-60,0,2000,{.maxSpeed = 90,forwards = false});
 
 }
 void AutoSkills1()//3 LOADERS AND LONG GOALS
