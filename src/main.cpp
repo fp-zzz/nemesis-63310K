@@ -281,26 +281,29 @@ void AutoRight()
 
 //intake first three blocks
     chassis.turnToPoint(-22,-22,500,{},false);
-    //turn inake on 
+    intake.move(127);
     chassis.moveToPoint(-22,-22,750,{.maxSpeed = 100},false);//change for accurrcy and consistanty of intake
 
-//Score in middle(4 balls)
-    //intake off
-    chassis.turnToHeading(225,500,{},false);//change for consistancy
+//Score in lower(4 balls)
+    chassis.turnToHeading(315,500,{},false);//change for consistancy
     chassis.moveToPoint(-13,-14,750,{.forwards = false,.maxSpeed = 85},false);//decrease speed for accurecy, increase for arrive faster
-    //score with lever SLOWL:Y
+    pros::delay(500);
+    intake.move(-127);
+    pros::delay(500);
+    intake.move(127);
 
 //match load
-    //tounge down
-    chassis.turnToPoint(-55,-47,750,{},false);
-    chassis.moveToPoint(-55,-47,900,{.maxSpeed = 100},false);
+  //  chassis.moveToPoint(-55,-47,900,{.maxSpeed = 100,forwards = false},false);
     chassis.turnToPoint(-57,-47,750,{},false);
+    tongue_piston.set_value(true) && intake.move(127);
     //chassis.moveToPoint(-57,-47,{.maxSpeed = 90},false);
+    pros::delay(500);
     //adjust by adding points if needed
     //intake for 500ms
 
 //Score in long(3 balls)
     chassis.moveToPoint(-30,-47,900,{.forwards = false,.maxSpeed = 90},false);
+    leverScore();
     //score with lever
 
 //wing in the control(Do this if there is time)   
@@ -312,6 +315,14 @@ void AutoWinPoint()
 }
 void AutoSkills2()//MIDDLE AND LOW GOALS
 {
+//Set Position
+    chassis.setPose(-50,0,270);
+
+//Intake six balls
+    intake.move(127);
+    chassis.moveToPoint(-60,0,4000,{.maxSpeed = 90});//add false if needed
+    //chassis.moveToPoint(-50,0,3500,{.maxSpeed = 90,forwards = false});
+    //chassis.moveToPoint(-60,0,2000,{.maxSpeed = 90,forwards = false});
 
 }
 void AutoSkills1()//3 LOADERS AND LONG GOALS
