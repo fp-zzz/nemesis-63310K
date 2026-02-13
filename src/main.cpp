@@ -238,7 +238,7 @@ enum class Auto{
     Skills2
 };
 
-constexpr Auto AutoSelect = Auto::Right;
+constexpr Auto AutoSelect = Auto::Test;
 
 void AutoLeft()
 {
@@ -247,27 +247,29 @@ void AutoLeft()
 
 //intake first three blocks
     chassis.turnToPoint(-22,22,500,{},false);
-    //turn inake on 
-    chassis.moveToPoint(-22,22,750,{.maxSpeed = 100},false);//change for accurrcy and consistanty of intake
+    intake.move(127);
+    chassis.moveToPoint(-22,22,1000,{.maxSpeed = 85});//change for accurrcy and consistanty of intake
 
 //Score in middle(4 balls)
-    //intake off
+    intake.move(0);
+    mid_piston.set_value(false);
     chassis.turnToHeading(315,500,{},false);//change for consistancy
     chassis.moveToPoint(-13,14,750,{.forwards = false,.maxSpeed = 85},false);//decrease speed for accurecy, increase for arrive faster
-    //score with lever SLOWL:Y
+    leverScore();
 
 //match load
-    //tounge down
     chassis.turnToPoint(-55,47,750,{},false);
-    chassis.moveToPoint(-55,47,900,{.maxSpeed = 100},false);
+    chassis.moveToPoint(-55,47,950,{.maxSpeed = 100},false);
     chassis.turnToPoint(-57,47,750,{},false);
-    //chassis.moveToPoint(-57,47,{.maxSpeed = 90},false);
-    //adjust by adding points if needed
-    //intake for 500ms
+    tongue_piston.set_value(true);
+    intake.move(127);
+    chassis.moveToPoint(-57,47,900,{.maxSpeed = 90});
+    pros::delay(500);
 
 //Score in long(3 balls)
+    mid_piston.set_value(false);
     chassis.moveToPoint(-30,47,900,{.forwards = false,.maxSpeed = 90},false);
-    //score with lever
+    leverScore();
 
 //wing in the control(Do this if there is time)   
 }
