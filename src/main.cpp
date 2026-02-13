@@ -150,14 +150,16 @@ void leverScoreLogic() {
     //lever.move_absolute(leverMax, 100);  // Positive velocity to move toward negative position
     int loopCount = 0;
     int timeout = 1500;
+    double leverEff = 0;
 
     lever.move(MAX_INPUT);
 
     // Wait until reaching target
     while(fabs(lever.get_position() - leverMax) > tolerance) {
         pros::delay(20);
+        leverEff = lever.get_efficiency();
         loopCount++;
-        if(loopCount * 20 > timeout) break;
+        if(loopCount * 20 > timeout || leverEff < 10) break;
     }
     loopCount = 0; //reset
     lever.brake(); // Stop at scoring position
@@ -168,8 +170,9 @@ void leverScoreLogic() {
     // Wait until back at zero
     while(fabs(lever.get_position() - bottomPos) > bottomPos) {
         pros::delay(20);
+        leverEff = lever.get_efficiency();
         loopCount++;
-        if(loopCount * 20 > timeout) break;
+        if(loopCount * 20 > timeout || leverEff < 10) break;
     }
     
     lever.brake();
