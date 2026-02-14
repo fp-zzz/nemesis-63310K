@@ -265,15 +265,22 @@ void AutoLeft()
     chassis.turnToHeading(270,750,{},false);
     intake.move(127);
     chassis.moveToPoint(-62.75,39,900,{.maxSpeed = 90},false);
-    pros::delay(500);
     chassis.moveToPoint(-62.75,39,450,{.maxSpeed = 90},false);
+    pros::delay(500);
 
 //Score in long(3 balls)
     mid_piston.set_value(true);
     chassis.moveToPoint(-30,38,900,{.forwards = false,.maxSpeed = 90},false);
     leverScore();
+    pros::delay(400);
+    tongue_piston.set_value(false);
 
 //wing in the control(Do this if there is time)   
+    chassis.moveToPoint(-45,39,750,{.maxSpeed = 90},false);
+    chassis.turnToPoint(-45,28,750,{},false);
+    chassis.moveToPoint(-45,28,750,{.maxSpeed = 90},false);
+    chassis.turnToHeading(90,750,{},false);
+    chassis.moveToPoint(-10,28,750,{.maxSpeed = 90},false);
 }
     
 void AutoRight()
