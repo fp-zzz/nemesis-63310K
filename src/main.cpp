@@ -57,6 +57,7 @@ bool leverLock = false;
 int tolerance = 20;
 int bottomPos = 0;
 
+
 /*
 -----------------------------------------------------------
 2️⃣ SENSOR CONFIGURATION
@@ -83,7 +84,7 @@ bool lockW = false;
 
 // MIDDLE PISTON
 pros::adi::DigitalOut mid_piston('F'); // Pneumatic clamp on ADI port F
-bool midValue = false;
+bool topScore = true;
 bool lockM = false;
 
 /*
@@ -145,6 +146,13 @@ float avg(std::vector<double> vars) {
 }
 
 //MUTEX function for leverScore
+enum class ScoreType{
+    Top,
+    Mid,
+};
+
+ScoreType leverType = ScoreType::Top;
+
 void leverScoreLogic() {
     // Move to max position (score)
     //lever.move_absolute(leverMax, 100);  // Positive velocity to move toward negative position
@@ -152,14 +160,31 @@ void leverScoreLogic() {
     int timeout = 1000;
     //double leverEff = 0;
 
-    lever.move(MAX_INPUT);
+    if(leverType == ScoreType::Top)
+    {
+        timeout = 1000;
+        lever.move(MAX_INPUT);
 
-    // Wait until reaching target
-    while(fabs(lever.get_position() - leverMax) > tolerance) {
-        pros::delay(20);
-        //leverEff = lever.get_efficiency();
-        loopCount++;
-        if(loopCount * 20 > timeout) break;
+        // Wait until reaching target
+        while(fabs(lever.get_position() - leverMax) > tolerance) {
+            pros::delay(20);
+            //leverEff = lever.get_efficiency();
+            loopCount++;
+            if(loopCount * 20 > timeout) break;
+        }
+    }
+    else if(leverType == ScoreType::Mid)
+    {
+        timeout = 2000;
+        lever.move(127/2);
+
+        // Wait until reaching target
+        while(fabs(lever.get_position() - leverMax) > tolerance) {
+            pros::delay(20);
+            //leverEff = lever.get_efficiency();
+            loopCount++;
+            if(loopCount * 20 > timeout) break;
+        }
     }
     loopCount = 0; //reset
     lever.brake(); // Stop at scoring position
@@ -179,7 +204,8 @@ void leverScoreLogic() {
     leverLock = false; //allow to score again
 }
 
-void leverScore(){
+void leverScore(ScoreType leverScoreMid = ScoreType::Top){
+    leverType = leverScoreMid;
     pros::Task leverTask(leverScoreLogic);
 }
 
@@ -516,9 +542,13 @@ pros::Task* leverTask = nullptr;
         else if (master.get_digital(outtake)) {
             intake.move(-MAX_INPUT); // Full reverse
         } 
-        else if (master.get_digital(score) && !leverLock) {
+        else if (master.get_digital(score) && !leverLock && topScore) {
             leverLock = true;
-            leverScore();    
+            leverScore(ScoreType::Top);    
+        }
+        else if (master.get_digital(score) && !leverLock && !topScore) {
+            leverLock = true;
+            leverScore(ScoreType::Mid);    
         }
         else {
             intake.brake();    // Stop (optional — can replace with .move(0))
@@ -550,8 +580,8 @@ pros::Task* leverTask = nullptr;
         // MIDDLE PISTON CONTROL
         
         if (master.get_digital(middle) && !lockM) {
-            midValue = !midValue;
-            mid_piston.set_value(midValue);
+            topScore = !topScore;
+            mid_piston.set_value(topScore);
             lockM = true;
         }
         else if(!(master.get_digital(middle))) {
@@ -560,3 +590,21 @@ pros::Task* leverTask = nullptr;
         pros::delay(20); // Delay to reduce CPU usage
     }
 }
+
+
+
+
+
+/*
+
+if u want to score mid
+leverScore(ScoreType::Mid);
+
+if u want to score top
+leverScore(ScoreType::Top);
+
+if you do this
+leverScore();
+it will default to top score
+
+*/
