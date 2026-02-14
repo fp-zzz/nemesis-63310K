@@ -72,7 +72,7 @@ pros::Imu imu(20); // IMU on port 20
 */
 
 // TONGUE PISTON
-pros::adi::DigitalOut tongue_piston('A');  // Pneumatic clamp on ADI port A
+pros::adi::DigitalOut tongue_piston('G');  // Pneumatic clamp on ADI port A
 bool tongueValue = false;           // Initial state of pneumatic clamp
 bool lockT = false;
 
@@ -190,14 +190,14 @@ void initialize() {
         // Variables for screen colors
         const uint32_t BLACK = 0x000000;
         const uint32_t WHITE = 0xFFFFFF;
-        // Set background to black and clear screen
-        pros::screen::set_eraser(BLACK);
-        pros::screen::erase();
-        // Set text color to white
-        pros::screen::set_pen(WHITE);
         // Print info to brain screen
         while (true) {
             // Print robot location to the brain screen
+            // Set background to black and clear screen
+            pros::screen::set_eraser(BLACK);
+            pros::screen::erase();
+            // Set text color to white
+            pros::screen::set_pen(WHITE);
             pros::screen::print(pros::E_TEXT_MEDIUM, 0, "Lever: %f", lever.get_position()); // Lever position
             pros::screen::print(pros::E_TEXT_MEDIUM, 1, "X: %f", chassis.getPose().x);
             pros::screen::print(pros::E_TEXT_MEDIUM, 2, "Y: %f", chassis.getPose().y);
