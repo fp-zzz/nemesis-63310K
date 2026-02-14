@@ -51,10 +51,11 @@ pros::MotorGroup right_motors({21,8,7}, pros::MotorGears::blue);
 
 // Lever and intake motors
 pros::Motor intake(5, pros::MotorGears::blue); // Motor for intake
-pros::Motor lever(16, pros::MotorGears::red); // Motor for lever mech
-int leverMax = -555;
+pros::Motor lever(-16, pros::MotorGears::red); // Motor for lever mech
+int leverMax = -580;
 bool leverLock = false;
-int tolerance = 5;
+int tolerance = 20;
+int bottomPos = 0;
 
 /*
 -----------------------------------------------------------
@@ -144,32 +145,46 @@ float avg(std::vector<double> vars) {
 }
 
 //MUTEX function for leverScore
-void leverScore() {
+void leverScoreLogic() {
     // Move to max position (score)
-    lever.move_absolute(leverMax, 100);  // Positive velocity to move toward negative position
-    
+    //lever.move_absolute(leverMax, 100);  // Positive velocity to move toward negative position
+    int loopCount = 0;
+    int timeout = 1000;
+    //double leverEff = 0;
+
+    lever.move(MAX_INPUT);
+
     // Wait until reaching target
     while(fabs(lever.get_position() - leverMax) > tolerance) {
         pros::delay(20);
+        //leverEff = lever.get_efficiency();
+        loopCount++;
+        if(loopCount * 20 > timeout) break;
     }
-    
+    loopCount = 0; //reset
     lever.brake(); // Stop at scoring position
-    pros::delay(100);
     
     // Return to starting position
     lever.move_absolute(0, 100);
     
     // Wait until back at zero
-    while(fabs(lever.get_position() - 0) > tolerance) {
+    while(fabs(lever.get_position() - bottomPos) > bottomPos) {
         pros::delay(20);
+        //leverEff = lever.get_efficiency();
+        loopCount++;
+        if(loopCount * 20 > timeout) break;
     }
     
     lever.brake();
-    leverLock = false;
+    leverLock = false; //allow to score again
 }
 
+void leverScore(){
+    pros::Task leverTask(leverScoreLogic);
+}
 
 void initialize() {
+    lever.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     pros::lcd::initialize();
     pros::Task screenTask([&]() {
         // Variables for screen colors
@@ -223,7 +238,7 @@ enum class Auto{
     Skills2
 };
 
-constexpr Auto AutoSelect = Auto::Right;
+constexpr Auto AutoSelect = Auto::Test;
 
 void AutoLeft()
 {
@@ -232,47 +247,66 @@ void AutoLeft()
 
 //intake first three blocks
     chassis.turnToPoint(-22,22,500,{},false);
-    //turn inake on 
-    chassis.moveToPoint(-22,22,750,{.maxSpeed = 100},false);//change for accurrcy and consistanty of intake
+    intake.move(127);
+    chassis.moveToPoint(-22,22,1000,{.maxSpeed = 85});//change for accurrcy and consistanty of intake
 
 //Score in middle(4 balls)
-    //intake off
+    intake.move(0);
+    mid_piston.set_value(false);
     chassis.turnToHeading(315,500,{},false);//change for consistancy
     chassis.moveToPoint(-13,14,750,{.forwards = false,.maxSpeed = 85},false);//decrease speed for accurecy, increase for arrive faster
-    //score with lever SLOWL:Y
+    leverScore();
 
 //match load
-    //tounge down
-    // dont knwow wtf happened here *****chassis.moveToPose(-57,47,270,900,{.maxSpeed = 100,.lead = 0.3,.horizontalDrift = 8},false);//check if right
-    //adjust by adding points if needed
-    //intake for 500ms
+    chassis.turnToPoint(-55,47,750,{},false);
+    chassis.moveToPoint(-55,47,950,{.maxSpeed = 100},false);
+    chassis.turnToPoint(-57,47,750,{},false);
+    tongue_piston.set_value(true);
+    intake.move(127);
+    chassis.moveToPoint(-57,47,900,{.maxSpeed = 90});
+    pros::delay(500);
 
 //Score in long(3 balls)
-    chassis.moveToPoint(-30,47,750,{.forwards = false,.maxSpeed = 90},false);
-    //score with lever
+    mid_piston.set_value(false);
+    chassis.moveToPoint(-30,47,900,{.forwards = false,.maxSpeed = 90},false);
+    leverScore();
 
 //wing in the control(Do this if there is time)   
 }
     
 void AutoRight()
 {
-//Set position
-    chassis.setPose(-47,-12,110);
+//start position
+    chassis.setPose(-47,-12,70);
 
-//collection 3 blocks
+//intake first three blocks
     chassis.turnToPoint(-22,-22,500,{},false);
-    //intake on
-    chassis.moveToPoint(-22,-22,750,{.maxSpeed = 100},false);//adjust speed
+    intake.move(127);
+    chassis.moveToPoint(-22,-22,750,{.maxSpeed = 100},false);//change for accurrcy and consistanty of intake
 
-//score in low(4 balls)
-    //intake off
-    chassis.turnToPoint(-13,-14,500,{},false);
-    chassis.moveToPoint(-13,-14,750,{.maxSpeed = 90},false);
-    //reverse intake
-    pros::delay(1000);
+//Score in lower(4 balls)
+    chassis.turnToHeading(315,500,{},false);//change for consistancy
+    chassis.moveToPoint(-13,-14,750,{.forwards = false,.maxSpeed = 85},false);//decrease speed for accurecy, increase for arrive faster
+    pros::delay(500);
+    intake.move(-127);
+    pros::delay(500);
+    intake.move(127);
 
 //match load
-    
+  //  chassis.moveToPoint(-55,-47,900,{.maxSpeed = 100,forwards = false},false);
+    chassis.turnToPoint(-57,-47,750,{},false);
+    tongue_piston.set_value(true) && intake.move(127);
+    //chassis.moveToPoint(-57,-47,{.maxSpeed = 90},false);
+    pros::delay(500);
+    //adjust by adding points if needed
+    //intake for 500ms
+
+//Score in long(3 balls)
+    chassis.moveToPoint(-30,-47,900,{.forwards = false,.maxSpeed = 90},false);
+    leverScore();
+    //score with lever
+
+//wing in the control(Do this if there is time)   
     
 }
 void AutoWinPoint()
@@ -281,6 +315,14 @@ void AutoWinPoint()
 }
 void AutoSkills2()//MIDDLE AND LOW GOALS
 {
+//Set Position
+    chassis.setPose(-50,0,270);
+
+//Intake six balls
+    intake.move(127);
+    chassis.moveToPoint(-60,0,4000,{.maxSpeed = 90});//add false if needed
+    //chassis.moveToPoint(-50,0,3500,{.maxSpeed = 90,forwards = false});
+    //chassis.moveToPoint(-60,0,2000,{.maxSpeed = 90,forwards = false});
 
 }
 void AutoSkills1()//3 LOADERS AND LONG GOALS
@@ -307,23 +349,17 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     intake.move(0);
     chassis.moveToPoint(-20,20,2000,{.maxSpeed = 140},false);
     chassis.turnToPoint(45,20,750);
-    intake.move(127);
     chassis.moveToPoint(45,20,2000,{.maxSpeed = 140},false);
     chassis.turnToPoint(45,40,750);
     chassis.moveToPoint(45,40,750,{.maxSpeed = 140},false);
     chassis.turnToHeading(90,750,{},false);
     chassis.moveToPoint(21,47.5,750,{.forwards = false,.maxSpeed = 70},false);
-   // intake.move(-127);
     pros::delay(600);
-    intake.move(127) && lever.move(127);
-    pros::delay(450);
-    intake.move(-127);
-    pros::delay(650);
-    lever.move(127) && intake.move(127);
-    pros::delay(3500);
+    lever.move_absolute(leverMax,-100);
+    lever.move_absolute(1,100);
 
     //intake 
-    lever.move(0)&&intake.move(127);
+    intake.move(127);
     chassis.turnToPoint(45,41,1000);
     chassis.moveToPoint(45,41,1000,{.maxSpeed = 70});
     chassis.turnToPoint(59,41,900);
@@ -333,20 +369,13 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.moveToPoint(61.5,41,1000,{.maxSpeed = 95},false);
     intake.move(127);
     pros::delay(850);
-   // intake.move(-127);
-    //pros::delay(600);
-   // intake.move(127)&& top.move(0);
     chassis.moveToPoint(62,40,1000,{.maxSpeed = 95});
 
     //score
     chassis.moveToPoint(20.5,47.5,900,{.forwards = false,.maxSpeed = 70},false);
     pros::delay(650);
-   intake.move(127)&& lever.move(127);
-    pros::delay(500);
-   intake.move(-127);
-   pros::delay(650);
-    lever.move(127) && intake.move(127);
-    pros::delay(3500);
+    lever.move_absolute(leverMax,-100);
+    lever.move_absolute(1,100);
     
     
 
@@ -363,7 +392,7 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.turnToPoint(57,-53,750,{},false);
 
     //intake
-    intake.move(127)&&lever.move(0);
+    intake.move(127);
     chassis.moveToPoint(57,-53,1750,{.maxSpeed = 90},false);
     chassis.moveToPoint(59,-53,1000,{.maxSpeed = 95});
     intake.move(127);
@@ -454,7 +483,6 @@ void autonomous()
     }
 }
 
-
 /*
 -----------------------------------------------------------
 7️⃣ DRIVER CONTROL (OPCONTROL)
@@ -484,11 +512,8 @@ pros::Task* leverTask = nullptr;
             intake.move(-MAX_INPUT); // Full reverse
         } 
         else if (master.get_digital(score) && !leverLock) {
-            //0 is bottom, -555 is max
-
             leverLock = true;
-            pros::Task leverTask(leverScore);
-            
+            leverScore();    
         }
         else {
             intake.brake();    // Stop (optional — can replace with .move(0))
