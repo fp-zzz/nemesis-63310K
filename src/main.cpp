@@ -243,7 +243,7 @@ constexpr Auto AutoSelect = Auto::Test;
 void AutoLeft()
 {
 //start position
-    chassis.setPose(-47,12,70);
+    chassis.setPose(-47,12,90);
 
 //intake first three blocks
     chassis.turnToPoint(-22,22,500,{},false);
@@ -277,7 +277,7 @@ void AutoLeft()
 void AutoRight()
 {
 //start position
-    chassis.setPose(-47,-12,70);
+    chassis.setPose(-47,-12,90);
 
 //intake first three blocks
     chassis.turnToPoint(-22,-22,500,{},false);
@@ -293,10 +293,10 @@ void AutoRight()
     intake.move(127);
 
 //match load
-  //  chassis.moveToPoint(-55,-47,900,{.maxSpeed = 100,forwards = false},false);
+    chassis.moveToPoint(-55,-47,900,{.maxSpeed = 100,.forwards = false},false);
     chassis.turnToPoint(-57,-47,750,{},false);
     tongue_piston.set_value(true) && intake.move(127);
-    //chassis.moveToPoint(-57,-47,{.maxSpeed = 90},false);
+    chassis.moveToPoint(-57,-47,750{.maxSpeed = 90},false);
     pros::delay(500);
     //adjust by adding points if needed
     //intake for 500ms
@@ -355,8 +355,7 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.turnToHeading(90,750,{},false);
     chassis.moveToPoint(21,47.5,750,{.forwards = false,.maxSpeed = 70},false);
     pros::delay(600);
-    lever.move_absolute(leverMax,-100);
-    lever.move_absolute(1,100);
+    leverScore();
 
     //intake 
     intake.move(127);
@@ -374,8 +373,7 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     //score
     chassis.moveToPoint(20.5,47.5,900,{.forwards = false,.maxSpeed = 70},false);
     pros::delay(650);
-    lever.move_absolute(leverMax,-100);
-    lever.move_absolute(1,100);
+    leverScore();
     
     
 
@@ -413,12 +411,7 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.turnToHeading(270,750,{},false);
     chassis.moveToPoint(-20.5,-47,900,{.forwards = false,.maxSpeed = 70},false);
     pros::delay(750);
-    intake.move(127)&& lever.move(127);
-    pros::delay(650);
-    intake.move(-127);
-    pros::delay(650);
-    lever.move(127) && intake.move(127);
-    pros::delay(2900);
+    leverScore();
 
     //park
     tongue_piston.set_value(false);
@@ -428,7 +421,7 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.turnToPoint(-20,8,900);
     chassis.moveToPoint(-20,8,750,{.maxSpeed = 140},false);
     chassis.turnToPoint(-70,8,900);
-    intake.move(127) && lever.move(127);
+    intake.move(127);
     chassis.moveToPoint(-70,8,4000,{.minSpeed = 140});
 
 
