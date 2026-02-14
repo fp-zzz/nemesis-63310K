@@ -442,10 +442,10 @@ void TestAuto(){
     chassis.moveToPoint(0, 24, 3000, {.maxSpeed = 40});// comment 1
     chassis.turnToHeading(90, 1000, {.maxSpeed = 40});// comment 2
     chassis.moveToPoint(12, 24, 3000, {.maxSpeed = 40});// comment 3
-    chassis.moveToPoint(24,24,3000, {.maxSpeed = 40});// comment 4
+    //chassis.moveToPoint(24,24,3000, {.maxSpeed = 40});// comment 4
     chassis.turnToHeading(0, 1000, {.maxSpeed = 40});// comment 5
     chassis.moveToPoint(24, 36, 3000, {.maxSpeed = 40});// comment 6
-    chassis.moveToPoint(24,48,3000, {.maxSpeed = 40});// comment 7
+    //chassis.moveToPoint(24,48,3000, {.maxSpeed = 40});// comment 7
 }
 
 void autonomous()
