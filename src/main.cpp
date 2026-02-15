@@ -47,7 +47,7 @@ constexpr auto wing = pros::E_CONTROLLER_DIGITAL_RIGHT; // Wing piston control
 pros::MotorGroup left_motors({-2,-6,-13},pros::MotorGears::blue);
 
 // Right motor group on ports 21, 8, 7 (None reversed)
-pros::MotorGroup right_motors({21,8,7}, pros::MotorGears::blue);
+pros::MotorGroup right_motors({21,8,19}, pros::MotorGears::blue);
 
 // Lever and intake motors
 pros::Motor intake(5, pros::MotorGears::blue); // Motor for intake
@@ -264,7 +264,7 @@ enum class Auto{
     Skills2
 };
 
-constexpr Auto AutoSelect = Auto::Right;
+constexpr Auto AutoSelect = Auto::Left;
 
 void AutoLeft()
 {
@@ -274,30 +274,40 @@ void AutoLeft()
 //intake first three blocks
     chassis.turnToPoint(-18,25,750,{},false);
     intake.move(127);
+    chassis.moveToPoint(-18,25,1750,{.maxSpeed = 70},false);
+    chassis.moveToPoint(-25,20,750,{.forwards = false,.maxSpeed = 70},false);
     //chassis.moveToPoint(-25,25,1000,{.maxSpeed = 85});//change for accurrcy and consistanty of int
 
-//Score in middle(4 balls)
+/*//Score in middle(4 balls)
     chassis.moveToPoint(-18,25,1750,{.maxSpeed = 70},false);//change for accurrcy and consistanty of intake
     chassis.moveToPoint(-25,20,750,{.forwards = false,.maxSpeed = 70},false);//decrease speed for accurecy, increase for arrive faster 
     mid_piston.set_value(false);
     chassis.turnToHeading(315,500,{},false);//change for consistancy
-    chassis.moveToPoint(-15.7,9.1,800,{.forwards = false,.maxSpeed = 85},false);//decrease speed for accurecy, increase for arrive faster
+    chassis.moveToPoint(-10,10,800,{.forwards = false,.maxSpeed = 90},false);//decrease speed for accurecy, increase for arrive faster
     leverScore(leverType = ScoreType::Mid);
     pros::delay(500);
-
+*/
+   
 //match load
     chassis.turnToPoint(-50,41,750,{},false);
     chassis.moveToPoint(-50,41,950,{.maxSpeed = 100},false);
+    mid_piston.set_value(true);
+    chassis.moveToPoint(-27,40.5,900,{.forwards = false,.maxSpeed = 90},false);
+    intake.move(-127);
+    leverScore(leverType = ScoreType::Top);
+    pros::delay(1000);
     tongue_piston.set_value(true);
+    chassis.turnToPoint(-50,41,750,{},false);
+    chassis.moveToPoint(-50,41,950,{.maxSpeed = 100},false);
     chassis.turnToHeading(270,750,{},false);
     intake.move(127);
-    chassis.moveToPoint(-60,40,900,{.maxSpeed = 75},false);
-    chassis.moveToPoint(-60,40,450,{.maxSpeed = 85},false);
+    chassis.moveToPoint(-59,40,900,{.maxSpeed = 75},false);
+    chassis.moveToPoint(-59,40,450,{.maxSpeed = 85},false);
     pros::delay(400);
 
 //Score in long(3 balls)
     mid_piston.set_value(true);
-    chassis.moveToPoint(-27,39,900,{.forwards = false,.maxSpeed = 90},false);
+    chassis.moveToPoint(-27,40.5,900,{.forwards = false,.maxSpeed = 90},false);
     intake.move(-127);
     leverScore(leverType = ScoreType::Top);
     pros::delay(1000);
@@ -469,10 +479,10 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
 
 void AllianceWinPoint()
 {
-    chassis.setPose(-45,10,360);
+    /*chassis.setPose(-45,10,360);
     chassis.moveToPoint(-45,25,1000, {.maxSpeed = 40},false);
     chassis.turnToHeading(90, 1000, {.maxSpeed = 40},false);
-    chassis.moveToPoint(-55,25,1000, {.forwards = false,.maxSpeed = 40});
+    chassis.moveToPoint(-55,25,1000, {.forwards = false,.maxSpeed = 40});*/
 }
 
 
