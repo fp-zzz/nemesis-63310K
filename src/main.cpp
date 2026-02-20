@@ -363,16 +363,17 @@ void AutoWinPoint()
 {
     
 }
-void AutoSkills2()//MIDDLE AND LOW GOALS
+void AutoSkills2()//For WORLDS
 {
-//Set Position
-    chassis.setPose(-50,0,270);
+//set Position in the middle of the parking zone
+    chassis.setPose(-62,14,360);
 
-//Intake six balls
-    intake.move(127);
-    chassis.moveToPoint(-60,0,4000,{.maxSpeed = 90});//add false if needed
-    //chassis.moveToPoint(-50,0,3500,{.maxSpeed = 90,forwards = false});
-    //chassis.moveToPoint(-60,0,2000,{.maxSpeed = 90,forwards = false});
+//Clear Park**NEEDS TESTING!!!
+    
+    chassis.moveToPoint(62,14,750,{.maxSpeed = 70},false);//finishing position
+
+
+
 
 }
 void AutoSkills1()//3 LOADERS AND LONG GOALS
