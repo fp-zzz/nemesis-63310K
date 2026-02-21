@@ -366,12 +366,143 @@ void AutoWinPoint()
 void AutoSkills2()//For WORLDS
 {
 //set Position in the middle of the parking zone
-    chassis.setPose(-62,14,360);
+    chassis.setPose(-62,14,180);
 
 //Clear Park**NEEDS TESTING!!!
-    
-    chassis.moveToPoint(62,14,750,{.maxSpeed = 70},false);//finishing position
+    intake.move(127);
+    chassis.moveToPoint(-62,3,500,{.minSpeed = 100},false);//over the park
+    chassis.moveToPoint(-62,-5,2000,{.maxspeed = 50},false);//slowing start intaking
 
+//get out of the park and set for the next step**PART OF TESTING
+    chassis.moveToPoint(-62,-24,800,{.minSpeed = 100},false);
+    intake.move(0);
+
+//intake one single blue ball** also needs testing
+    chassis.turnToPoint(-33,-24,500,{},false);//turn to ball
+    intake.move(127);
+    chassis.moveToPoint(-33,-24,750,{.maxSpeed = 80});//TEst this
+    intake.brake();
+   
+//score 7 balls in the low goal
+    chassis.moveToPoint(-22,-24,400,{.maxSpeed = 70},false);//set up for score
+    chassis.turnToHeading(45,500,{},false);//turn to score
+    chassis.moveToPoint(-14,-14.5,800,{.maxSpeed = 75},false);//tune speed and timing
+    intake.move(-64);//test this
+    pros::delay(900);//test this delay to make sure it scores all the balls and doesn't leave any in the bot
+    intake.move(0);
+
+//match load
+    chassis.moveToPoint(-50,-47,900,{.forwards = false.maxSpeed = 100},false);//tune speed to save time and timeout
+    tongue_piston.set_value(true);
+    chassis.turnToPoint(-57,-47,500,{},false);
+    intake.move(127);
+    chassis.moveToPoint(-57,-47,1000,{.maxSpeed = 90},false);//tune pose so the balls fall freely and the bot doesn't get cooked
+    //add delay if needed try no to 
+    intake.move(0);
+
+//get to the other side
+    chassis.moveToPose(-25,-60,270,750,{.maxSpeed = 90,.forwards = false},false);//tune this
+    chassis.moveToPoint(25,-60,750,{.forwards =false,.maxSpeed = 90},false);//tune this too make it smooth
+
+//set up for scoring
+    chassis.turnToHeading(225,500,{},false);//tune the turn
+    chassis.moveToPoint(38,-47,500,{.forwards = false .maxSpped = 80});//tune speed
+    chassis.turnToHeading(90,500,{},false);
+    chassis.moveToPoint(32,-47,500,{.forwards = false,.maxSpeed = 75},false);
+
+//score
+    leverScore(leverType = ScoreType::Top);
+
+//Match load
+    intake.move(127);
+    chassis.turnToPoint(59,-41,900);
+    tongue_piston.set_value(true);
+    chassis.moveToPoint(59,41,2000,{.maxSpeed = 90},false);//tune timeout and distance
+    //add delay if needed
+    intake.move(0);
+
+//score
+    chassis.moveToPoint(32,-47,700,{.forwards = false,.maxSpeed = 75},false);
+    leverScore(leverType = ScoreType::Top);
+
+//clear blue park**NeEDS TESTING
+    chassis.turnToPoint(62,-25,500);
+    chassis.moveToPoint(62,-25,750,{.maxSpeed = 100},false);
+    chassis.turnToPoint(62,-3,500);
+    intake.move(127);
+    chassis.moveToPoint(62,-3,900,{.minSpeed = 100},false);//agjust timeout
+    chassis.moveToPoint(62,3,2000,{.maxSpeed = 50},false);
+    chassis.moveToPoint(62,20,800,{.minSpeed = 100},false);//test timeout
+    intake.move(0);
+
+//get the single red ball
+    chassis.turnToPoint(48,20,500);
+    chassis.moveToPoint(48,20,750,{.maxSpeed = 80});
+    chassis.turnToPoint(30,-14,500);
+    intake.move(127);
+    chassis.moveToPoint(30,-14,750,{.maxSpeed = 80});
+    intake.brake();//test this
+
+//score in the middle** TEST and TUNE for smoothness and timing
+    chassis.moveToPoint(24,23,500,{.maxSpeed = 70},false);
+    chassis.turnToHeading(135,500,{},false);
+    chassis.moveToPoint(14,-13,800,{.maxSpeed = 75},false);
+    leverScore(leverType = ScoreType::Mid);
+    intake.move(127);
+    leverScore(leverType = ScoreType::Mid);
+    intake.move(0);
+
+//intake four balls**Test this
+    chassis.moveToPoint(18,-17,500,{.maxSpeed = 100});
+    chassis.turnToPoint(23,22.5,500,{},false);
+    intake.move(127);
+    chassis.moveToPoint(23,22.5,1000,{.maxSpeed = 90},false);
+
+//score in the long 
+    chassis.turnToPoint(38,47,500);
+    chassis.moveToPoint(38,47,750,{.maxSpeed = 90},false);
+    chassis.turnToHeading(90,500,{},false);
+    chassis.moveToPoint(21,47.5,750,{.forwards = false,.maxSpeed = 70},false);
+    leverScore(leverType = ScoreType::Top);
+
+
+//match load
+    chassis.moveToPoint(45,41,1000,{.maxSpeed = 100},false);//ajust timeout
+    intake.move(127);
+    chassis.turnToPoint(59,41,500,{},false);
+    tongue_piston.set_value(true);
+    chassis.moveToPoint(59,41,1000,{.maxSpeed = 90},false);//tune timeout and distance
+    intake.move(0);
+
+//get to the other side
+    chassis.moveToPose(25,60,90,750,{.maxSpeed = 100,.forwards = false},false);//tune this
+    chassis.moveToPoint(-25,60,750,{.forwards =false,.maxSpeed = 100},false);//tune this too make it smooth
+
+//set up for scoring
+    chassis.turnToHeading(45,500,{},false);//tune the turn
+    chassis.moveToPoint(-38,47,500,{.forwards = false .maxSpeed = 80});//tune speed
+    chassis.turnToHeading(90,500,{},false);
+    chassis.moveToPoint(-32,47,500,{.forwards = false,.maxSpeed = 75},false);
+
+//score
+    leverScore(leverType = ScoreType::Top);
+
+//match load
+    intake.move(127);
+    tongue_piston.set_value(true);
+    chassis.moveToPoint(-59,41,1750,{.maxSpeed = 90},false);//tune timeout and distance
+    //add delay if needed
+    intake.move(0);
+
+//score
+    chassis.moveToPoint(-32,47,500,{.forwards = false,.maxSpeed = 75},false);
+    leverScore(leverType = ScoreType::Top);
+
+//park**test this
+    chassis.turnToPoint(-62,25,500);
+    chassis.moveToPoint(-62,25,750,{.maxSpeed = 100},false);
+    chassis.turnToPoint(-62,0,500,{},false);
+    chassis.moveToPoint(-62,0,900,{.minSpeed = 100},false);
 
 
 
