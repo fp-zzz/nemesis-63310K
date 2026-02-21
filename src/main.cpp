@@ -264,7 +264,7 @@ enum class Auto{
     Skills2
 };
 
-constexpr Auto AutoSelect = Auto::Left;
+constexpr Auto AutoSelect = Auto::Test;
 
 void AutoLeft()
 {
@@ -371,7 +371,7 @@ void AutoSkills2()//For WORLDS
 //Clear Park**NEEDS TESTING!!!
     intake.move(127);
     chassis.moveToPoint(-62,3,500,{.minSpeed = 100},false);//over the park
-    chassis.moveToPoint(-62,-5,2000,{.maxspeed = 50},false);//slowing start intaking
+    chassis.moveToPoint(-62,-5,2000,{.maxSpeed = 50},false);//slowing start intaking
 
 //get out of the park and set for the next step**PART OF TESTING
     chassis.moveToPoint(-62,-24,800,{.minSpeed = 100},false);
@@ -392,7 +392,7 @@ void AutoSkills2()//For WORLDS
     intake.move(0);
 
 //match load
-    chassis.moveToPoint(-50,-47,900,{.forwards = false.maxSpeed = 100},false);//tune speed to save time and timeout
+    chassis.moveToPoint(-50,-47,900,{.forwards = false,.maxSpeed = 100},false);//tune speed to save time and timeout
     tongue_piston.set_value(true);
     chassis.turnToPoint(-57,-47,500,{},false);
     intake.move(127);
@@ -401,12 +401,12 @@ void AutoSkills2()//For WORLDS
     intake.move(0);
 
 //get to the other side
-    chassis.moveToPose(-25,-60,270,750,{.maxSpeed = 90,.forwards = false},false);//tune this
+    //chassis.moveToPose(-25,-60,270,750,{.maxSpeed = 90,.forwards = false},false);//tune this
     chassis.moveToPoint(25,-60,750,{.forwards =false,.maxSpeed = 90},false);//tune this too make it smooth
 
 //set up for scoring
     chassis.turnToHeading(225,500,{},false);//tune the turn
-    chassis.moveToPoint(38,-47,500,{.forwards = false .maxSpped = 80});//tune speed
+    chassis.moveToPoint(38,-47,500,{.forwards = false,.maxSpeed = 80});//tune speed
     chassis.turnToHeading(90,500,{},false);
     chassis.moveToPoint(32,-47,500,{.forwards = false,.maxSpeed = 75},false);
 
@@ -475,12 +475,12 @@ void AutoSkills2()//For WORLDS
     intake.move(0);
 
 //get to the other side
-    chassis.moveToPose(25,60,90,750,{.maxSpeed = 100,.forwards = false},false);//tune this
+    //chassis.moveToPose(25,60,90,750,{.maxSpeed = 100,.forwards = false},false);//tune this
     chassis.moveToPoint(-25,60,750,{.forwards =false,.maxSpeed = 100},false);//tune this too make it smooth
 
 //set up for scoring
     chassis.turnToHeading(45,500,{},false);//tune the turn
-    chassis.moveToPoint(-38,47,500,{.forwards = false .maxSpeed = 80});//tune speed
+    chassis.moveToPoint(-38,47,500,{.forwards = false,.maxSpeed = 80});//tune speed
     chassis.turnToHeading(90,500,{},false);
     chassis.moveToPoint(-32,47,500,{.forwards = false,.maxSpeed = 75},false);
 
@@ -619,7 +619,7 @@ void AllianceWinPoint()
 
 
 void TestAuto(){
-    chassis.setPose(0, 0, 0);
+   // chassis.setPose(0, 0, 0);
 /*
     chassis.moveToPoint(0, 24, 3000, {.maxSpeed = 40});// comment 1
     chassis.turnToHeading(90, 1000, {.maxSpeed = 40});// comment 2
@@ -629,7 +629,31 @@ void TestAuto(){
     chassis.moveToPoint(24, 36, 3000, {.maxSpeed = 40});// comment 6
     //chassis.moveToPoint(24,48,3000, {.maxSpeed = 40});// comment 7
     */
-    chassis.moveToPoint(0, 72, 3000, {.maxSpeed = 85});// comment 1
+
+   /* //set Position in the middle of the parking zone
+    chassis.setPose(-49,0,270);
+
+//Clear Park**NEEDS TESTING!!!
+    intake.move(127);
+    chassis.moveToPoint(-73,0,1000,{.maxSpeed = 60},false);//over the park
+    chassis.moveToPoint(-80,0,4000,{.maxSpeed = 20});//slowing start intaking
+    //tongue_piston.set_value(true);
+
+//get out of the park and set for the next step**PART OF TESTING
+    //chassis.moveToPoint(-47,0,800,{.forwards = false,.minSpeed = 100});
+    //intake.move(0);*/
+    
+    //set Position in the middle of the parking zone
+    chassis.setPose(-62,13,180);
+
+//Clear Park**NEEDS TESTING!!!
+    intake.move(127);
+    chassis.moveToPoint(-62,3,500,{.maxSpeed = 85},false);//over the park
+    chassis.moveToPoint(-62,-5,2000,{.maxSpeed = 85},false);//slowing start intaking
+
+//get out of the park and set for the next step**PART OF TESTING
+    chassis.moveToPoint(-62,-40,800,{.maxSpeed = 85},false);
+    intake.move(0);
 }
 
 void autonomous()
