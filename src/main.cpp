@@ -264,7 +264,7 @@ enum class Auto{
     Skills2
 };
 
-constexpr Auto AutoSelect = Auto::Right;
+constexpr Auto AutoSelect = Auto::Skills1;
 
 void AutoLeft()
 {
@@ -342,21 +342,32 @@ void AutoRight()
     pros::delay(500);*/
 
 //match load
-    chassis.moveToPoint(-50,-45,950,{.maxSpeed = 100},false);
+    chassis.moveToPoint(-47,-49,950,{.maxSpeed = 100},false);
     tongue_piston.set_value(true);
     chassis.turnToHeading(270,750,{},false);
     intake.move(127);
-    chassis.moveToPoint(-60,-40,900,{.maxSpeed = 75},false);
-    chassis.moveToPoint(-60,-40,450,{.maxSpeed = 80},false);
-    pros::delay(400);
+    chassis.moveToPoint(-60,-51,900,{.maxSpeed = 75},false);
+    chassis.moveToPoint(-60,-51,450,{.maxSpeed = 80},false);
+    pros::delay(300);
 
 //Score in long(3 balls)
     mid_piston.set_value(true);
-    chassis.moveToPoint(-27,-42,900,{.forwards = false,.maxSpeed = 75},false);
+    chassis.moveToPoint(-25,-50,900,{.forwards = false,.maxSpeed = 75},false);
     intake.move(-127);
     leverScore(leverType = ScoreType::Top);
     pros::delay(1000);
     tongue_piston.set_value(false);
+
+//wing
+    chassis.moveToPoint(-45,-49,750,{.maxSpeed = 90},false);
+    wing_piston.set_value(true);
+    chassis.turnToPoint(-30,-62,750,{},false);
+    chassis.moveToPoint(-30,-62,750,{.maxSpeed = 90},false);
+    chassis.turnToPoint(-18,-62,750,{},false);
+    chassis.moveToPoint(-18,-62,750,{.maxSpeed = 70},false);
+    chassis.turnToPoint(-10,-62,750,{},false);
+    wing_piston.set_value(false);
+    chassis.moveToPoint(-10,-62,750,{.maxSpeed = 90},false);
 }
 void AutoWinPoint()
 {
@@ -520,10 +531,12 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.turnToPoint(-45,48,750,{},false);
     chassis.moveToPoint(-45,48,1750,{.maxSpeed = 100},false);
     tongue_piston.set_value(true);
-    chassis.turnToPoint(-60,48,750,{},false);
+    chassis.turnToPoint(-57,47.5,750,{},false);
     intake.move(127);
-    chassis.moveToPoint(-60,48,1000,{.maxSpeed = 90},false);
-    pros::delay(1750);
+    chassis.moveToPoint(-57,47.5,1000,{.maxSpeed = 80},false);
+    pros::delay(750);
+    chassis.moveToPoint(-59,47.5,750,{.maxSpeed = 80},false);
+    pros::delay(750);
 
     //Move to score
     chassis.moveToPoint(-45,45,1000,{.forwards = false,.maxSpeed = 70});
@@ -531,46 +544,52 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.moveToPoint(-20,25,2000,{.maxSpeed = 140},false);
     chassis.turnToPoint(45,25,750,{},false);
     chassis.moveToPoint(45,25,2000,{.maxSpeed = 140},false);
-    chassis.turnToPoint(45,47,750);
-    chassis.moveToPoint(45,47,750,{.maxSpeed = 140},false);
+    chassis.turnToPoint(45,45.5,750,{},false);
+    chassis.moveToPoint(45,45.5,750,{.maxSpeed = 140},false);
     chassis.turnToHeading(90,750,{},false);
-    chassis.moveToPoint(23,49,750,{.forwards = false,.maxSpeed = 70},false);
-    pros::delay(600);
+    chassis.moveToPoint(22,45.5,750,{.forwards = false,.maxSpeed = 70},false);
+    pros::delay(500);
     leverScore(leverType = ScoreType::Top);
+    pros::delay(300);
 
     //intake 
     intake.move(127);
-    chassis.turnToPoint(45,46,1000);
-    chassis.moveToPoint(45,46,1000,{.maxSpeed = 70});
-    chassis.turnToPoint(62,46,900);
+    chassis.turnToPoint(45,43,1000);
+    tongue_piston.set_value(true);
+    chassis.moveToPoint(45,43,1000,{.maxSpeed = 70});
+    chassis.turnToPoint(61,42,900);
     tongue_piston.set_value(true);
     intake.move(127);
-    chassis.moveToPoint(62,46,1000,{.maxSpeed = 90},false);
+    chassis.moveToPoint(61,42,1000,{.maxSpeed = 80},false);
     intake.move(127);
     pros::delay(2000);
 
     //score
-    chassis.moveToPoint(20.5,50,900,{.forwards = false,.maxSpeed = 70},false);
-    pros::delay(650);
+    chassis.moveToPoint(20.5,46,900,{.forwards = false,.maxSpeed = 70},false);
+    pros::delay(500);
     leverScore(leverType = ScoreType::Top);
+    pros::delay(300);
     
     
 
 
     //moving
+    tongue_piston.set_value(false);
+    intake.move(-127);
    chassis.moveToPoint(45,-45,1000,{.maxSpeed = 70});
    chassis.turnToPoint(25,25,750,{},false);
     chassis.moveToPoint(25,25,2000,{.maxSpeed = 140},false);
     chassis.turnToPoint(25,-25,750,{},false);
     chassis.moveToPoint(25,-25,2000,{.maxSpeed = 140},false);
-    chassis.turnToPoint(45,-47,750,{},false);
-    chassis.moveToPoint(45,-47,2750,{.maxSpeed = 140},false);
+    chassis.turnToPoint(40,-50,750,{},false);
+    chassis.moveToPoint(40,-50,2750,{.maxSpeed = 140},false);
     tongue_piston.set_value(true);
-    chassis.turnToPoint(57,-47,750,{},false);
+    chassis.turnToPoint(55,-50,750,{},false);
 
     //intake
+    tongue_piston.set_value(true);
     intake.move(127);
-    chassis.moveToPoint(59.5,-47,1000,{.maxSpeed = 90});
+    chassis.moveToPoint(59,-50,1000,{.maxSpeed = 90});
     pros::delay(2000);
 
 
@@ -578,38 +597,38 @@ void AutoSkills1()//3 LOADERS AND LONG GOALS
     chassis.moveToPoint(45,-53,750,{.forwards = false,.maxSpeed = 70});
     chassis.turnToPoint(25,-25,750);
     chassis.moveToPoint(25,-25,2000,{.maxSpeed = 140},false);
-    chassis.turnToPoint(-45,-25,750,{},false);
-    chassis.moveToPoint(-45,-25,2000,{.maxSpeed = 140},false);
-    chassis.turnToPoint(-45,-47,750,{},false);
-    chassis.moveToPoint(-45,-47,2000,{.maxSpeed = 70});
+    chassis.turnToPoint(-55,-25,750,{},false);
+    chassis.moveToPoint(-55,-25,2000,{.maxSpeed = 140},false);
+    chassis.turnToPoint(-55,-45,750,{},false);
+    chassis.moveToPoint(-55,-45,2000,{.maxSpeed = 70});
 
     //score
     chassis.turnToHeading(270,750,{},false);
-    chassis.moveToPoint(-25,-47,900,{.forwards = false,.maxSpeed = 70},false);
+    chassis.moveToPoint(-25,-46,900,{.forwards = false,.maxSpeed = 70},false);
     pros::delay(750);
     leverScore(leverType = ScoreType::Top);
 
     //intake
     intake.move(127);
-    chassis.moveToPoint(-57,-47,1750,{.maxSpeed = 90},false);
-    chassis.moveToPoint(-59,-47,1000,{.maxSpeed = 95});
+    chassis.turnToPoint(-67,-45,750,{},false);
+    chassis.moveToPoint(-67,-45,1750,{.maxSpeed = 90},false);
+    chassis.moveToPoint(-69,-45.5,1000,{.maxSpeed = 95},false);
     intake.move(127);
     pros::delay(1000);
-    intake.move(0);
 
     //score
-    chassis.moveToPoint(-20.5,-47,900,{.forwards = false,.maxSpeed = 70},false);
+    chassis.moveToPoint(-20.5,-45.5,900,{.forwards = false,.maxSpeed = 70},false);
     pros::delay(750);
     leverScore(leverType = ScoreType::Top);
+    pros::delay(300);
 
     //park
     tongue_piston.set_value(false);
-    chassis.moveToPoint(-35,-47,750,{.maxSpeed = 70});
-    chassis.turnToPoint(-35,-10,900);
-    chassis.moveToPoint(-35,-10,900,{.maxSpeed = 100},false);
-    chassis.turnToPoint(-70,-10,750);
+    chassis.turnToPoint(-35,0,900);
+    chassis.moveToPoint(-35,0,1750,{.maxSpeed = 100},false);
+    chassis.turnToPoint(-70,2,750,{},false);
     intake.move(127);
-    chassis.moveToPoint(-70,-10,4000,{.minSpeed = 140});
+    chassis.moveToPoint(-70,2,4000,{.minSpeed = 140});
 
 
 }
@@ -624,7 +643,7 @@ void AllianceWinPoint()
 
 
 void TestAuto(){
-    chassis.setPose(0, 0, 0);
+   /* chassis.setPose(0, 0, 0);
 
     chassis.moveToPoint(0, 24, 3000, {.maxSpeed = 40});// comment 1
     chassis.turnToHeading(90, 1000, {.maxSpeed = 40});// comment 2
@@ -632,16 +651,16 @@ void TestAuto(){
    // chassis.moveToPoint(24,24,3000, {.maxSpeed = 40});// comment 4
     chassis.turnToHeading(0, 1000, {.maxSpeed = 40});// comment 5
     chassis.moveToPoint(12, 36, 3000, {.maxSpeed = 40});// comment 6
-    //chassis.moveToPoint(24,48,3000, {.maxSpeed = 40});// comment 7
+    //chassis.moveToPoint(24,48,3000, {.maxSpeed = 40});// comment 7*/
     
 
-   /* //set Position in the middle of the parking zone
-    chassis.setPose(-49,0,270);
+    //set Position in the middle of the parking zone
+    chassis.setPose(-60,12,180);
 
 //Clear Park**NEEDS TESTING!!!
     intake.move(127);
-    chassis.moveToPoint(-73,0,1000,{.maxSpeed = 60},false);//over the park
-    chassis.moveToPoint(-80,0,4000,{.maxSpeed = 20});//slowing start intaking
+    chassis.moveToPoint(-60,0,4000,{.minSpeed = 90},false);//over the park
+   chassis.moveToPoint(-60,-10,4000,{.minSpeed = 90},false);//slowing start intaking
     //tongue_piston.set_value(true);
 
 //get out of the park and set for the next step**PART OF TESTING
