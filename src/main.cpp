@@ -122,7 +122,7 @@ lemlib::ControllerSettings lateral_controller(
 
 // PID Controller settings for turning
 lemlib::ControllerSettings angular_controller(
-    2.5, 0.7, 50, 4,  // kP, kI, kD, anti-windup
+    2.5, 0.7, 51, 4,  // kP, kI, kD, anti-windup
     1.5, 600,        // Small error (degrees), timeout (ms)
     4, 900,        // Large error (degrees), timeout (ms)
     20           // Max acceleration (slew)
@@ -264,7 +264,7 @@ enum class Auto{
     Skills2
 };
 
-constexpr Auto AutoSelect = Auto::Skills1;
+constexpr Auto AutoSelect = Auto::Right;
 
 void AutoLeft()
 {
@@ -324,36 +324,35 @@ void AutoLeft()
 void AutoRight()
 {
 //start position
-    chassis.setPose(-47,-12,90);
+    chassis.setPose(-47,-12,180);
 
 //intake first three blocks
-    chassis.turnToPoint(-18,-25,750,{},false);
-    intake.move(127);
+   // chassis.turnToPoint(-15,-20,750,{},false);
+    //intake.move(127);
     //chassis.moveToPoint(-25,25,1000,{.maxSpeed = 85});//change for accurrcy and consistanty of int
 
-//Score in middle(4 balls)
-    chassis.moveToPoint(-18,-25,1750,{.maxSpeed = 70},false);//change for accurrcy and consistanty of intake
+/*/Score in low(4 balls)
+    chassis.moveToPoint(-15,-20,1750,{.maxSpeed = 70},false);//change for accurrcy and consistanty of intake
     chassis.moveToPoint(-25,-20,750,{.forwards = false,.maxSpeed = 70},false);//decrease speed for accurecy, increase for arrive faster 
     mid_piston.set_value(false);
     chassis.turnToHeading(45,500,{},false);//change for consistancy
-    chassis.moveToPoint(-15.7,-9.1,800,{.maxSpeed = 85},false);//decrease speed for accurecy, increase for arrive faster
+    chassis.moveToPoint(-12,-12,800,{.maxSpeed = 85},false);//decrease speed for accurecy, increase for arrive faster
     pros::delay(500);
     intake.move(-127);
-    pros::delay(500);
+    pros::delay(500);*/
 
 //match load
-    chassis.turnToPoint(-50,-41,750,{},false);
-    chassis.moveToPoint(-50,-41,950,{.maxSpeed = 100},false);
+    chassis.moveToPoint(-50,-45,950,{.maxSpeed = 100},false);
     tongue_piston.set_value(true);
     chassis.turnToHeading(270,750,{},false);
     intake.move(127);
     chassis.moveToPoint(-60,-40,900,{.maxSpeed = 75},false);
-    chassis.moveToPoint(-60,-40,450,{.maxSpeed = 85},false);
+    chassis.moveToPoint(-60,-40,450,{.maxSpeed = 80},false);
     pros::delay(400);
 
 //Score in long(3 balls)
     mid_piston.set_value(true);
-    chassis.moveToPoint(-27,-39,900,{.forwards = false,.maxSpeed = 90},false);
+    chassis.moveToPoint(-27,-42,900,{.forwards = false,.maxSpeed = 75},false);
     intake.move(-127);
     leverScore(leverType = ScoreType::Top);
     pros::delay(1000);
@@ -625,16 +624,16 @@ void AllianceWinPoint()
 
 
 void TestAuto(){
-   // chassis.setPose(0, 0, 0);
-/*
+    chassis.setPose(0, 0, 0);
+
     chassis.moveToPoint(0, 24, 3000, {.maxSpeed = 40});// comment 1
     chassis.turnToHeading(90, 1000, {.maxSpeed = 40});// comment 2
     chassis.moveToPoint(12, 24, 3000, {.maxSpeed = 40});// comment 3
-    chassis.moveToPoint(24,24,3000, {.maxSpeed = 40});// comment 4
+   // chassis.moveToPoint(24,24,3000, {.maxSpeed = 40});// comment 4
     chassis.turnToHeading(0, 1000, {.maxSpeed = 40});// comment 5
-    chassis.moveToPoint(24, 36, 3000, {.maxSpeed = 40});// comment 6
+    chassis.moveToPoint(12, 36, 3000, {.maxSpeed = 40});// comment 6
     //chassis.moveToPoint(24,48,3000, {.maxSpeed = 40});// comment 7
-    */
+    
 
    /* //set Position in the middle of the parking zone
     chassis.setPose(-49,0,270);
@@ -650,18 +649,18 @@ void TestAuto(){
     //intake.move(0);*/
     
     //set Position in the middle of the parking zone
-    chassis.setPose(-62,13,180);
+   // chassis.setPose(-62,13,180);
 
 //Clear Park**NEEDS TESTING!!!
-    intake.move(127);
-    chassis.moveToPoint(-62,-5,500,{.minSpeed = 110});//over the park
+   // intake.move(127);
+    //chassis.moveToPoint(-62,-5,500,{.minSpeed = 110});//over the park
     //tongue_piston.set_value(true);
     //chassis.moveToPoint(-62,-47,800,{.maxSpeed = 85});
-    chassis.moveToPoint(-62,-10,1000,{.maxSpeed = 85},false);//slowing start intaking
+    //chassis.moveToPoint(-62,-10,1000,{.maxSpeed = 85},false);//slowing start intaking
     //tongue_piston.set_value(false);
 
 //get out of the park and set for the next step**PART OF TESTING
-    chassis.moveToPoint(-62,-55,4000,{.minSpeed = 110},false);
+   // chassis.moveToPoint(-62,-55,4000,{.minSpeed = 110},false);
 }
 
 void autonomous()
